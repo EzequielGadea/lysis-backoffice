@@ -14,5 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    return view('login');
+})->name('login');
+
+Route::get('menu', function () {
     return view('index');
-});
+})->middleware('auth');
