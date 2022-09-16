@@ -10,7 +10,7 @@
 <body>
     <main>
         <div class="flex item-center justify-center">
-            <form action="" class="w-1/5 flex flex-col gap-2 justify-center bg-gray-100 rounded-xl p-4 pb-4 shadow-xl shadow-gray-300 mt-10">
+            <form action="api/login" method="post" class="w-1/5 flex flex-col gap-2 justify-center bg-gray-100 rounded-xl p-4 pb-4 shadow-xl shadow-gray-300 mt-10">
                 <h1 class="w-100 flex justify-center text-xl">Iniciar sesion</h1>
                 <div class="w-100 flex flex-col justify-center p-2 gap-3">
                     <input type="email" name="emailAdmin" id="emailAdmin" class="w-46 flex flex-col rounded-lg p-1 text-sm m-auto border-2 border-gray-300" placeholder="Ingresar email">
