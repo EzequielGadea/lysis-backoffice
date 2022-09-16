@@ -9,7 +9,9 @@
 </head>
 <body>
     <main>
-        <form action=""></form>
+        <div class="container-form">
+            <form action=""></form>
+        </div>
     </main>
 </body>
 </html>
