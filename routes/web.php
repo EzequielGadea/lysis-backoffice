@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,10 @@ Route::get('/', function () {
     return view('login');
 })->name('login');
 
+Route::post('auth', [LoginController::class, 'Authenticate']);
+
 Route::middleware(['auth'])->group(function () {
-    Route::view('/index', 'index');
+    Route::view('index', 'index');
+    
+    Route::post('register', [UserController::class, 'Create']);
 });
