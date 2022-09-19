@@ -13,12 +13,13 @@
             <p class="text-5xl tracking-tighter text-zinc-800 font-bold mb-2">Welcome back</p>
             <p class="text-xl text-zinc-700 font-medium mb-5">Welcome back! Please enter your credentials.</p>
         </div>
-        <form action="/index" method="post" class="flex flex-col">
+        <form action="auth" method="POST" class="flex flex-col">
+            @csrf
             <label for="email" class="text-zinc-700 text-lg mb-1">Email</label>
             <input type="email" name="email" id="email" placeholder="Enter your email" class="w-96 shadow-inner py-2 px-3 border border-slate-500 rounded-md mb-5 placeholder:font-light">
             <label for="password" class="text-zinc-700 text-lg mb-1">Password</label>
             <input type="password" name="password" id="password" placeholder="Shh! It's super secret" class="w-96 shadow-inner py-2 px-3 border border-slate-500 rounded-md mb-5 placeholder:font-light">
-            <input type="submit" value="Sign in" class="w-96 bg-slate-600 py-1 rounded-md text-white">
+            <button type="submit" class="w-96 bg-slate-600 py-1 rounded-md text-white">Sign in</button>
         </form>
     </main>
 </body>
