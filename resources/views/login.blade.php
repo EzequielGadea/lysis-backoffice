@@ -7,20 +7,19 @@
     <link rel="stylesheet" href="../css/output.css">
     <title>Backoffice | Login</title>
 </head>
-<body>
-    <main>
-        <div class="flex item-center justify-center">
-            <form action="api/login" method="post" class="w-1/5 flex flex-col gap-2 justify-center bg-gray-100 rounded-xl p-4 pb-4 shadow-xl shadow-gray-300 mt-10">
-                <h1 class="w-100 flex justify-center text-xl">Iniciar sesion</h1>
-                <div class="w-100 flex flex-col justify-center p-2 gap-3">
-                    <input type="email" name="emailAdmin" id="emailAdmin" class="w-46 flex flex-col rounded-lg p-1 text-sm m-auto border-2 border-gray-300" placeholder="Ingresar email">
-                    <input type="password" name="passwordAdmin" id="passwordAdmin" class="w-46 flex flex-col rounded-lg p-1 text-sm m-auto border-2 border-gray-300" placeholder="Ingresar contraseña">
-                </div>
-                <button type="submit" class="w-auto flex justify-center bg-purple-600 text-white p-2 pl-2 pr-2 rounded-lg m-auto">
-                    Iniciar sesion
-                </button>
-            </form>
+<body class="font-sans antialiased">
+    <main class="h-screen flex flex-col items-center justify-center">
+        <div>
+            <p class="text-5xl tracking-tighter text-zinc-800 font-bold mb-2">Welcome back</p>
+            <p class="text-xl text-zinc-700 font-medium mb-5">Welcome back! Please enter your credentials.</p>
         </div>
+        <form action="/index" method="post" class="flex flex-col">
+            <label for="email" class="text-zinc-700 text-lg mb-1">Email</label>
+            <input type="email" name="email" id="email" placeholder="Enter your email" class="w-96 shadow-inner py-2 px-3 border border-slate-500 rounded-md mb-5 placeholder:font-light">
+            <label for="password" class="text-zinc-700 text-lg mb-1">Password</label>
+            <input type="password" name="password" id="password" placeholder="Shh! It's super secret" class="w-96 shadow-inner py-2 px-3 border border-slate-500 rounded-md mb-5 placeholder:font-light">
+            <input type="submit" value="Sign in" class="w-96 bg-slate-600 py-1 rounded-md text-white">
+        </form>
     </main>
 </body>
 </html>
