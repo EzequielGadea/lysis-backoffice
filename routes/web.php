@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,6 @@ Route::get('/', function () {
     return view('login');
 })->name('login');
 
-Route::get('menu', function () {
-    return view('index');
-})->middleware('auth');
+Route::middleware(['auth'])->group(function () {
+    Route::view('/index', 'index');
+});
