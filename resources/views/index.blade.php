@@ -33,7 +33,8 @@
     </div> 
     <div class="bg-slate-50 flex flex-col gap-6 w-80 px-8 py-6">
         <p class="text-zinc-800 text-2xl font-semibold">Create</p>
-         <form action="#" method="post" class="flex flex-col gap-3">
+         <form action="/register" method="post" class="flex flex-col gap-3">
+            @csrf
             <div class="flex flex-col gap-1">
                 <label for="name" class="font-medium text-zinc-700">Name</label>
                 <input type="text" id="name" placeholder="Enter name" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
@@ -43,9 +44,26 @@
                 <input type="text" id="surname" placeholder="Enter surname" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             </div>
             <div class="flex flex-col gap-1">
-                
+                <label for="birthdate" class="font-medium text-zinc-700">Birthdate</label>
+                <input type="date" id="birthdate" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             </div>
-
+            <div class="flex flex-col gap-1">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="Enter email" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="subscription">Subscription</label>
+                <input list="subscriptions" name="subscription" id="subscription" placeholder="Choose subscription type" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+                <datalist id="subscriptions">
+                    <option value="basic">Basic</option>
+                    <option value="premium">Premium</option>
+                </datalist>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="passowrd">Password</label>
+                <input type="password" name="password" id="password" placeholder="Enter password" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-3 py-1 w-fit rounded-md">Create user</button>
          </form>
     </div>
 </body>
