@@ -48,6 +48,7 @@ class LoginController extends Controller
             ];
 
         Auth::login($admin);
-        return view('index');
+
+        return view('userManagement');
     }
 }
