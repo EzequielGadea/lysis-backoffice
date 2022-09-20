@@ -37,15 +37,15 @@
             @csrf
             <div class="flex flex-col gap-1">
                 <label for="name" class="font-medium text-zinc-700">Name</label>
-                <input type="text" id="name" placeholder="Enter name" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+                <input type="text" name="name" id="name" placeholder="Enter name" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             </div>
             <div class="flex flex-col gap-1">
                 <label for="surname" class="font-medium text-zinc-700">Surname</label>
-                <input type="text" id="surname" placeholder="Enter surname" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+                <input type="text" name="surname" id="surname" placeholder="Enter surname" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             </div>
             <div class="flex flex-col gap-1">
                 <label for="birthdate" class="font-medium text-zinc-700">Birthdate</label>
-                <input type="date" id="birthdate" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+                <input type="date" name="birthdate" id="birthdate" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             </div>
             <div class="flex flex-col gap-1">
                 <label for="email">Email</label>
@@ -66,5 +66,14 @@
             <button type="submit" class="bg-blue-600 text-white px-3 py-1 w-fit rounded-md">Create user</button>
          </form>
     </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 </body>
 </html>
