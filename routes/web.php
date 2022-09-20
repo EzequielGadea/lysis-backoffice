@@ -22,7 +22,12 @@ Route::get('/', function () {
 Route::post('auth', [LoginController::class, 'Authenticate']);
 
 Route::middleware(['auth'])->group(function () {
-    Route::view('index', 'index');
+    Route::view('userManagement', 'userManagement')->name('user');
+    Route::view('register', 'userManagement');
+
+    Route::get('userManagement', [UserController::class, 'ReturnUsersManagement']);
     
-    Route::post('register', [UserController::class, 'Create']);
+    Route::post('userRegister', [UserController::class, 'Create']);
+    Route::post('userDelete', [UserController::class, 'Delete'])
+
 });
