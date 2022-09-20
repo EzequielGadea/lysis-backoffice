@@ -26,34 +26,49 @@ class UserController extends Controller
 
     private function validateCreation($request) {
         $validator = Validator::make($request -> all(),[
-            "name" => "required",
-            "email" => ["required", "email"],
-            "password" => "required"
+            'name' => 'required',
+            'surname' => 'required',
+            'birthdate' => 'required',
+            'email' => 'required|email|unique:admins',
+            'subscription' => 'required',
+            'password' => 'required|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/'
         ]);
 
         if($validator->fails()) 
-            return $validator->errors()->toJson();
+            return redirect()->back()->withErrors($validator);
 
         return true;
     }
 
     private function createUser($request) {
+        $client = new Client([
+            'surname' => $request->post('surname'),
+            'birthdate' => $request->post('birthdate'),
+            'subscription_id' => Subscription::firstWhere('type', $request->post('subscription'))->id
+        ]);
+
+        $user = new User([
+            'name' => $request->post('name'),
+            'email' => $request->post('email'),
+            'password' => Hash::make($request->post('password'))
+        ]);
+
+        $client->user()->save($user);
         try {
-            User::create([
-                "name" => $request -> post("name"),
-                "email" => $request -> post("email"),
-                "password" => Hash::make($request -> post("password"))
-            ]);
+            DB::transaction(function () use ($client, $user){
+                $client->save();
+                $client->user()->save($user);
+            });
         } 
         catch (QueryException $e) {
             return [
-                "result" => "Couldn't create admin.",
+                "result" => "Couldn't create user.",
                 "trace" => $e->getMessage()
             ];
         }
 
         return [
-            "result" => "Admin registered succesfully."
+            "result" => "User registered succesfully."
         ];
     }
 }
