@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\CreateUserRequest;
+use App\Models\User;
+use App\Models\Client;
+use App\Models\SubscriptionType;
 
 class UserController extends Controller
 {
-    public function Create(Request $request) {
-        $validation = $this->validateCreation($request);
-        if($validation !== true)
-            return $validation;
-
+    public function Create(CreateUserRequest $request) {
         try {
             return $this->createUser($request);
         }
@@ -24,27 +24,11 @@ class UserController extends Controller
         }
     }
 
-    private function validateCreation($request) {
-        $validator = Validator::make($request -> all(),[
-            'name' => 'required',
-            'surname' => 'required',
-            'birthdate' => 'required',
-            'email' => 'required|email|unique:admins',
-            'subscription' => 'required',
-            'password' => 'required|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/'
-        ]);
-
-        if($validator->fails()) 
-            return redirect()->back()->withErrors($validator);
-
-        return true;
-    }
-
     private function createUser($request) {
         $client = new Client([
             'surname' => $request->post('surname'),
-            'birthdate' => $request->post('birthdate'),
-            'subscription_id' => Subscription::firstWhere('type', $request->post('subscription'))->id
+            'birth_date' => $request->post('birthdate'),
+            'subscription_id' => SubscriptionType::firstWhere('type', $request->post('subscription'))->subscription_id
         ]);
 
         $user = new User([
@@ -53,7 +37,6 @@ class UserController extends Controller
             'password' => Hash::make($request->post('password'))
         ]);
 
-        $client->user()->save($user);
         try {
             DB::transaction(function () use ($client, $user){
                 $client->save();
@@ -67,8 +50,16 @@ class UserController extends Controller
             ];
         }
 
-        return [
-            "result" => "User registered succesfully."
-        ];
+        return redirect('userManagement')->with('status', "User $name $surname created succesfully.");
+    }
+
+    public function ReturnUsersManagement() {
+        return view('userManagement')->with('users', 
+            DB::table('users')
+            ->join('clients', 'users.client_id', '=', 'clients.id')
+            ->join('subscription_types', 'subscription_types.subscription_id', '=', 'clients.subscription_id')
+            ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 'clients.birth_date', 'subscription_types.type')
+            ->get()
+            );
     }
 }
