@@ -15,12 +15,21 @@
         </div>
         <form action="auth" method="POST" class="flex flex-col">
             @csrf
-            <label for="email" class="text-zinc-700 text-lg mb-1">Email</label>
-            <input type="email" name="email" id="email" placeholder="Enter your email" class="w-96 shadow-inner py-2 px-3 border border-slate-500 rounded-md mb-5 placeholder:font-light">
-            <label for="password" class="text-zinc-700 text-lg mb-1">Password</label>
-            <input type="password" name="password" id="password" placeholder="Shh! It's super secret" class="w-96 shadow-inner py-2 px-3 border border-slate-500 rounded-md mb-5 placeholder:font-light">
+            <div class="flex flex-col mb-5">
+                <label for="email" class="text-zinc-700 text-lg mb-1">Email</label>
+                <input type="email" name="email" id="email" placeholder="Enter your email" class="w-96 shadow-inner py-2 px-3 border border-slate-500 rounded-md  placeholder:font-light">
+                <p class="text-red-600 text-sm">{{ $errors->first('email') }}</p>
+            </div>
+            <div class="flex flex-col mb-5">
+                <label for="password" class="text-zinc-700 text-lg mb-1">Password</label>
+                <input type="password" name="password" id="password" placeholder="Shh! It's super secret" class="w-96 shadow-inner py-2 px-3 border border-slate-500 rounded-md placeholder:font-light">
+                <p class="text-red-600 text-sm">{{ $errors->first('password') }}</p>
+            </div>
             <button type="submit" class="w-96 bg-slate-600 py-1 rounded-md text-white">Sign in</button>
         </form>
+        <div class="text-red-600 mt-5">
+                {{ $errors->first('statusLogin') }}
+        </div>
     </main>
 </body>
 </html>
