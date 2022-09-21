@@ -8,11 +8,17 @@
     <title>Backoffice | Home</title>
 </head>
 <body class="flex flex-row justify-center">
-    <nav class="flex flex-col gap-5 pl-8 pr-3 pt-6 border-r-2 border-slate-500 h-screen w-48">
+    <nav class="flex flex-col pl-8 pr-3 pt-6 border-r-2 border-slate-500 h-screen w-48 justify-between">
         <!-- FALTA AGREGAR ENLACES -->
-        <a href="" class="font-medium text-zinc-800">Users</a>
-        <a href="" class="font-medium text-zinc-800">Admins</a>
-        <a href="" class="font-medium text-zinc-800">Ads</a>
+        <div class="flex flex-col gap-5">
+            <a href="" class="font-medium text-zinc-800">Users</a>
+            <a href="" class="font-medium text-zinc-800">Admins</a>
+            <a href="" class="font-medium text-zinc-800">Ads</a>
+        </div>
+        <form action="logout" method="POST">
+            @csrf
+            <button type="submit">Log out</button>
+        </form>
     </nav>
     <div class="pt-6 px-8 w-[50rem] flex-grow">
         <p class="text-2xl text-zinc-800 font-semibold mb-6">Users</p>
@@ -29,33 +35,39 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($users as $user)
-                <tr class="border-b border-slate-300">
-                    <td class="pl-3 text-zinc-800">{{ $user->id }}</td>
-                    <td class="py-3 text-zinc-800">{{ $user->client_id }}</td>
-                    <td class="py-3 text-zinc-800">
-                        <p class="text-zinc-800">
-                            {{ $user->name }} {{ $user->surname }} 
-                        </p>
-                        <p class="text-sm text-zinc-600">
-                            Birthdate: {{ $user->birth_date }}
-                        </p>
-                    </td>
-                    <td class="py-3 text-zinc-800">{{ $user->email }}</td>
-                    <td class="py-3 text-zinc-800">{{ $user->type}}</td>
-                    <td class="pr-3 text-zinc-800">
-                        <div class="flex flex-col items-center">
-                            <button class="font-semibold text-blue-600">Edit</button>
-                            <form action="deleteUser" method="POST">
-                                <input type="hidden" name="userId" value="{{ $user->id }}">
-                                <button class="font-semibold text-blue-600">Delete</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
+                @if (isset($users))
+                    @foreach ($users as $user)
+                    <tr class="border-b border-slate-300">
+                        <td class="pl-3 text-zinc-800">{{ $user->id }}</td>
+                        <td class="py-3 text-zinc-800">{{ $user->client_id }}</td>
+                        <td class="py-3 text-zinc-800">
+                            <p class="text-zinc-800">
+                                {{ $user->name }} {{ $user->surname }} 
+                            </p>
+                            <p class="text-sm text-zinc-600">
+                                Birthdate: {{ $user->birth_date }}
+                            </p>
+                        </td>
+                        <td class="py-3 text-zinc-800">{{ $user->email }}</td>
+                        <td class="py-3 text-zinc-800">{{ $user->type}}</td>
+                        <td class="pr-3 text-zinc-800">
+                            <div class="flex flex-col items-center">
+                                <button class="font-semibold text-blue-600">Edit</button>
+                                <form action="userDelete" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="userId" value="{{ $user->id }}">
+                                    <button class="font-semibold text-blue-600" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
+        @if (session('statusDelete'))
+            {{ session('statusDelete') }}
+        @endif
     </div>
     </div> 
     <div class="bg-slate-50 flex flex-col gap-6 w-80 px-8 py-6">
@@ -99,8 +111,8 @@
             </div>
             <button type="submit" class="bg-blue-600 text-white px-3 py-1 w-fit rounded-md">Create user</button>
          </form>
-        @if (session('status'))
-            <p class="p-4 text-green-600 bg-green-100 rounded-md">{{ session('status') }}</p>
+        @if (session('statusCreate'))
+            <p class="p-4 text-green-600 bg-green-100 rounded-md">{{ session('statusCreate') }}</p>
         @endif
     </div>
 </body>
