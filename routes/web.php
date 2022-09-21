@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,19 +16,20 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-Route::get('/', function () {
-    return view('login');
-})->name('login');
-
-Route::post('auth', [LoginController::class, 'Authenticate']);
-
-Route::middleware(['auth'])->group(function () {
-    Route::view('userManagement', 'userManagement')->name('user');
-    Route::view('register', 'userManagement');
-
-    Route::get('userManagement', [UserController::class, 'ReturnUsersManagement']);
+Route::middleware(['web'])->group(function () {
+    Route::get('/', function () {
+        return view('login');
+    })->name('login');
     
-    Route::post('userRegister', [UserController::class, 'Create']);
-    Route::post('userDelete', [UserController::class, 'Delete'])
-
+    Route::post('auth', [LoginController::class, 'Authenticate']);
+    
+    Route::middleware(['auth'])->group(function () {    
+        Route::get('userManagement', [UserController::class, 'ReturnUsersManagement'])->name('userManagement');
+        Route::get('adminManagement', [AdminController::class, 'ReturnAdminManagement'])->name('adminManagement');
+        
+        Route::post('logout', [LoginController::class, 'Logout']);
+        Route::post('userRegister', [UserController::class, 'Create']);
+        Route::post('userDelete', [UserController::class, 'Delete']);
+        Route::post('adminRegister', [UserController::class, 'Create']);
+    });
 });
