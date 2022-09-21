@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\CreateUserRequest;
 use App\Models\User;
 use App\Models\Client;
@@ -22,6 +23,27 @@ class UserController extends Controller
         catch (QueryException $e) {
             return $e->getMessage();
         }
+    }
+
+    public function Delete(Request $request) {
+        $validation = Validator::make($request->all(), [
+            'userId' => 'required'
+        ]);
+
+        if(User::find($request->post('userId')) == null)
+            return redirect()->route('userManagement')->with('statusDelete', 'User of ID: '.$request->post('userId').' does not exist');
+
+        try {
+            DB::transaction(function () use ($request) {
+                User::find($request->post('userId'))->first()->client()->delete();
+                User::destroy($request->post('userId'));
+            });
+        }
+        catch (QueryExcpetion $e) {
+            return Redirect::back()->with('statusDelete', 'Could not delete user.');
+        }
+
+        return Redirect::back()->with('statusDelete', 'User deleted succesfully');
     }
 
     private function createUser($request) {
@@ -50,7 +72,7 @@ class UserController extends Controller
             ];
         }
 
-        return redirect('userManagement')->with('status', "User $name $surname created succesfully.");
+        return redirect('userManagement')->with('statusCreate', "User ".$request->post('name')." ".$request->post('surname')." created succesfully.");
     }
 
     public function ReturnUsersManagement() {
@@ -58,6 +80,7 @@ class UserController extends Controller
             DB::table('users')
             ->join('clients', 'users.client_id', '=', 'clients.id')
             ->join('subscription_types', 'subscription_types.subscription_id', '=', 'clients.subscription_id')
+            ->where('users.deleted_at', '=', null)
             ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 'clients.birth_date', 'subscription_types.type')
             ->get()
             );
