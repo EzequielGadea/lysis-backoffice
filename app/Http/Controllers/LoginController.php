@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\Admin;
 
 class LoginController extends Controller
@@ -16,10 +17,19 @@ class LoginController extends Controller
         if($validation !== true)
             return $validation;
         
-        return $this->doAuthentication(
-            $request->post('email'),
-            $request->post('password')
-        );
+        if (!Auth::attempt([
+            'email' => $request->post('email'),
+            'password' => $request->post('password')
+        ])) 
+            return Redirect::back()->withErrors([
+                'statusLogin' => 'Credentials don\'t match any registered admin.'
+            ]);
+
+        return redirect()->route('userManagement');
+    }
+
+    public function Logout() {
+        Auth::logout();
     }
 
     private function validateAuthentication($request) {
@@ -29,26 +39,8 @@ class LoginController extends Controller
         ]);
 
         if($validator -> fails())
-            return $validator->errors()->toJson();
+            return Redirect::back()->withErrors($validator->errors());
 
         return true;
-    }
-
-    private function doAuthentication($email, $password) {
-        $admin = Admin::firstWhere('email', $email);
-
-        if($admin == null)
-            return [
-                'result' => "$email is not a registered email."
-            ];
-
-        if(!Hash::check($password, $admin->password)) 
-            return [
-                'result' => 'Wrong password.'
-            ];
-
-        Auth::login($admin);
-
-        return view('userManagement');
     }
 }
