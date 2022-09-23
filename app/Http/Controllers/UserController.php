@@ -16,7 +16,8 @@ use App\Models\SubscriptionType;
 
 class UserController extends Controller
 {
-    public function Create(CreateUserRequest $request) {
+    public function create(CreateUserRequest $request) 
+    {
         try {
             return $this->createUser($request);
         }
@@ -25,7 +26,8 @@ class UserController extends Controller
         }
     }
 
-    public function Delete(Request $request) {
+    public function delete(Request $request) 
+    {
         $validation = Validator::make($request->all(), [
             'userId' => 'required'
         ]);
@@ -35,7 +37,7 @@ class UserController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
-                User::find($request->post('userId'))->first()->client()->delete();
+                User::find($request->post('userId'))->client()->delete();
                 User::destroy($request->post('userId'));
             });
         }
@@ -46,7 +48,20 @@ class UserController extends Controller
         return Redirect::back()->with('statusDelete', 'User deleted succesfully');
     }
 
-    private function createUser($request) {
+    public function show() 
+    {
+        return view('userManagement')->with('users', 
+            DB::table('users')
+            ->join('clients', 'users.client_id', '=', 'clients.id')
+            ->join('subscription_types', 'subscription_types.subscription_id', '=', 'clients.subscription_id')
+            ->where('users.deleted_at', '=', null)
+            ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 'clients.birth_date', 'subscription_types.type')
+            ->get()
+            );
+    }
+
+    private function createUser($request) 
+    {
         $client = new Client([
             'surname' => $request->post('surname'),
             'birth_date' => $request->post('birthdate'),
@@ -75,14 +90,5 @@ class UserController extends Controller
         return redirect('userManagement')->with('statusCreate', "User ".$request->post('name')." ".$request->post('surname')." created succesfully.");
     }
 
-    public function ReturnUsersManagement() {
-        return view('userManagement')->with('users', 
-            DB::table('users')
-            ->join('clients', 'users.client_id', '=', 'clients.id')
-            ->join('subscription_types', 'subscription_types.subscription_id', '=', 'clients.subscription_id')
-            ->where('users.deleted_at', '=', null)
-            ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 'clients.birth_date', 'subscription_types.type')
-            ->get()
-            );
-    }
+
 }
