@@ -9,7 +9,7 @@ use App\Http\Requests\CreateAdminRequest;
 
 class AdminController extends Controller
 {
-    public function ReturnAdminManagement() {
+    public function show() {
         return view('adminManagement')->with('admins', 
             DB::table('admins')
             ->where('deleted_at', '=', null)
