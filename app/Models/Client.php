@@ -19,15 +19,18 @@ class Client extends Model
         'subscription_id'
     ];
 
-    public function user() {
+    public function user() 
+    {
         return $this->hasOne(User::Class);
     }
 
-    public function subscription() {
+    public function subscription() 
+    {
         return $this->hasOne(Subscription::class);
     }
 
-    public function subscriptionType() {
+    public function subscriptionType() 
+    {
         return $this->hasOneThrough(SubscriptionType::class, Subscription::class);
     }
 }
