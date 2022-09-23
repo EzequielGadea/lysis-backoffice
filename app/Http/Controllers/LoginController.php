@@ -12,7 +12,7 @@ use App\Models\Admin;
 
 class LoginController extends Controller
 {
-    public function Authenticate(Request $request) {
+    public function authenticate(Request $request) {
         $validation = $this->validateAuthentication($request);
         if($validation !== true)
             return $validation;
@@ -28,7 +28,7 @@ class LoginController extends Controller
         return redirect()->route('userManagement');
     }
 
-    public function Logout() {
+    public function logout() {
         Auth::logout();
     }
 
