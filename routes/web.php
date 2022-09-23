@@ -21,15 +21,14 @@ Route::middleware(['web'])->group(function () {
         return view('login');
     })->name('login');
     
-    Route::post('auth', [LoginController::class, 'Authenticate']);
+    Route::post('auth', [LoginController::class, 'authenticate']);
     
     Route::middleware(['auth'])->group(function () {    
-        Route::get('userManagement', [UserController::class, 'ReturnUsersManagement'])->name('userManagement');
-        Route::get('adminManagement', [AdminController::class, 'ReturnAdminManagement'])->name('adminManagement');
+        Route::get('userManagement', [UserController::class, 'show'])->name('userManagement');
+        Route::get('adminManagement', [AdminController::class, 'show'])->name('adminManagement');
         
-        Route::post('logout', [LoginController::class, 'Logout']);
-        Route::post('userRegister', [UserController::class, 'Create']);
-        Route::post('userDelete', [UserController::class, 'Delete']);
-        Route::post('adminRegister', [UserController::class, 'Create']);
+        Route::post('logout', [LoginController::class, 'logout']);
+        Route::post('userRegister', [UserController::class, 'create']);
+        Route::post('userDelete', [UserController::class, 'delete']); 
     });
 });
