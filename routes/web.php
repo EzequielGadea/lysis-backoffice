@@ -24,14 +24,22 @@ Route::middleware(['web'])->group(function () {
     Route::post('auth', [LoginController::class, 'authenticate']);
     
     Route::middleware(['auth'])->group(function () {    
-        Route::get('userManagement', [UserController::class, 'show'])->name('userManagement');
-        Route::get('adminManagement', [AdminController::class, 'show'])->name('adminManagement');
-        Route::get('userUpdate/{id}', [UserController::class, 'showUpdate']);
-        
         Route::post('logout', [LoginController::class, 'logout']);
 
-        Route::post('userRegister', [UserController::class, 'create']);
-        Route::post('userUpdate', [UserController::class, 'update']);
-        Route::post('userDelete', [UserController::class, 'delete']);
+        Route::controller(UserController::class)->group(function () {
+            Route::get('userManagement', 'show')->name('userManagement');
+            Route::get('userUpdate/{id}', 'showUpdate');
+            Route::post('userRegister', 'create');
+            Route::post('userUpdate', 'update');
+            Route::post('userDelete', 'delete');
+        });
+        
+        Route::controller(AdminController::class)->group(function () {
+            Route::get('adminManagement', 'show')->name('adminManagement');
+            Route::get('adminUpdate/{id}', 'showUpdate');
+            Route::post('adminRegister', 'create');
+            Route::post('adminUpdate', 'update');
+            Route::post('adminDelete', 'delete');
+        });
     });
 });
