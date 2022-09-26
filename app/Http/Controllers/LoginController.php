@@ -12,7 +12,8 @@ use App\Models\Admin;
 
 class LoginController extends Controller
 {
-    public function authenticate(Request $request) {
+    public function authenticate(Request $request) 
+    {
         $validation = $this->validateAuthentication($request);
         if($validation !== true)
             return $validation;
@@ -28,11 +29,13 @@ class LoginController extends Controller
         return redirect()->route('userManagement');
     }
 
-    public function logout() {
+    public function logout() 
+    {
         Auth::logout();
     }
 
-    private function validateAuthentication($request) {
+    private function validateAuthentication($request) 
+    {
         $validator = Validator::make($request -> all(), [
             'email' => ['required', 'email'],
             'password' => 'required'
