@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rule;
 use App\Http\Requests\CreateUserRequest;
 use App\Models\User;
 use App\Models\Client;
@@ -26,14 +27,43 @@ class UserController extends Controller
         }
     }
 
+    public function update(Request $request)
+    {
+        $validation = $this->validateUpdate($request);
+
+        if($validation !== true)
+            return back()->withErrors($validation);
+        
+        $user = User::find($request->post('id'));
+
+        try {
+            DB::transaction(function () use ($user, $request) {
+                $user->update([
+                    'name' => $request->post('name'),
+                    'email' => $request->post('email')
+                ]);
+                
+                $user->client->update([
+                    'surname' => $request->post('surname'),
+                    'birth_date' => $request->post('birthdate'),
+                    'subscription_id' => SubscriptionType::firstWhere('type', $request->post('subscription'))->subscription_id
+                ]);
+            });
+        } catch (QueryExcpetion $e) {
+            return view('updateUser')->with('statusUpdate', 'Couldn\'t update user. If this issue persists please contact the developer team.');
+        }
+
+        return back()->with('statusUpdate', 'User updated succesfully. You will soon be redirected back.')->with('isRedirected', 'true');
+    }
+
     public function delete(Request $request) 
     {
         $validation = Validator::make($request->all(), [
-            'userId' => 'required'
+            'userId' => 'required|numeric|exists:users,id'
         ]);
 
-        if(User::find($request->post('userId')) == null)
-            return redirect()->route('userManagement')->with('statusDelete', 'User of ID: '.$request->post('userId').' does not exist');
+        if($validation->fails())
+            return back()->withErrors($validation);
 
         try {
             DB::transaction(function () use ($request) {
@@ -57,7 +87,27 @@ class UserController extends Controller
             ->where('users.deleted_at', '=', null)
             ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 'clients.birth_date', 'subscription_types.type')
             ->get()
-            );
+        );
+    }
+
+    public function showUpdate($id)
+    {
+        $validation = Validator::make(['id' => $id], [
+            'id' => 'numeric|exists:users,id'
+        ]);
+
+        if($validation->fails())
+            return back();
+
+        return view('updateUser')->with('user', 
+            DB::table('users')
+            ->join('clients', 'users.client_id', '=', 'clients.id')
+            ->join('subscription_types', 'subscription_types.subscription_id', '=', 'clients.subscription_id')
+            ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 'clients.birth_date', 'subscription_types.type')
+            ->where('users.id', '=', $id)
+            ->get()
+            ->first()
+        );
     }
 
     private function createUser($request) 
@@ -90,5 +140,27 @@ class UserController extends Controller
         return redirect('userManagement')->with('statusCreate', "User ".$request->post('name')." ".$request->post('surname')." created succesfully.");
     }
 
+    private function validateUpdate($request)
+    {
+        $validateId = Validator::make(['id' => $request->post('id')], [
+            'id' => 'numeric|exists:users,id'
+        ]);
 
+        if($validateId->fails())
+            return $validateId;
+
+        $validation = Validator::make($request->all(), [
+            'id' => 'required',
+            'name' => 'required',
+            'surname' => 'required',
+            'birthdate' => 'required',
+            'email' => ['required', 'email', Rule::unique('users')->ignore(User::find($request->post('id'))->id)],
+            'subscription' => 'required'
+        ]);
+
+        if($validation->fails())
+            return $validation;
+
+        return true;
+    }
 }
