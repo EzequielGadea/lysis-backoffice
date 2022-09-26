@@ -26,9 +26,12 @@ Route::middleware(['web'])->group(function () {
     Route::middleware(['auth'])->group(function () {    
         Route::get('userManagement', [UserController::class, 'show'])->name('userManagement');
         Route::get('adminManagement', [AdminController::class, 'show'])->name('adminManagement');
+        Route::get('userUpdate/{id}', [UserController::class, 'showUpdate']);
         
         Route::post('logout', [LoginController::class, 'logout']);
+
         Route::post('userRegister', [UserController::class, 'create']);
-        Route::post('userDelete', [UserController::class, 'delete']); 
+        Route::post('userUpdate', [UserController::class, 'update']);
+        Route::post('userDelete', [UserController::class, 'delete']);
     });
 });
