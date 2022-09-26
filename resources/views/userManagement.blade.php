@@ -47,43 +47,43 @@
                         <td class="pr-3 py-3 font-light text-zinc-800 text-center">ACTIONS</td>
                     </tr>
                 </thead>
-            <tbody>
-                @if (isset($users))
-                    @foreach ($users as $user)
-                        <tr class="border-b border-slate-300">
-                            <td class="pl-3 text-zinc-800">{{ $user->id }}</td>
-                            <td class="py-3 text-zinc-800">{{ $user->client_id }}</td>
-                            <td class="py-3 text-zinc-800">
-                                <p class="text-zinc-800">
-                                    {{ $user->name }} {{ $user->surname }} 
-                                </p>
-                                <p class="text-sm text-zinc-600">
-                                    Birthdate: {{ $user->birth_date }}
-                                </p>
-                            </td>
-                            <td class="py-3 text-zinc-800">{{ $user->email }}</td>
-                            <td class="py-3 text-zinc-800">{{ $user->type}}</td>
-                            <td class="pr-3 text-zinc-800">
-                                <div class="flex flex-col items-center">
-                                    <form action="userUpdate/{{ $user->id }}" method="GET">
-                                        <button class="font-semibold text-blue-600" type="submit">Edit</button>
-                                    </form>
-                                    <form action="userDelete" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="userId" value="{{ $user->id }}">
-                                        <button class="font-semibold text-blue-600" type="submit">Delete</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
-            </tbody>
+                <tbody>
+                    @if (isset($users))
+                        @foreach ($users as $user)
+                            <tr class="border-b border-slate-300">
+                                <td class="pl-3 text-zinc-800">{{ $user->id }}</td>
+                                <td class="py-3 text-zinc-800">{{ $user->client_id }}</td>
+                                <td class="py-3 text-zinc-800">
+                                    <p class="text-zinc-800">
+                                        {{ $user->name }} {{ $user->surname }} 
+                                    </p>
+                                    <p class="text-sm text-zinc-600">
+                                        Birthdate: {{ $user->birth_date }}
+                                    </p>
+                                </td>
+                                <td class="py-3 text-zinc-800">{{ $user->email }}</td>
+                                <td class="py-3 text-zinc-800">{{ $user->type}}</td>
+                                <td class="pr-3 text-zinc-800">
+                                    <div class="flex flex-col items-center">
+                                        <form action="userUpdate/{{ $user->id }}" method="GET">
+                                            <button class="font-semibold text-blue-600" type="submit">Edit</button>
+                                        </form>
+                                        <form action="userDelete" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="userId" value="{{ $user->id }}">
+                                            <button class="font-semibold text-blue-600" type="submit">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
             </table>
-            @if (session('statusDelete'))
-                {{ session('statusDelete') }}
-            @endif
         </div>
+        @if (session('statusDelete'))
+            <p class="bg-red-100 text-red-600 p-4 rounded-md mt-12">{{ session('statusDelete') }}</p>
+        @endif
     </div> 
     <div class="bg-slate-50 flex flex-col gap-6 w-80 px-8 py-6">
         <p class="text-zinc-800 text-2xl font-semibold">Create</p>
