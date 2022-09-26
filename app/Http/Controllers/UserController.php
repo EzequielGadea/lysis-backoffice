@@ -20,7 +20,7 @@ class UserController extends Controller
     public function create(CreateUserRequest $request) 
     {
         try {
-            return $this->createUser($request);
+            return $this->store($request);
         }
         catch (QueryException $e) {
             return $e->getMessage();
@@ -99,7 +99,7 @@ class UserController extends Controller
         if($validation->fails())
             return back();
 
-        return view('updateUser')->with('user', 
+        return view('userUpdate')->with('user', 
             DB::table('users')
             ->join('clients', 'users.client_id', '=', 'clients.id')
             ->join('subscription_types', 'subscription_types.subscription_id', '=', 'clients.subscription_id')
@@ -110,7 +110,7 @@ class UserController extends Controller
         );
     }
 
-    private function createUser($request) 
+    private function store($request) 
     {
         $client = new Client([
             'surname' => $request->post('surname'),
