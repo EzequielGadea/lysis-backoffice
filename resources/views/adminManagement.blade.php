@@ -8,60 +8,70 @@
     <title>Admin Management</title>
 </head>
 <body class="flex flex-row justify-center">
-    <nav class="flex flex-col pl-8 pr-3 pt-6 border-r-2 border-slate-500 h-screen w-48 justify-between">
-        <!-- FALTA AGREGAR ENLACES -->
+    <nav class="flex flex-col pl-8 pr-3 pt-6 border-r-2 border-slate-500 min-h-screen w-48 justify-between">
         <div class="flex flex-col gap-5">
-            <a href="" class="font-medium text-zinc-800">Users</a>
-            <a href="" class="font-medium text-zinc-800">Admins</a>
-            <a href="" class="font-medium text-zinc-800">Ads</a>
+            <form action="/userManagement" method="GET" id="nav-users-form">
+                @csrf
+                <button class="font-medium text-zinc-800" id="nav-users" type="submit">Users</button>
+            </form>
+            <form action="/adminManagement" method="GET" id="nav-admins-form">
+                @csrf
+                <button class="font-medium text-zinc-800" id="nav-admins" type="submit">Admins</button>
+            </form>
+            <form action="/adManagement" method="GET" id="nav-ads-form">
+                @csrf
+                <button class="font-medium text-zinc-800" id="nav-ads" type="submit">Ads</button>
+            </form>
         </div>
         <form action="logout" method="POST">
             @csrf
             <button type="submit">Log out</button>
         </form>
     </nav>
-    <div class="pt-6 px-8 w-[50rem] flex-grow">
-        <p class="text-2xl text-zinc-800 font-semibold mb-6">Users</p>
-        <div class="rounded-md overflow-hidden">
+    <div class="flex flex-col items-center pt-6 px-8 w-[50rem] flex-grow">
+        <p class="text-2xl text-zinc-800 font-semibold mb-6 w-full">Admins</p>
+        <div class="rounded-md overflow-hidden shadow-xl w-full">
             <table class="table-auto border-collapse w-full">
                 <thead>
                     <tr class="bg-slate-300">
-                    <td class="pl-3 py-3 font-light text-zinc-800 w-1/12">ADMIN ID</td>
+                    <td class="pl-3 py-3 font-light text-zinc-800">ADMIN ID</td>
                     <td class="py-3 font-light text-zinc-800 w-1/4">NAME</td>
                     <td class="py-3 font-light text-zinc-800">EMAIL</td>
                     <td class="pr-3 py-3 font-light text-zinc-800 text-center w-2/12">ACTIONS</td>
                 </tr>
-            </thead>
-            <tbody>
-                @if (isset($admins))
-                    @foreach ($admins as $admin)
-                    <tr class="border-b border-slate-300">
-                        <td class="pl-3 text-zinc-800">{{ $admin->id }}</td>
-                        <td class="py-3 text-zinc-800">
-                            <p class="text-zinc-800">
-                                {{ $admin->name }}
-                            </p>
-                        </td>
-                        <td class="py-3 text-zinc-800">{{ $admin->email }}</td>
-                        <td class="pr-3 text-zinc-800">
-                            <div class="flex flex-col items-center">
-                                <button class="font-semibold text-blue-600">Edit</button>
-                                <form action="userDelete" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="adminId" value="{{ $admin->id }}">
-                                    <button class="font-semibold text-blue-600" type="submit">Delete</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                @endif
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @if (isset($admins))
+                        @foreach ($admins as $admin)
+                        <tr class="border-b border-slate-300">
+                            <td class="pl-3 text-zinc-800">{{ $admin->id }}</td>
+                            <td class="py-3 text-zinc-800">
+                                <p class="text-zinc-800">
+                                    {{ $admin->name }}
+                                </p>
+                            </td>
+                            <td class="py-3 text-zinc-800">{{ $admin->email }}</td>
+                            <td class="pr-3 text-zinc-800">
+                                <div class="flex flex-col items-center">
+                                    <form action="adminUpdate/{{ $admin->id }}" method="GET">
+                                        <button class="font-semibold text-blue-600">Edit</button>
+                                    </form>
+                                    <form action="adminDelete" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $admin->id }}">
+                                        <button class="font-semibold text-blue-600" type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+        </div>
         @if (session('statusDelete'))
-            {{ session('statusDelete') }}
+            <p class="bg-red-100 text-red-600 p-4 rounded-md mt-12">{{ session('statusDelete') }}</p>
         @endif
-    </div>
     </div> 
     <div class="bg-slate-50 flex flex-col gap-6 w-80 px-8 py-6">
         <p class="text-zinc-800 text-2xl font-semibold">Create</p>
@@ -85,8 +95,8 @@
             <button type="submit" class="bg-blue-600 text-white px-3 py-1 w-fit rounded-md">Create admin</button>
          </form>
         @if (session('statusCreate'))
-            <p class="p-4 text-green-600 bg-green-100 rounded-md">{{ session('statusCreate') }}</p>
+            <p class="p-4 text-green-600 bg-green-100 rounded-md"> {{ session('statusCreate') }}</p>
         @endif
-    </div>
+    </div>!
 </body>
 </html>
