@@ -37,6 +37,8 @@
                     <td class="pl-3 py-3 font-light text-zinc-800">ADMIN ID</td>
                     <td class="py-3 font-light text-zinc-800 w-1/4">NAME</td>
                     <td class="py-3 font-light text-zinc-800">EMAIL</td>
+                    <td class="py-3 font-light text-zinc-800">CREATED AT (UTC)</td>
+                    <td class="py-3 font-light text-zinc-800">UPDATED AT (UTC)</td>
                     <td class="pr-3 py-3 font-light text-zinc-800 text-center w-2/12">ACTIONS</td>
                 </tr>
                 </thead>
@@ -45,12 +47,13 @@
                         @foreach ($admins as $admin)
                         <tr class="border-b border-slate-300">
                             <td class="pl-3 text-zinc-800">{{ $admin->id }}</td>
+                            <td class="py-3 text-zinc-800">{{ $admin->name }}</td>
                             <td class="py-3 text-zinc-800">
-                                <p class="text-zinc-800">
-                                    {{ $admin->name }}
-                                </p>
+                                <p>{{ $admin->email }}</p>
+                                <p class="text-sm text-zinc-600">Verified at (UTC): {{ $admin->email_verified_at }}</p>
                             </td>
-                            <td class="py-3 text-zinc-800">{{ $admin->email }}</td>
+                            <td class="py-3 text-zinc-800">{{ $admin->created_at }}</td>
+                            <td class="py-3 text-zinc-800">{{ $admin->updated_at }}</td>
                             <td class="pr-3 text-zinc-800">
                                 <div class="flex flex-col items-center">
                                     <form action="adminUpdate/{{ $admin->id }}" method="GET">
