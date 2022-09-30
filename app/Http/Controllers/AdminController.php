@@ -66,7 +66,7 @@ class AdminController extends Controller
         return view('adminManagement')->with('admins', 
             DB::table('admins')
             ->where('deleted_at', '=', null)
-            ->select('id', 'name', 'email')
+            ->select('id', 'name', 'email', 'email_verified_at', 'created_at', 'updated_at')
             ->get()
         );
     }
