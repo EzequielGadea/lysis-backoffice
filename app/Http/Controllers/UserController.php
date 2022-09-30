@@ -19,18 +19,33 @@ class UserController extends Controller
 {
     public function create(CreateUserRequest $request) 
     {
+        $client = new Client([
+            'surname' => $request->post('surname'),
+            'birth_date' => $request->post('birthdate'),
+            'subscription_id' => $request->post('subscriptionId')
+        ]);
+        $user = new User([
+            'name' => $request->post('name'),
+            'email' => $request->post('email'),
+            'password' => Hash::make($request->post('password'))
+        ]);
+
         try {
-            return $this->store($request);
+            DB::transaction(function () use ($client, $user){
+                $client->save();
+                $client->user()->save($user);
+            });
         }
         catch (QueryException $e) {
-            return $e->getMessage();
+            return back()->with('statusCreate', 'Couldn\'t create user. If this issue persists please contact the developer team.');
         }
+
+        return back()->with('statusCreate', "User ".$request->post('name')." ".$request->post('surname')." created succesfully.");
     }
 
     public function update(Request $request)
     {
         $validation = $this->validateUpdate($request);
-
         if($validation !== true)
             return back()->withErrors($validation);
         
@@ -42,6 +57,10 @@ class UserController extends Controller
                     'name' => $request->post('name'),
                     'email' => $request->post('email')
                 ]);
+                if(!empty($request->post('password')))
+                    $user->update([
+                        'password' => Hass::make($request->post('password'))
+                    ]);
                 
                 $user->client->update([
                     'surname' => $request->post('surname'),
@@ -87,7 +106,7 @@ class UserController extends Controller
             ->where('users.deleted_at', '=', null)
             ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 'clients.birth_date', 'subscription_types.type')
             ->get()
-        );
+        )->with('subscriptions', SubscriptionType::all());
     }
 
     public function showUpdate($id)
@@ -107,58 +126,21 @@ class UserController extends Controller
             ->where('users.id', '=', $id)
             ->get()
             ->first()
-        );
-    }
-
-    private function store($request) 
-    {
-        $client = new Client([
-            'surname' => $request->post('surname'),
-            'birth_date' => $request->post('birthdate'),
-            'subscription_id' => SubscriptionType::firstWhere('type', $request->post('subscription'))->subscription_id
-        ]);
-
-        $user = new User([
-            'name' => $request->post('name'),
-            'email' => $request->post('email'),
-            'password' => Hash::make($request->post('password'))
-        ]);
-
-        try {
-            DB::transaction(function () use ($client, $user){
-                $client->save();
-                $client->user()->save($user);
-            });
-        } 
-        catch (QueryException $e) {
-            return [
-                "result" => "Couldn't create user.",
-                "trace" => $e->getMessage()
-            ];
-        }
-
-        return redirect('userManagement')->with('statusCreate', "User ".$request->post('name')." ".$request->post('surname')." created succesfully.");
+        )->with('subscriptions', SubscriptionType::all());
     }
 
     private function validateUpdate($request)
     {
-        $validateId = Validator::make(['id' => $request->post('id')], [
-            'id' => 'numeric|exists:users,id'
-        ]);
-
-        if($validateId->fails())
-            return $validateId;
-
         $validation = Validator::make($request->all(), [
-            'id' => 'required',
+            'id' => 'required|numeric|exists:users,id',
             'name' => 'required',
             'surname' => 'required',
             'birthdate' => 'required',
-            'email' => ['required', 'email', Rule::unique('users')->ignore(User::find($request->post('id'))->id)],
-            'subscription' => 'required'
+            'email' => ['required', 'email', Rule::unique('users')->ignore($request->post('id'))],
+            'subscription' => 'required',
+            'password' => 'nullable|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/'
         ]);
-
-        if($validation->fails())
+        if($validation->stopOnFirstFailure()->fails())
             return $validation;
 
         return true;
