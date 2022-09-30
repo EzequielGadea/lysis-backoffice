@@ -8,11 +8,6 @@
     <title>Backoffice | Home</title>
 </head>
 <body class="flex flex-row justify-center">
-    <!-- FALTA FOR EACH PARA PEDIR SUSBCRIPCIONES DE LA BD -->
-    <datalist id="subscriptions">
-        
-    </datalist>
-
     <nav class="flex flex-col pl-8 pr-3 pt-6 border-r-2 border-slate-500 h-screen w-48 justify-between">
         <div class="flex flex-col gap-5">
             <form action="/userManagement" method="GET" id="nav-users-form">
@@ -111,9 +106,10 @@
             </div>
             <div class="flex flex-col gap-1">
                 <label for="subscription">Subscription</label>
-                <select name="subscription" id="subscription" placeholder="Choose subscription type" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner" autocomplete="off">
-                    <option value="basic">Basic</option>
-                    <option value="premium">Premium</option>
+                <select name="subscriptionId" id="subscription" placeholder="Choose subscription type" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner" autocomplete="off">
+                    @foreach($subscriptions as $subscription)
+                        <option value="{{ $subscription->subscription_id }}">{{ $subscription->type }}</option>
+                    @endforeach
                 </select>
                 <p class="text-sm text-red-600">{{ $errors->first('subscription') }}</p>
             </div>
