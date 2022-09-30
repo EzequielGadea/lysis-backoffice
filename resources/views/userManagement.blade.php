@@ -39,6 +39,8 @@
                         <td class="py-3 font-light text-zinc-800">NAME</td>
                         <td class="py-3 font-light text-zinc-800">EMAIL</td>
                         <td class="py-3 font-light text-zinc-800">SUBSCRIPTION</td>
+                        <td class="py-3 font-light text-zinc-800">CREATED AT (UTC)</td>
+                        <td class="py-3 font-light text-zinc-800">UPDATED AT (UTC)</td>
                         <td class="pr-3 py-3 font-light text-zinc-800 text-center">ACTIONS</td>
                     </tr>
                 </thead>
@@ -56,8 +58,13 @@
                                         Birthdate: {{ $user->birth_date }}
                                     </p>
                                 </td>
-                                <td class="py-3 text-zinc-800">{{ $user->email }}</td>
+                                <td class="py-3 text-zinc-800">
+                                    <p>{{ $user->email }}</p>
+                                    <p class="text-sm text-zinc-600">Verified at (UTC): {{ $user->email_verified_at }}</p>
+                                </td>
                                 <td class="py-3 text-zinc-800">{{ $user->type}}</td>
+                                <td class="py-3 text-zinc-800">{{ $user->created_at }}</td>
+                                <td class="py-3 text-zinc-800">{{ $user->updated_at }}</td>
                                 <td class="pr-3 text-zinc-800">
                                     <div class="flex flex-col items-center">
                                         <form action="userUpdate/{{ $user->id }}" method="GET">
