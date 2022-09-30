@@ -65,7 +65,7 @@ class UserController extends Controller
                 $user->client->update([
                     'surname' => $request->post('surname'),
                     'birth_date' => $request->post('birthdate'),
-                    'subscription_id' => SubscriptionType::firstWhere('type', $request->post('subscription'))->subscription_id
+                    'subscription_id' => $request->post('subscription')
                 ]);
             });
         } catch (QueryExcpetion $e) {
@@ -104,7 +104,8 @@ class UserController extends Controller
             ->join('clients', 'users.client_id', '=', 'clients.id')
             ->join('subscription_types', 'subscription_types.subscription_id', '=', 'clients.subscription_id')
             ->where('users.deleted_at', '=', null)
-            ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 'clients.birth_date', 'subscription_types.type')
+            ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 
+                'clients.birth_date', 'subscription_types.type', 'users.created_at', 'users.updated_at', 'users.email_verified_at')
             ->get()
         )->with('subscriptions', SubscriptionType::all());
     }
@@ -137,7 +138,7 @@ class UserController extends Controller
             'surname' => 'required',
             'birthdate' => 'required',
             'email' => ['required', 'email', Rule::unique('users')->ignore($request->post('id'))],
-            'subscription' => 'required',
+            'subscription' => 'required|exists:subscriptions,id',
             'password' => 'nullable|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/'
         ]);
         if($validation->stopOnFirstFailure()->fails())
