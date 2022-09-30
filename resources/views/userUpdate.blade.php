@@ -32,12 +32,13 @@
                 <div class="flex flex-col gap-1">
                     <label for="subscription" class="font-medium text-zinc-700">Subscription</label>
                     <select name="subscription" id="subscription" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner" autocomplete="off">
-                        <option value="basic">Basic</option>
-                        @if($user->type == 'Premium')
-                            <option value="premium" selected>Premium</option>
-                        @else
-                            <option value="premium">Premium</option>
-                        @endif
+                        @foreach($subscriptions as $subscription)
+                            @if($user->type == $subscription->type)
+                                <option value="{{ $subscription->subscription_id }}" selected>{{ $subscription->type }}</option>
+                            @else
+                                <option value="{{ $subscription->subscription_id }}">{{ $subscription->type }}</option>
+                            @endif
+                        @endforeach
                     </select>
                     <p class="text-sm text-red-600">{{ $errors->first('subscription') }}</p>
                 </div>
@@ -45,6 +46,10 @@
                     <label for="email" class="font-medium text-zinc-700">Email</label>
                     <input type="email" name="email" id="email" value="{{ $user->email }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
                     <p class="text-sm text-red-600">{{ $errors->first('email') }}</p>
+                </div>
+                <div class="flex flex-col">
+                    <label for="password" class="font-medium text-zinc-700">Password</label>
+                    <input type="password" name="password" id="password" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner" placeholder="Leave empty to keep current">
                 </div>
                 <p class="text-sm text-red-600">{{ $errors->first('id') }}</p>
                 @if (session('statusUpdate'))
