@@ -23,11 +23,11 @@ class AdminController extends Controller
                 'email' => $request->post('email'),
                 'password' => Hash::make($request->post('password'))
             ]);
-
-            return back()->with('statusCreate', 'Admin created succesfully.');
         } catch (QueryException $e) {
             return back()->with('statusCreate', 'Couldn\'t create admin.');
         }
+
+        return back()->with('statusCreate', 'Admin created succesfully.');
     }
 
     public function update(Request $request)
@@ -61,35 +61,6 @@ class AdminController extends Controller
         return back()->with('statusDelete', 'Admin deleted succesfully');
     }
 
-    private function validateUpdate($request)
-    {
-        $validateId = $this->validateId($request->post('id'));
-        if($validateId !== true)
-            return back()->withErrors($validateId);
-        
-        $validation = Validator::make($request->all(), [
-            'id' => 'required',
-            'name' => 'required',
-            'email' => ['required', 'email', Rule::unique('admins')->ignore(Admin::find($request->post('id'))->id)],
-            'password' => 'nullable|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/'
-        ]);
-        if($validation->fails())
-            return $validation;
-
-        return true;
-    }
-
-    private function validateId($id)
-    {
-        $validation = Validator::make(['id' => $id], [
-            'id' => 'numeric|exists:admins,id'
-        ]);
-        if($validation->fails())
-            return $validateId;
-
-        return true;
-    }
-
     public function show() 
     {
         return view('adminManagement')->with('admins', 
@@ -97,7 +68,7 @@ class AdminController extends Controller
             ->where('deleted_at', '=', null)
             ->select('id', 'name', 'email')
             ->get()
-            );
+        );
     }
 
     public function showUpdate($id)
@@ -109,5 +80,19 @@ class AdminController extends Controller
             return back();
 
         return view('adminUpdate')->with('admin', Admin::find($id));
+    }
+
+    private function validateUpdate($request)
+    {
+        $validation = Validator::make($request->all(), [
+            'id' => 'required|numeric|exists:admins,id',
+            'name' => 'required',
+            'email' => ['required', 'email', Rule::unique('admins')->ignore($request->post('id'))],
+            'password' => 'nullable|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/'
+        ]);
+        if($validation->stopOnFirstFailure()->fails())
+            return $validation;
+
+        return true;
     }
 }
