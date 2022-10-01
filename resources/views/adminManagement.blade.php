@@ -1,33 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/output.css">
-    <title>Admin Management</title>
-</head>
-<body class="flex flex-row justify-center">
-    <nav class="flex flex-col pl-8 pr-3 pt-6 border-r-2 border-slate-500 min-h-screen w-48 justify-between">
-        <div class="flex flex-col gap-5">
-            <form action="/userManagement" method="GET" id="nav-users-form">
-                @csrf
-                <button class="font-medium text-zinc-800" id="nav-users" type="submit">Users</button>
-            </form>
-            <form action="/adminManagement" method="GET" id="nav-admins-form">
-                @csrf
-                <button class="font-medium text-zinc-800" id="nav-admins" type="submit">Admins</button>
-            </form>
-            <form action="/adManagement" method="GET" id="nav-ads-form">
-                @csrf
-                <button class="font-medium text-zinc-800" id="nav-ads" type="submit">Ads</button>
-            </form>
-        </div>
-        <form action="logout" method="POST">
-            @csrf
-            <button type="submit">Log out</button>
-        </form>
-    </nav>
+<x-layout>
+    <x-slot name="title">Admin management</x-slot>
+    <x-nav/>
     <div class="flex flex-col items-center pt-6 px-8 w-[50rem] flex-grow">
         <p class="text-2xl text-zinc-800 font-semibold mb-6 w-full">Admins</p>
         <div class="rounded-md overflow-hidden shadow-xl w-full">
@@ -45,28 +18,28 @@
                 <tbody>
                     @if (isset($admins))
                         @foreach ($admins as $admin)
-                        <tr class="border-b border-slate-300">
-                            <td class="pl-3 text-zinc-800">{{ $admin->id }}</td>
-                            <td class="py-3 text-zinc-800">{{ $admin->name }}</td>
-                            <td class="py-3 text-zinc-800">
-                                <p>{{ $admin->email }}</p>
-                                <p class="text-sm text-zinc-600">Verified at (UTC): {{ $admin->email_verified_at }}</p>
-                            </td>
-                            <td class="py-3 text-zinc-800">{{ $admin->created_at }}</td>
-                            <td class="py-3 text-zinc-800">{{ $admin->updated_at }}</td>
-                            <td class="pr-3 text-zinc-800">
-                                <div class="flex flex-col items-center">
-                                    <form action="adminUpdate/{{ $admin->id }}" method="GET">
-                                        <button class="font-semibold text-blue-600">Edit</button>
-                                    </form>
-                                    <form action="adminDelete" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $admin->id }}">
-                                        <button class="font-semibold text-blue-600" type="submit">Delete</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
+                            <tr class="border-b border-slate-300">
+                                <td class="pl-3 text-zinc-800">{{ $admin->id }}</td>
+                                <td class="py-3 text-zinc-800">{{ $admin->name }}</td>
+                                <td class="py-3 text-zinc-800">
+                                    <p>{{ $admin->email }}</p>
+                                    <p class="text-sm text-zinc-600">Verified at (UTC): {{ $admin->email_verified_at }}</p>
+                                </td>
+                                <td class="py-3 text-zinc-800">{{ $admin->created_at }}</td>
+                                <td class="py-3 text-zinc-800">{{ $admin->updated_at }}</td>
+                                <td class="pr-3 text-zinc-800">
+                                    <div class="flex flex-col items-center">
+                                        <form action="adminUpdate/{{ $admin->id }}" method="GET">
+                                            <button class="font-semibold text-blue-600">Edit</button>
+                                        </form>
+                                        <form action="adminDelete" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $admin->id }}">
+                                            <button class="font-semibold text-blue-600" type="submit">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforeach
                     @endif
                 </tbody>
@@ -100,6 +73,5 @@
         @if (session('statusCreate'))
             <p class="p-4 text-green-600 bg-green-100 rounded-md"> {{ session('statusCreate') }}</p>
         @endif
-    </div>!
-</body>
-</html>
+    </div>
+</x-layout>
