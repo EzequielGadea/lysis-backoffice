@@ -1,33 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('css/output.css') }}">
-    <title>Backoffice | Home</title>
-</head>
-<body class="flex flex-row justify-center">
-    <nav class="flex flex-col pl-8 pr-3 pt-6 border-r-2 border-slate-500 h-screen w-48 justify-between">
-        <div class="flex flex-col gap-5">
-            <form action="/userManagement" method="GET" id="nav-users-form">
-                @csrf
-                <button class="font-medium text-zinc-800" id="nav-users" type="submit">Users</button>
-            </form>
-            <form action="/adminManagement" method="GET" id="nav-admins-form">
-                @csrf
-                <button class="font-medium text-zinc-800" id="nav-admins" type="submit">Admins</button>
-            </form>
-            <form action="/adManagement" method="GET" id="nav-ads-form">
-                @csrf
-                <button class="font-medium text-zinc-800" id="nav-ads" type="submit">Ads</button>
-            </form>
-        </div>
-        <form action="logout" method="POST">
-            @csrf
-            <button type="submit">Log out</button>
-        </form>
-    </nav>
+<x-layout>
+    <x-slot name="title">Backoffice | Users</x-slot>
+    <x-nav/>
     <div class="flex flex-col items-center pt-6 px-8 w-[50rem] flex-grow">
         <p class="text-2xl text-zinc-800 font-semibold mb-6 w-full">Users</p>
         <div class="rounded-md overflow-hidden shadow-xl w-full">
@@ -131,6 +104,4 @@
             <p class="p-4 text-green-600 bg-green-100 rounded-md">{{ session('statusCreate') }}</p>
         @endif
     </div>
-    
-</body>
-</html>
+</x-layout>
