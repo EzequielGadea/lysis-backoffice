@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,11 @@ Route::middleware(['web'])->group(function () {
             Route::post('adminRegister', 'create');
             Route::post('adminUpdate', 'update');
             Route::post('adminDelete', 'delete');
+        });
+        
+        Route::controller(AdController::class)->group(function () {
+            Route::get('adManagement', 'show')->name('adManagement');
+            Route::post('adRegister', 'create');
         });
     });
 });
