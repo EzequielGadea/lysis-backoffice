@@ -46,6 +46,7 @@ Route::middleware(['web'])->group(function () {
         Route::controller(AdController::class)->group(function () {
             Route::get('adManagement', 'show')->name('adManagement');
             Route::post('adRegister', 'create');
+            Route::post('adDelete', 'delete');
         });
     });
 });
