@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ asset('css/output.css') }}">
     <title>{{ $title ?? 'Lysis backoffice' }}</title>
-    <title>Document</title>
 </head>
 <body class="flex flex-row justify-center">
     {{ $slot }}
