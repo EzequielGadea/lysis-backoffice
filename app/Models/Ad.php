@@ -12,9 +12,10 @@ class Ad extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'link',
-        'clicks_hired',
-        'location'
+        'path',
+        'views_hired',
+        'location',
+        'link'
     ];
 
     public function values() {
