@@ -10,6 +10,7 @@
                         <td class="pl-3 py-3 font-light text-zinc-800">AD ID</td>
                         <td class="py-3 font-light text-zinc-800">LINK</td>
                         <td class="py-3 font-light text-zinc-800">PATH</td>
+                        <td class="py-3 font-light text-zinc-800">LOCATION</td>
                         <td class="py-3 font-light text-zinc-800">VIEWS HIRED</td>
                         <td class="py-3 font-light text-zinc-800">CURRENT VIEWS</td>
                         <td class="py-3 font-light text-zinc-800">TAG:VALUE</td>
@@ -25,6 +26,7 @@
                                 <td class="pl-3 text-zinc-800">{{ $ad->id }}</td>
                                 <td class="py-3 text-zinc-800">{{ $ad->link }}</td>
                                 <td class="py-3 text-zinc-800">{{ $ad->path }}</td>
+                                <td class="py-3 text-zinc-800">{{ $ad->location }}</td>
                                 <td class="py-3 text-zinc-800">{{ $ad->views_hired }}</td>
                                 <td class="py-3 text-zinc-800">{{ $ad->current_views }}</td>
                                 <td class="py-3 text-zinc-800">
@@ -124,8 +126,8 @@
             <p class="text-sm text-red-600">{{ $errors->first('tagThreeId') }}</p>
         </div>
         <div class="flex flex-col gap-1">
-            <label for="valueTagOne" class="font-medium text-zinc-700">Value</label>
-            <input type="text" name="valueTagOne" id="valueTagOne" placeholder="Enter value for tag three" value="{{ old('valueTagThree') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            <label for="valueTagThree" class="font-medium text-zinc-700">Value</label>
+            <input type="text" name="valueTagThree" id="valueTagThree" placeholder="Enter value for tag three" value="{{ old('valueTagThree') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             <p class="text-sm text-red-600">{{ $errors->first('valueTagThree') }}</p>
         </div> 
     </x-create-section>
