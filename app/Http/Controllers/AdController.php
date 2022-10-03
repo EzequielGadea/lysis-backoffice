@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Collection;
 use App\Http\Requests\CreateAdRequest;
 use App\Models\Ad;
 use App\Models\Tag;
@@ -14,16 +15,42 @@ class AdController extends Controller
 {
     public function create(CreateAdRequest $request)
     {
+        $tagValues = collect([
+            'firstTag' => [
+                'tag_id' => $request->post('tagOneId'),
+                'value' => $request->post('valueTagOne')
+            ],
+            'secondTag' => [
+                'tag_id' => $request->post('tagTwoId'),
+                'value' => $request->post('valueTagTwo')
+            ],
+            'thirdTag' => [
+                'tag_id' => $request->post('tagThreeId'),
+                'value' => $request->post('valueTagThree')
+            ]
+        ]);
+
         try {
-            $ad = Ad::create([
-                'path' => $request->post('path'),
-                'views_hired' => $request->post('viewsHired'),
-                'location' => $request->post('location'),
-                'link' => $request->post('link')
-            ]);
+            DB::transaction(function () use ($request, $tagValues) {
+                $ad = Ad::create([
+                    'path' => $request->post('path'),
+                    'views_hired' => $request->post('viewsHired'),
+                    'location' => $request->post('location'),
+                    'link' => $request->post('link')
+                ]);
+                $tagValues->map(function ($item) use ($ad) {
+                    $value = Value::create([
+                        'value' => $item['value'],
+                        'tag_id' => $item['tag_id']
+                    ]);
+                    $ad->values()->save($value);
+                });                
+            });
         } catch (QueryExcpetion $e) {
             return back()->with('statusCreate', 'Couldn\'t create ad.');
         }
+
+        return back()->with('statusCreate', 'Ad created succesfully');
     }
 
     public function show()
@@ -37,5 +64,29 @@ class AdController extends Controller
             ->select('ads.id', 'tags.name', 'values.value')
             ->get()
         )->with('tags', Tag::all());
+    }
+
+    public function showUpdate($id)
+    {
+        $validation = Validator::make(['id' => $id], [
+            'id' => 'numeric|exists:ads'
+        ]);
+        if($validation->fails())
+            return back();
+
+        return view('adUpdate')->with('ad', Ad::find($id));
+    }
+
+    public function delete(Request $request) 
+    {
+        $validation = Validator::make($request->all(), [
+            'id' => 'required|numeric|exists:ads'
+        ]);
+        if($validation->fails())
+            return back()->withErrors($validation);
+
+        Ad::destroy($request->post('id'));
+
+        return back()->with('statusDelete', 'Ad deleted succesfully.');
     }
 }
