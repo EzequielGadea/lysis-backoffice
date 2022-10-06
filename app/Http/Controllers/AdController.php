@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 use App\Http\Requests\CreateAdRequest;
 use App\Models\Ad;
 use App\Models\Tag;
@@ -66,7 +67,28 @@ class AdController extends Controller
         )->with('tags', Tag::all());
     }
 
-    public function showUpdate($id)
+    public function update(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'id' => 'required|numeric|exists:ads',
+            'link' => 'required',
+            'path' => ['required', Rule::unique('ads')->ignore($request->post('id'))],
+            'viewsHired' => 'required|numeric|gte:1',
+            'currentViews' => 'required|numeric|gte:0',
+            'tagOneId' => 'required|numeric|exists:tags,id',
+            'valueTagOne' => 'required',
+            'tagTwoId' => 'required|numeric|exists:tags,id',
+            'valueTagTwo' => 'required',
+            'tagThreeId' => 'required|numeric|exists:tags,id',
+            'valueTagThree' => 'required'
+        ]);
+        if($validation->stopOnFirstFailure()->fails())
+            return back()->withErrors($validation);
+
+        
+    }
+
+    public function edit($id)
     {
         $validation = Validator::make(['id' => $id], [
             'id' => 'numeric|exists:ads'
@@ -74,7 +96,10 @@ class AdController extends Controller
         if($validation->fails())
             return back();
 
-        return view('adUpdate')->with('ad', Ad::find($id));
+        return view('adUpdate')
+            ->with('ad', Ad::find($id))
+            ->with('adTags', Ad::find($id)->values()->get())
+            ->with('tags', Tag::all());
     }
 
     public function delete(Request $request) 
