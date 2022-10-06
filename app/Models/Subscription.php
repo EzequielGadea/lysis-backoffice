@@ -15,8 +15,4 @@ class Subscription extends Model
     public function user() {
         return $this->hasMany(Client::class);
     }
-
-    public function type() {
-        return $this->hasOne(SubscriptionType::class);
-    }
 }
