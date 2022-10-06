@@ -98,7 +98,6 @@
             <input type="text" name="valueTagOne" id="valueTagOne" placeholder="Enter value for tag one" value="{{ old('valueTagOne') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             <p class="text-sm text-red-600">{{ $errors->first('valueTagOne') }}</p>
         </div>
-
         <div class="flex flex-col gap-1">
             <label for="tagTwo" class="font-medium text-zinc-700">Second tag</label>
             <select name="tagTwoId" id="tagTwo" placeholder="Choose second tag" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner" autocomplete="off">
@@ -114,7 +113,6 @@
             <input type="text" name="valueTagTwo" id="valueTagTwo" placeholder="Enter value for tag two" value="{{ old('valueTagTwo') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             <p class="text-sm text-red-600">{{ $errors->first('valueTagTwo') }}</p>
         </div>
-
         <div class="flex flex-col gap-1">
             <label for="tagThree" class="font-medium text-zinc-700">Third tag</label>
             <select name="tagThreeId" id="tagThree" placeholder="Choose third tag" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner" autocomplete="off">
