@@ -13,7 +13,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Requests\CreateUserRequest;
 use App\Models\User;
 use App\Models\Client;
-use App\Models\SubscriptionType;
+use App\Models\Subscription;
 
 class UserController extends Controller
 {
@@ -102,12 +102,12 @@ class UserController extends Controller
         return view('userManagement')->with('users', 
             DB::table('users')
             ->join('clients', 'users.client_id', '=', 'clients.id')
-            ->join('subscription_types', 'subscription_types.subscription_id', '=', 'clients.subscription_id')
+            ->join('subscriptions', 'subscriptions.id', '=', 'clients.subscription_id')
             ->where('users.deleted_at', '=', null)
             ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 
-                'clients.birth_date', 'subscription_types.type', 'users.created_at', 'users.updated_at', 'users.email_verified_at')
+                'clients.birth_date', 'subscriptions.type', 'users.created_at', 'users.updated_at', 'users.email_verified_at')
             ->get()
-        )->with('subscriptions', SubscriptionType::all());
+        )->with('subscriptions', Subscription::all());
     }
 
     public function showUpdate($id)
@@ -122,12 +122,12 @@ class UserController extends Controller
         return view('userUpdate')->with('user', 
             DB::table('users')
             ->join('clients', 'users.client_id', '=', 'clients.id')
-            ->join('subscription_types', 'subscription_types.subscription_id', '=', 'clients.subscription_id')
-            ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 'clients.birth_date', 'subscription_types.type')
+            ->join('subscriptions', 'subscriptions.id', '=', 'clients.subscription_id')
+            ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 'clients.birth_date', 'subscriptions.type')
             ->where('users.id', '=', $id)
             ->get()
             ->first()
-        )->with('subscriptions', SubscriptionType::all());
+        )->with('subscriptions', Subscription::all());
     }
 
     private function validateUpdate($request)
