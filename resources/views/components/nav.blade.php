@@ -16,6 +16,10 @@
             @csrf
             <button class="font-medium text-zinc-800" id="nav-tags" type="submit">Tags</button>
         </form>
+        <form action="/subscriptionManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800" id="nav-subscriptions" type="submit">Subscriptions</button>
+        </form>
     </div>
     <form action="logout" method="POST" class="mt-12">
         @csrf
