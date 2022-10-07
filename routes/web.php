@@ -34,6 +34,7 @@ Route::middleware(['web'])->group(function () {
             Route::post('userRegister', 'create');
             Route::post('userUpdate', 'update');
             Route::post('userDelete', 'delete');
+            Route::post('userRestore', 'restore');
         });
         
         Route::controller(AdminController::class)->group(function () {
@@ -42,6 +43,7 @@ Route::middleware(['web'])->group(function () {
             Route::post('adminRegister', 'create');
             Route::post('adminUpdate', 'update');
             Route::post('adminDelete', 'delete');
+            Route::post('adminRestore', 'restore');
         });
         
         Route::controller(AdController::class)->group(function () {
@@ -50,12 +52,16 @@ Route::middleware(['web'])->group(function () {
             Route::post('adRegister', 'create');
             Route::post('adUpdate', 'update');
             Route::post('adDelete', 'delete');
+            Route::post('adRestore', 'restore');
         });
 
         Route::controller(TagController::class)->group(function () {
             Route::get('tagManagement', 'show')->name('tagManagement');
+            Route::get('tagUpdate/{id}', 'edit');
             Route::post('tagRegister', 'create');
+            Route::post('tagUpdate', 'update');
             Route::post('tagDelete', 'delete');
+            Route::post('tagRestore', 'restore');
         });
     });
 });
