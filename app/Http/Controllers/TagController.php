@@ -30,7 +30,22 @@ class TagController extends Controller
 
         Tag::destroy($request->post('id'));
 
-        return back()->with('statusDelete', 'Tag deleted succesfully.');
+        return back()->with([
+            'statusDelete' => 'Tag deleted succesfully.',
+            'deletedId' => $request->post('id')
+        ]);
+    }
+
+    public function restore(Request $request)
+    {
+        $validation = $this->validateRestore($request);
+        if($validation !== true)
+            return back()->withErrors($validation);
+        
+        Tag::withTrashed()
+            ->where('id', $request->post('id'))
+            ->restore();
+        return back()->with('statusRestore', 'Tag restored succesfully.');
     }
 
     public function update(Request $request)
@@ -43,7 +58,10 @@ class TagController extends Controller
             'name' => $request->post('name')
         ]);
 
-        return back()->with('statusUpdate', 'Tag updated succesfully, you will soon be redirected.')->with('isRedirected', 'true');
+        return back()->with([
+            'statusUpdate' => 'Tag updated succesfully, you will soon be redirected.',
+            'isRedirected' => 'true'
+        ]);
     }
 
     public function edit($id)
@@ -53,7 +71,7 @@ class TagController extends Controller
         ]);
         if($validation->fails())
             return back();
-        return view('tagUpdate')->with('tag', Tag::find($id))
+        return view('tagUpdate')->with('tag', Tag::find($id));
     }
 
     public function show()
@@ -64,7 +82,7 @@ class TagController extends Controller
     private function validateCreation($request)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'required|unique:tags'
+            'name' => ['required', Rule::unique('tags')->whereNull('deleted_at')]
         ]);
         if($validation->fails())
             return $validation;
@@ -85,9 +103,22 @@ class TagController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:tags',
-            'name' => ['required', Rule::unique('tags')->ignore($request->post('id'))]
+            'name' => ['required', 
+                Rule::unique('tags')
+                ->ignore($request->post('id'))
+            ]
         ]);
         if($validation->stopOnFirstFailure()->fails())
+            return $validation;
+        return true;
+    }
+
+    private function validateRestore($request)
+    {
+        $validation = Validator::make($request->all(), [
+            'id' => 'required|numeric|exists:tags'
+        ]);
+        if($validation->fails())
             return $validation;
         return true;
     }
