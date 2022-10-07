@@ -45,8 +45,14 @@
                 </tbody>
             </table>
         </div>
-        @if (session('statusDelete'))
-            <p class="bg-red-100 text-red-600 p-4 rounded-md mt-12">{{ session('statusDelete') }}</p>
+        @if(session('statusDelete') && session('deletedId'))
+            <x-status-delete>
+                <x-slot name="action">adminRestore</x-slot>
+                <x-slot name="id">{{ session('deletedId') }}</x-slot>
+            </x-status-delete>
+        @endif
+        @if(session('statusRestore'))
+            <x-status-restore/>
         @endif
     </div> 
     <div class="bg-slate-50 flex flex-col gap-6 w-80 px-8 py-6">

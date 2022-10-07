@@ -56,8 +56,14 @@
                 </tbody>
             </table>
         </div>
-        @if (session('statusDelete'))
-            <p class="bg-red-100 text-red-600 p-4 rounded-md mt-12">{{ session('statusDelete') }}</p>
+        @if(session('statusDelete') && session('deletedId'))
+            <x-status-delete>
+                <x-slot name="action">userRestore</x-slot>
+                <x-slot name="id">{{ session('deletedId') }}</x-slot>
+            </x-status-delete>
+        @endif
+        @if(session('statusRestore'))
+            <x-status-restore/>
         @endif
     </div> 
     <div class="bg-slate-50 flex flex-col gap-6 w-80 px-8 py-6">
@@ -88,7 +94,7 @@
                 <label for="subscription">Subscription</label>
                 <select name="subscriptionId" id="subscription" placeholder="Choose subscription type" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner" autocomplete="off">
                     @foreach($subscriptions as $subscription)
-                        <option value="{{ $subscription->subscription_id }}">{{ $subscription->type }}</option>
+                        <option value="{{ $subscription->id }}">{{ $subscription->type }}</option>
                     @endforeach
                 </select>
                 <p class="text-sm text-red-600">{{ $errors->first('subscription') }}</p>
