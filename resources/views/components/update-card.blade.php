@@ -3,6 +3,9 @@
     @csrf
     <div class="flex flex-col items-start px-6 gap-2 flex-wrap">
         {{ $slot }}
+        @if (session('statusUpdate'))
+            <p class="p-4 text-green-600 bg-green-100 rounded-md">{{ session('statusUpdate') }}</p>
+        @endif
     </div>
     <div class="flex flex-row justify-end items-center py-3 px-6 bg-slate-200 w-full gap-10">
         <a class="text-zinc-800 hover:cursor-pointer" id="cancel">Cancel</a>
