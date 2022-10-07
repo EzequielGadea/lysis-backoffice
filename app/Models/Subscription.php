@@ -12,6 +12,12 @@ class Subscription extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'type',
+        'description',
+        'price'
+    ];
+
     public function user() {
         return $this->hasMany(Client::class);
     }
