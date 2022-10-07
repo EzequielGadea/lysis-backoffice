@@ -17,20 +17,7 @@ class AdController extends Controller
 
     public function create(CreateAdRequest $request)
     {
-        $tagValues = collect([
-            'firstTag' => [
-                'tag_id' => $request->post('tagOneId'),
-                'value' => $request->post('valueTagOne')
-            ],
-            'secondTag' => [
-                'tag_id' => $request->post('tagTwoId'),
-                'value' => $request->post('valueTagTwo')
-            ],
-            'thirdTag' => [
-                'tag_id' => $request->post('tagThreeId'),
-                'value' => $request->post('valueTagThree')
-            ]
-        ]);
+        $tagValues = $this->tagValuesToArray($request);
 
         try {
             DB::transaction(function () use ($request, $tagValues) {
@@ -40,14 +27,14 @@ class AdController extends Controller
                     'location' => $request->post('location'),
                     'link' => $request->post('link')
                 ]);
-                $tagValues->map(function ($item) use ($ad) {
-                    $value = Value::create([
-                        'value' => $item['value'],
-                        'tag_id' => $item['tag_id']
+                foreach ($tagValues as $value) {
+                    $values = Value::create([
+                        'value' => $value['value'],
+                        'tag_id' => $value['tag_id']
                     ]);
-                    $ad->values()->save($value);
-                });                
-            });
+                    $ad->values()->save($values);
+                }
+            });                
         } catch (QueryExcpetion $e) {
             return back()->with('statusCreate', 'Couldn\'t create ad.');
         }
@@ -86,20 +73,7 @@ class AdController extends Controller
         if($validation->stopOnFirstFailure()->fails())
             return back()->withErrors($validation);
 
-        $tagValues = [
-            [
-                'tag_id' => $request->post('tagOneId'),
-                'value' => $request->post('valueTagOne')
-            ],
-            [
-                'tag_id' => $request->post('tagTwoId'),
-                'value' => $request->post('valueTagTwo')
-            ],
-            [
-                'tag_id' => $request->post('tagThreeId'),
-                'value' => $request->post('valueTagThree')
-            ]
-        ];
+        $tagValues = $this->tagValuesToArray($request);
     
         try {
             DB::transaction(function () use ($request, $tagValues) {
@@ -119,7 +93,7 @@ class AdController extends Controller
         }
     
         return back()->with('statusUpdate', 'Ad updated succesfully, you will soon be redirected.')->with('isRedirected', 'true');
-   
+
     }
 
     public function edit($id)
@@ -147,5 +121,22 @@ class AdController extends Controller
         Ad::destroy($request->post('id'));
 
         return back()->with('statusDelete', 'Ad deleted succesfully.');
+    }
+
+    private function tagValuesToArray($request) {
+        return $tagValues = [
+            [
+                'tag_id' => $request->post('tagOneId'),
+                'value' => $request->post('valueTagOne')
+            ],
+            [
+                'tag_id' => $request->post('tagTwoId'),
+                'value' => $request->post('valueTagTwo')
+            ],
+            [
+                'tag_id' => $request->post('tagThreeId'),
+                'value' => $request->post('valueTagThree')
+            ]
+        ];
     }
 }
