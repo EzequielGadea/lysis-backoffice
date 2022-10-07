@@ -44,37 +44,21 @@ class AdController extends Controller
 
     public function show()
     {
-        return view('adManagement')->with('ads', Ad::all())
-        ->with('tagsValues', 
-            DB::table('ads')
-            ->join('ad_value', 'ads.id', '=', 'ad_value.ad_id')
-            ->join('values', 'ad_value.value_id', '=', 'values.id')
-            ->join('tags', 'values.tag_id', '=', 'tags.id')
-            ->select('ads.id', 'tags.name', 'values.value')
-            ->get()
-        )->with('tags', Tag::all());
+        return view('adManagement')->with([
+            'ads' => Ad::all(),
+            'tagsValues' => 
+                DB::table('ads')
+                ->join('ad_value', 'ads.id', '=', 'ad_value.ad_id')
+                ->join('values', 'ad_value.value_id', '=', 'values.id')
+                ->join('tags', 'values.tag_id', '=', 'tags.id')
+                ->select('ads.id', 'tags.name', 'values.value')
+                ->get(),
+            'tags' => Tag::all()
+        ]);
     }
 
-    public function update(Request $request)
-    {
-        $validation = Validator::make($request->all(), [
-            'id' => 'required|numeric|exists:ads',
-            'link' => 'required',
-            'path' => ['required', Rule::unique('ads')->ignore($request->post('id'))],
-            'viewsHired' => 'required|numeric|gte:1',
-            'currentViews' => 'required|numeric|gte:0',
-            'tagOneId' => 'required|numeric|exists:tags,id',
-            'valueTagOne' => 'required',
-            'tagTwoId' => 'required|numeric|exists:tags,id',
-            'valueTagTwo' => 'required',
-            'tagThreeId' => 'required|numeric|exists:tags,id',
-            'valueTagThree' => 'required'
-        ]);
-        if($validation->stopOnFirstFailure()->fails())
-            return back()->withErrors($validation);
-
-        $tagValues = $this->tagValuesToArray($request);
-    
+    public function update(UpdateAdRequest $request)
+    {    
         try {
             DB::transaction(function () use ($request, $tagValues) {
                 $ad = Ad::find($request->post('id'))->update([
@@ -92,8 +76,10 @@ class AdController extends Controller
             return back()->with('statusUpdate', 'Couldn\'t update ad.');
         }
     
-        return back()->with('statusUpdate', 'Ad updated succesfully, you will soon be redirected.')->with('isRedirected', 'true');
-
+        return back()->with([
+            'statusUpdate' => 'Ad updated succesfully, you will soon be redirected.',
+            'isRedirected' => 'true'
+        ]);
     }
 
     public function edit($id)
@@ -104,10 +90,11 @@ class AdController extends Controller
         if($validation->fails())
             return back();
 
-        return view('adUpdate')
-            ->with('ad', Ad::find($id))
-            ->with('adTags', Ad::find($id)->values()->get())
-            ->with('tags', Tag::all());
+        return view('adUpdate')->with([
+            'ad' => Ad::find($id),
+            'adTags' => Ad::find($id)->values()->get(),
+            'tags' => Tag::all()
+        ]);
     }
 
     public function delete(Request $request) 
@@ -120,7 +107,33 @@ class AdController extends Controller
 
         Ad::destroy($request->post('id'));
 
-        return back()->with('statusDelete', 'Ad deleted succesfully.');
+        return back()->with([
+            'statusDelete' => 'Ad deleted succesfully.',
+            'deletedId' => $request->post('id')
+        ]);
+    }
+
+    public function restore(Request $request)
+    {
+        $validation = $this->validateRestore($request);
+        if($validation !== true)
+            return back()->withErrors($validation);
+
+        Ad::withTrashed()
+            ->find($request->post('id'))
+            ->restore();
+
+        return back()->with('statusRestore', 'Ad restored succesfully.');
+    }
+
+    private function validateRestore($request)
+    {
+        $validation = Validator::make($request->all(), [
+            'id' => 'required|numeric|exists:ads'
+        ]);
+        if($validation->fails())
+            return $validation;
+        return true;
     }
 
     private function tagValuesToArray($request) {
