@@ -34,9 +34,9 @@
                     <select name="subscription" id="subscription" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner" autocomplete="off">
                         @foreach($subscriptions as $subscription)
                             @if($user->type == $subscription->type)
-                                <option value="{{ $subscription->subscription_id }}" selected>{{ $subscription->type }}</option>
+                                <option value="{{ $subscription->id }}" selected>{{ $subscription->type }}</option>
                             @else
-                                <option value="{{ $subscription->subscription_id }}">{{ $subscription->type }}</option>
+                                <option value="{{ $subscription->id }}">{{ $subscription->type }}</option>
                             @endif
                         @endforeach
                     </select>
