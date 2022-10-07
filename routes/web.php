@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,14 @@ Route::middleware(['web'])->group(function () {
             Route::post('tagUpdate', 'update');
             Route::post('tagDelete', 'delete');
             Route::post('tagRestore', 'restore');
+        });
+
+        Route::controller(SubscriptionController::class)->group(function () {
+            Route::get('subscriptionManagement', 'show')->name('subscriptionManagement');
+            Route::get('subscriptionUpdate/{id}', 'edit');
+            Route::post('subscriptionRegister', 'create');
+            Route::post('subscriptionUpdate', 'update');
+            Route::post('subscriptionDelete', 'delete');
         });
     });
 });
