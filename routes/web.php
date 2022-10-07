@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,12 @@ Route::middleware(['web'])->group(function () {
             Route::post('adRegister', 'create');
             Route::post('adUpdate', 'update');
             Route::post('adDelete', 'delete');
+        });
+
+        Route::controller(TagController::class)->group(function () {
+            Route::get('tagManagement', 'show')->name('tagManagement');
+            Route::post('tagRegister', 'create');
+            Route::post('tagDelete', 'delete');
         });
     });
 });
