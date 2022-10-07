@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
@@ -80,7 +80,6 @@ class UserController extends Controller
         $validation = Validator::make($request->all(), [
             'userId' => 'required|numeric|exists:users,id'
         ]);
-
         if($validation->fails())
             return back()->withErrors($validation);
 
@@ -94,7 +93,32 @@ class UserController extends Controller
             return Redirect::back()->with('statusDelete', 'Could not delete user.');
         }
 
-        return Redirect::back()->with('statusDelete', 'User deleted succesfully');
+        return Redirect::back()->with([
+            'statusDelete' => 'User deleted succesfully',
+            'deletedId' => $request->post('userId')
+        ]);
+    }
+
+    public function restore(Request $request)
+    {
+        $validation = $this->validateRestore($request);
+        if($validation !== true)
+            return back()->withErrors($validation);
+
+        try {
+            DB::transaction(function () use ($request) {
+                User::withTrashed()
+                    ->where('id', $request->post('id'))
+                    ->restore();
+                User::withTrashed()
+                    ->find($request->post('id'))
+                    ->client()
+                    ->restore();
+            });
+        } catch (QueryException $e) {
+            return back()->with('statusRestore', 'Couldn\'t restore user.');
+        }
+        return back()->with('statusRestore', 'User restored succesfully.');
     }
 
     public function show() 
@@ -105,7 +129,7 @@ class UserController extends Controller
             ->join('subscriptions', 'subscriptions.id', '=', 'clients.subscription_id')
             ->where('users.deleted_at', '=', null)
             ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 
-                'clients.birth_date', 'subscriptions.type', 'users.created_at', 'users.updated_at', 'users.email_verified_at')
+                'clients.birth_date', 'subscriptions.type', 'users.created_at', 'clients.updated_at', 'users.email_verified_at')
             ->get()
         )->with('subscriptions', Subscription::all());
     }
@@ -144,6 +168,16 @@ class UserController extends Controller
         if($validation->stopOnFirstFailure()->fails())
             return $validation;
 
+        return true;
+    }    
+
+    private function validateRestore($request)
+    {
+        $validation = Validator::make($request->all(), [
+            'id' => 'required|numeric|exists:users'
+        ]);
+        if($validation->fails())
+            return $validation;
         return true;
     }
 }
