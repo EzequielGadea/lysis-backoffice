@@ -14,6 +14,7 @@ use App\Models\Value;
 
 class AdController extends Controller
 {
+
     public function create(CreateAdRequest $request)
     {
         $tagValues = collect([
@@ -85,7 +86,40 @@ class AdController extends Controller
         if($validation->stopOnFirstFailure()->fails())
             return back()->withErrors($validation);
 
-        
+        $tagValues = [
+            [
+                'tag_id' => $request->post('tagOneId'),
+                'value' => $request->post('valueTagOne')
+            ],
+            [
+                'tag_id' => $request->post('tagTwoId'),
+                'value' => $request->post('valueTagTwo')
+            ],
+            [
+                'tag_id' => $request->post('tagThreeId'),
+                'value' => $request->post('valueTagThree')
+            ]
+        ];
+    
+        try {
+            DB::transaction(function () use ($request, $tagValues) {
+                $ad = Ad::find($request->post('id'))->update([
+                    'link' => $request->post('link'),
+                    'path' => $request->post('path'),
+                    'views_hired' => $request->post('viewsHired'),
+                    'current_views' => $request->post('currentViews')
+                ]);
+                $values = Ad::find($request->post('id'))->values()->get();
+                $values->map(function ($item, $key) use ($tagValues) {
+                    $item->update($tagValues[$key]);
+                });             
+            });
+        } catch (QueryExcpetion $e) {
+            return back()->with('statusUpdate', 'Couldn\'t update ad.');
+        }
+    
+        return back()->with('statusUpdate', 'Ad updated succesfully, you will soon be redirected.')->with('isRedirected', 'true');
+   
     }
 
     public function edit($id)
