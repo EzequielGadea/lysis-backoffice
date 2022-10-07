@@ -44,6 +44,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * All of the relationships to be touched.
+     * 
+     * @var array
+     */
+    protected $touches = [
+        'client'
+    ];
+
     public function client() {
         return $this->belongsTo(Client::class);
     }
