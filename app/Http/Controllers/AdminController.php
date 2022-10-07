@@ -45,7 +45,10 @@ class AdminController extends Controller
                 'password' => Hash::make($request->post('password'))
             ]);
         
-        return back()->with('statusUpdate', 'Admin updated succesfully, you will soon be redirected.')->with('isRedirected', 'true');
+        return back()->with([
+            'statusUpdate' => 'Admin updated succesfully, you will soon be redirected.',
+            'isRedirected' => 'true'
+        ]);
     }
 
     public function delete(Request $request)
@@ -58,7 +61,23 @@ class AdminController extends Controller
         
         Admin::destroy($request->post('id'));
 
-        return back()->with('statusDelete', 'Admin deleted succesfully');
+        return back()->with([
+            'statusDelete' => 'Admin deleted succesfully',
+            'deletedId' => $request->post('id')
+        ]);
+    }
+
+    public function restore(Request $request)
+    {
+        $validation = $this->validateRestore($request);
+        if($validation !== true)
+            return back()->withErrors($validation);
+
+        Admin::withTrashed()
+            ->find($request->post('id'))
+            ->restore();
+
+        return back()->with('statusRestore', 'Admin restored succesfully.');
     }
 
     public function show() 
@@ -93,6 +112,16 @@ class AdminController extends Controller
         if($validation->stopOnFirstFailure()->fails())
             return $validation;
 
+        return true;
+    }
+
+    private function validateRestore($request)
+    {
+        $validation = Validator::make($request->all(), [
+            'id' => 'required|numeric|exists:admins'
+        ]);
+        if($validation->fails())
+            return $validation;
         return true;
     }
 }
