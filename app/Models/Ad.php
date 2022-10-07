@@ -15,7 +15,8 @@ class Ad extends Model
         'path',
         'views_hired',
         'location',
-        'link'
+        'link',
+        'current_views'
     ];
 
     public function values() {
