@@ -44,8 +44,14 @@
                 </tbody>
             </table>
         </div>
-        @if (session('statusDelete'))
-            <p class="bg-red-100 text-red-600 p-4 rounded-md mt-12">{{ session('statusDelete') }}</p>
+        @if(session('statusDelete') && session('deletedId'))
+            <x-status-delete>
+                <x-slot name="action">subscriptionRestore</x-slot>
+                <x-slot name="id">{{ session('deletedId') }}</x-slot>
+            </x-status-delete>
+        @endif
+        @if(session('statusRestore'))
+            <x-status-restore/>
         @endif
     </div>
     <x-create-section>
@@ -55,7 +61,7 @@
             <input type="text" name="type" id="type" placeholder="Enter type" value="{{ old('type') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             <p class="text-sm text-red-600">{{ $errors->first('type') }}</p>
             <label for="price" class="font-medium text-zinc-700">Price</label>
-            <input type="number" name="price" id="price" placeholder="Enter price" value="{{ old('price') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            <input type="number" min="0" name="price" id="price" placeholder="Enter price" value="{{ old('price') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             <p class="text-sm text-red-600">{{ $errors->first('price') }}</p>
             <label for="description" class="font-medium text-zinc-700">Description</label>
             <input type="text" name="description" id="description" placeholder="Enter description" value="{{ old('description') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
