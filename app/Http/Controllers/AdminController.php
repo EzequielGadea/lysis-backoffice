@@ -53,10 +53,8 @@ class AdminController extends Controller
 
     public function delete(Request $request)
     {
-        $validation = Validator::make($request->all(), [
-            'id' => 'required|numeric|exists:admins,id'
-        ]);
-        if($validation->fails())
+        $validation = $this->validateId($request);
+        if($validation !== true)
             return back()->withErrors($validation);
         
         Admin::destroy($request->post('id'));
@@ -69,7 +67,7 @@ class AdminController extends Controller
 
     public function restore(Request $request)
     {
-        $validation = $this->validateRestore($request);
+        $validation = $this->validateId($request);
         if($validation !== true)
             return back()->withErrors($validation);
 
@@ -92,10 +90,8 @@ class AdminController extends Controller
 
     public function showUpdate($id)
     {
-        $validation = Validator::make(['id' => $id], [
-            'id' => 'numeric|exists:admins,id'
-        ]);
-        if($validation->fails())
+        $validation = $this->validateId(collect(['id' => $id]));
+        if($validation !== true)
             return back();
 
         return view('adminUpdate')->with('admin', Admin::find($id));
@@ -116,6 +112,16 @@ class AdminController extends Controller
     }
 
     private function validateRestore($request)
+    {
+        $validation = Validator::make($request->all(), [
+            'id' => 'required|numeric|exists:admins'
+        ]);
+        if($validation->fails())
+            return $validation;
+        return true;
+    }
+
+    private function validateId($request)
     {
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:admins'
