@@ -71,6 +71,7 @@ Route::middleware(['web'])->group(function () {
             Route::post('subscriptionRegister', 'create');
             Route::post('subscriptionUpdate', 'update');
             Route::post('subscriptionDelete', 'delete');
+            Route::post('subscriptionRestore', 'restore');
         });
     });
 });
