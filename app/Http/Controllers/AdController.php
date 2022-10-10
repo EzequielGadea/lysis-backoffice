@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\CreateAdRequest;
-use App\Models\Ad;
-use App\Models\Tag;
-use App\Models\Value;
+use App\Models\Ads\Ad;
+use App\Models\Ads\Tag;
+use App\Models\Ads\Value;
 
 class AdController extends Controller
 {
