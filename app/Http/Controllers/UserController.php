@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\CreateUserRequest;
-use App\Models\User;
-use App\Models\Client;
-use App\Models\Subscription;
+use App\Models\Users\User;
+use App\Models\Users\Client;
+use App\Models\Users\Subscription;
 
 class UserController extends Controller
 {

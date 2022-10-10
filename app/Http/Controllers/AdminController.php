@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\CreateAdminRequest;
-use App\Models\Admin;
+use App\Models\Users\Admin;
 
 
 class AdminController extends Controller
