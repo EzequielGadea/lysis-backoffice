@@ -5,9 +5,9 @@ namespace App\Models\Players;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Country;
-use App\Models\Team;
-use App\Models\PlayerTeam;
+use App\Models\Whereabouts\Country;
+use App\Models\Teams\Team;
+use App\Models\Players\PlayerTeam;
 
 class Player extends Model
 {

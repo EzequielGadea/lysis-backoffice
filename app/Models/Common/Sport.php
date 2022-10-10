@@ -5,7 +5,7 @@ namespace App\Models\Common;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\League;
+use App\Models\Common\League;
 
 class Sport extends Model
 {

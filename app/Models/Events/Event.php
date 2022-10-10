@@ -5,7 +5,7 @@ namespace App\Models\Events;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Venue;
+use App\Models\Whereabouts\Venue;
 
 class Event extends Model
 {

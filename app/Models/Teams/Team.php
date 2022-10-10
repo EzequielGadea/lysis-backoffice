@@ -5,10 +5,10 @@ namespace App\Models\Teams;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Model\Country;
-use App\Model\League;
-use App\Model\Manager;
-use App\Model\PlayerTeam;
+use App\Model\Whereabouts\Country;
+use App\Model\Common\League;
+use App\Model\Teams\Manager;
+use App\Model\Players\PlayerTeam;
 
 class Team extends Model
 {
