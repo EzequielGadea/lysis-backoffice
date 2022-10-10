@@ -1,21 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Events;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Value;
 
-class Tag extends Model
+class EventPlayerTeam extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'name'
-    ];
+    protected $table = 'event_player_team';
 
-    public function value() {
-        return $this->hasMany(Value::class);
-    }
+    protected $fillable = [
+        'contract_start'
+    ];
 }

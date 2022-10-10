@@ -1,30 +1,35 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Common;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Sport;
 use App\Models\Country;
-use App\Models\Team;
+use App\Models\Teampp;
 
-class Manager extends Model
+class League extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
-        'surname',
-        'birth_date'
+        'logo_link'
     ];
+
+    public function sport()
+    {
+        return $this->belongsTo(Sport::class);
+    }
 
     public function country()
     {
         return $this->belongsTo(Country::class);
     }
 
-    public function team()
+    public function teams()
     {
-        return $this->hasOne(Team::class);
+        return $this->hasMany(Team::class);
     }
 }

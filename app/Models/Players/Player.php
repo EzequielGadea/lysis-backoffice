@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Players;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Country;
 use App\Models\Team;
+use App\Models\PlayerTeam;
 
 class Player extends Model
 {
@@ -27,7 +28,6 @@ class Player extends Model
 
     public function teams()
     {
-        return $this->belongsTo(Team::class)->withPivot('contract_start', 'shirt_number', 'position_id');
+        return $this->hasMany(PlayerTeam::class);
     }
-
 }

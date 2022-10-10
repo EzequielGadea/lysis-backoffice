@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Events;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\League;
+use App\Models\Country;
 
-class Sport extends Model
+class Referee extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
-        'logo_link'
+        'surname',
+        'birth_date'
     ];
 
-    public function leagues()
+    public function country()
     {
-        return $this->hasMany(League::class);
+        return $this->belongsTo(Country::class);
     }
 }

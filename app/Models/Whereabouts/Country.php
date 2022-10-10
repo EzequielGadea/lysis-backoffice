@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Whereabouts;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +9,8 @@ use App\Models\Player;
 use App\Models\Manager;
 use App\Models\League;
 use App\Models\Team;
+use App\Models\Referee;
+use App\Models\City;
 
 class Country extends Model
 {
@@ -28,6 +30,11 @@ class Country extends Model
     {
         return $this->hasMany(Manager::class);
     }
+
+    public function referees()
+    {
+        return $this->hasMany(Referee::class);
+    }
     
     public function leagues()
     {
@@ -37,5 +44,10 @@ class Country extends Model
     public function teams()
     {
         return $this->hasMany(Team::class);
+    }
+
+    public function cities()
+    {
+        return $this->hasMany(City::class);
     }
 }

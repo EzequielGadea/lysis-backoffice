@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Whereabouts;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Model\Country;
-use App\Model\League;
-use App\Model\Manager;
+use App\Models\Country;
+use App\Models\Venue;
 
-class Team extends Model
+class City extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name',
-        'logo_link'
+        'name'
     ];
 
     public function country()
@@ -23,13 +21,8 @@ class Team extends Model
         return $this->belongsTo(Country::class);
     }
 
-    public function league()
+    public function venues()
     {
-        return $this->belongsTo(League::class);
-    }
-
-    public function manager()
-    {
-        return $this->belongsTo(Mananger::class);
+        return $this->hasMany(Venue::class);
     }
 }
