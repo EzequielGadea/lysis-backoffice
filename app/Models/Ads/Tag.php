@@ -5,7 +5,7 @@ namespace App\Models\Ads;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Value;
+use App\Models\Ads\Value;
 
 class Tag extends Model
 {

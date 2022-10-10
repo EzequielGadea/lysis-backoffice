@@ -5,8 +5,8 @@ namespace App\Models\Ads;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Tag;
-use App\Models\Ad;
+use App\Models\Ads\Tag;
+use App\Models\Ads\Ad;
 
 class Value extends Model
 {
