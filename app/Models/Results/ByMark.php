@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Results\MarkName;
 use App\Models\Results\ByMarkEventPlayerTeam;
+use App\Models\Results\ByMarkPlayerVisitor;
 use App\Models\Events\Event;
 
 class ByMark extends Model
@@ -23,8 +24,13 @@ class ByMark extends Model
         return $this->belongsTo(Event::class);
     }
 
-    public function marks()
+    public function marksPlayerTeam()
     {
         return $this->hasMany(ByMarkEventPlayerTeam::class);
+    }
+
+    public function marksPlayerVisitor()
+    {
+        return $this->hasMany(ByMarkPlayerVisitor::class);
     }
 }

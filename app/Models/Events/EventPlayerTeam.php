@@ -12,6 +12,8 @@ use App\Models\Events\Event;
 use App\Models\Teams\Team;
 use App\Models\Results\ByMarkEventPlayerTeam;
 use App\Models\Results\ByPointEventPlayerTeam;
+use App\Models\Events\EventPlayerTeamSanctionCardless;
+use App\Models\Events\EventPlayerTeamSanctionCard;
 
 class EventPlayerTeam extends Model
 {
@@ -52,8 +54,23 @@ class EventPlayerTeam extends Model
         return $this->hasMany(ByPointEventPlayerTeam::class);
     }
 
+    public function pointsInSets()
+    {
+        return $this->hasMany(EventPlayerTeamSet::class);
+    }
+
     public function position()
     {
         return $this->hasOneThrough(Position::class, PlayerTeam::class);
+    }
+
+    public function cardlessSanctions()
+    {
+        return $this->hasMany(EventPlayerTeamSanctionCardless::class);
+    }
+
+    public function cardSanctions()
+    {
+        return $this->hasMany(EventPlayerTeamSanctionCard::class);
     }
 }

@@ -14,6 +14,8 @@ class EventPlayerTeamSet extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'event_player_team_set';
+
     protected $fillable = [
         'points_in_favor',
         'points_against',
@@ -37,6 +39,11 @@ class EventPlayerTeamSet extends Model
 
     public function playerTeam()
     {
-        return $this->hasOneThrough(PlayerTeam::class, EventPlayerTeam::class);
+        return $this->hasOneThrough(PlayerTeam::class, EventPlayerTeam::class); 
+    }
+
+    public function event()
+    {
+        return $this->hasOneThrough(Event::class, EventPlayerTeam::class);
     }
 }

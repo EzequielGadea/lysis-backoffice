@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Results\BySet;
 use App\Models\Results\EventPlayerTeamSet;
+use App\Models\Results\PlayerVisitorSet;
 
 class Set extends Model
 {
@@ -21,8 +22,13 @@ class Set extends Model
         return $this->belongsTo(BySet::class);
     }
 
-    public function points()
+    public function pointsPlayerTeam()
     {
         return $this->hasMany(EventPlayerTeamSet::class);
+    }
+
+    public function pointsPlayerVisitor()
+    {
+        return $this->hasMany(PlayerVisitorSet::class);
     }
 }
