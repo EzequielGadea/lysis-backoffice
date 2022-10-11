@@ -13,16 +13,11 @@ class RefereeController extends Controller
 {
     public function create(Request $request)
     {
-        $validation = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'surname' => 'required|max:255',
-            'birthDate' => 'required|date|before:today',
-            'countryId' => 'required|exists:countries,id'
-        ]);
-        if($validation->fails())
+        $validation = $this->validateCreation($request);
+        if($validation !== true)
             return back()->withErrors($validation);
 
-        $referee = Referee::create([
+        Referee::create([
             'name' => $request->post('name'),
             'surname' => $request->post('surname'),
             'birth_date' => $request->post('birthDate'),
@@ -45,14 +40,8 @@ class RefereeController extends Controller
 
     public function update(Request $request)
     {
-        $validation = Validator::make($request->all(), [
-            'id' => 'required|numeric|exists:referees',
-            'name' => 'required|max:255',
-            'surname' => 'required|max:255',
-            'birthDate' => 'required|date',
-            'countryId' => 'required|numeric|exists:countries,id'
-        ]);
-        if($validation->fails())
+        $validation = $this->validateUpdate($request);
+        if($validation !== true)
             return back()->withErrors($validation);
 
         Referee::find($request->post('id'))->update([
@@ -103,12 +92,30 @@ class RefereeController extends Controller
 
     private function validateCreation($request)
     {
-
+        $validation = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'surname' => 'required|max:255',
+            'birthDate' => 'required|date|before:today',
+            'countryId' => 'required|exists:countries,id'
+        ]);
+        if($validation->fails())
+            return $validation;
+        return true;
+        
     }
 
     private function validateUpdate($request)
     {
-
+        $validation = Validator::make($request->all(), [
+            'id' => 'required|numeric|exists:referees',
+            'name' => 'required|max:255',
+            'surname' => 'required|max:255',
+            'birthDate' => 'required|date',
+            'countryId' => 'required|numeric|exists:countries,id'
+        ]);
+        if($validation->fails())
+            return $validation;
+        return true;
     }
 
     private function validateId($request)
