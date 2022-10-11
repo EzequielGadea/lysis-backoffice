@@ -20,6 +20,10 @@
             @csrf
             <button class="font-medium text-zinc-800" id="nav-subscriptions" type="submit">Subscriptions</button>
         </form>
+        <form action="/refereeManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800" id="nav-referees" type="submit">Referees</button>
+        </form>
     </div>
     <form action="logout" method="POST" class="mt-12">
         @csrf
