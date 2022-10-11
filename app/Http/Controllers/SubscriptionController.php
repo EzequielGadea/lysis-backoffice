@@ -96,8 +96,8 @@ class SubscriptionController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:susbcriptions',
-            'type' => 'required|max:225',
-            'description' => 'required|max:225',
+            'type' => 'required|max:255',
+            'description' => 'required|max:255',
             'price' => 'required|integer|gte:0'
         ]);
         if($validation->fails())
