@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Players\Player;
 use App\Models\Teams\Team;
 use App\Models\Players\Position;
+use App\Models\Events\EventPlayerTeam;
 
 class PlayerTeam extends Model
 {
@@ -33,5 +34,10 @@ class PlayerTeam extends Model
     public function position()
     {
         return $this->belongsTo(Position::class);
+    }
+
+    public function events()
+    {
+        return $this->hasMany(EventPlayerTeam::class);
     }
 }

@@ -9,6 +9,8 @@ use App\Model\Whereabouts\Country;
 use App\Model\Common\League;
 use App\Model\Teams\Manager;
 use App\Model\Players\PlayerTeam;
+use App\Model\Players\Player;
+use App\Model\Events\EventPlayerTeam;
 
 class Team extends Model
 {
@@ -34,8 +36,18 @@ class Team extends Model
         return $this->belongsTo(Mananger::class);
     }
 
-    public function players()
+    public function playerTeams()
     {
         return $this->hasMany(PlayerTeam::class);
+    }
+
+    public function players()
+    {
+        return $this->hasManyThrough(Player::class, PlayerTeam::class);
+    }
+
+    public function events()
+    {
+        return $this->hasManyThrough(EventPlayerTeam::class, PlayerTeam::class);
     }
 }

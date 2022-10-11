@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Models\Results;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Results\Set;
+use App\Models\Results\BySet;
+use App\Models\Events\EventPlayerTeam;
+use App\Models\Players\PlayerTeam;
+
+class EventPlayerTeamSet extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'points_in_favor',
+        'points_against',
+        'minute'
+    ];
+
+    public function set()
+    {
+        return $this->belongsTo(Set::class);
+    }
+
+    public function eventPlayerTeam()
+    {
+        return $this->belongsTo(EventPlayerTeam::class);
+    }
+
+    public function result()
+    {
+        return $this->hasOneThrough(BySet::class, Set::class);
+    }
+
+    public function playerTeam()
+    {
+        return $this->hasOneThrough(PlayerTeam::class, EventPlayerTeam::class);
+    }
+}
