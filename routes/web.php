@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\RefereeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,15 @@ Route::middleware(['web'])->group(function () {
             Route::post('subscriptionUpdate', 'update');
             Route::post('subscriptionDelete', 'delete');
             Route::post('subscriptionRestore', 'restore');
+        });
+
+        Route::controller(RefereeController::class)->group(function () {
+            Route::get('refereeManagement', 'show')->name('refereeManagement');
+            Route::get('refereeUpdate/{id}', 'edit');
+            Route::post('refereeRegister', 'create');
+            Route::post('refereeUpdate', 'update');
+            Route::post('refereeDelete', 'delete');
+            Route::post('refereeRestore', 'restore');
         });
     });
 });
