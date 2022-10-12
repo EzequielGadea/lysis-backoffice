@@ -15,7 +15,8 @@ class Manager extends Model
     protected $fillable = [
         'name',
         'surname',
-        'birth_date'
+        'birth_date',
+        'country_id'
     ];
 
     public function country()
