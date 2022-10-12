@@ -8,6 +8,7 @@ use App\Http\Controllers\AdController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\RefereeController;
+use App\Http\Controllers\ManagerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +83,15 @@ Route::middleware(['web'])->group(function () {
             Route::post('refereeUpdate', 'update');
             Route::post('refereeDelete', 'delete');
             Route::post('refereeRestore', 'restore');
+        });
+
+        Route::controller(ManagerController::class)->group(function () {
+            Route::get('managerManagement', 'show')->name('managerManagement');
+            Route::get('managerUpdate/{id}', 'edit');
+            Route::post('managerRegister', 'create');
+            Route::post('managerUpdate', 'update');
+            Route::post('managerDelete', 'delete');
+            Route::post('managerRestore', 'restore');
         });
     });
 });
