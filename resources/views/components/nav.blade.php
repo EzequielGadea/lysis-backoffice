@@ -24,6 +24,10 @@
             @csrf
             <button class="font-medium text-zinc-800" id="nav-referees" type="submit">Referees</button>
         </form>
+        <form action="/managerManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800" id="nav-managers" type="submit">Managers</button>
+        </form>
     </div>
     <form action="logout" method="POST" class="mt-12">
         @csrf
