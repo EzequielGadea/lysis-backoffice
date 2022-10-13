@@ -15,7 +15,9 @@ class League extends Model
 
     protected $fillable = [
         'name',
-        'logo_link'
+        'logo_link',
+        'country_id',
+        'sport_id'
     ];
 
     public function sport()
