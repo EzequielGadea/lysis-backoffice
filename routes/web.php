@@ -11,6 +11,7 @@ use App\Http\Controllers\RefereeController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\SportController;
+use App\Http\Controllers\LeagueController;
 
 /*
 |--------------------------------------------------------------------------
@@ -112,6 +113,15 @@ Route::middleware(['web'])->group(function () {
             Route::post('sportUpdate', 'update');
             Route::post('sportDelete', 'delete');
             Route::post('sportRestore', 'restore');
+        });
+
+        Route::controller(LeagueController::class)->group(function () {
+            Route::get('leagueManagement', 'show')->name('leagueManagement');
+            Route::get('leagueUpdate/{id}', 'edit');
+            Route::post('leagueRegister', 'create');
+            Route::post('leagueUpdate', 'update');
+            Route::post('leagueDelete', 'delete');
+            Route::post('leagueRestore', 'restore');
         });
     });
 });
