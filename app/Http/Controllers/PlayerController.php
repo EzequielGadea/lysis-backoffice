@@ -63,9 +63,14 @@ class PlayerController extends Controller
     {
         return view('playerManagement')->with([
             'players' => DB::table('players')
-                ->join('countries', 'players.country_id', '=', 'countries.id')
-                ->whereNull('players.deleted_at')
-                ->select('players.id', 'players.name', 'players.surname', 'players.birth_date', 'players.height', 'players.weight', 'countries.name as country', 'players.created_at', 'players.updated_at')->get(),
+                    ->join('countries', 'players.country_id', '=', 'countries.id')
+                    ->whereNull('players.deleted_at')
+                    ->select(
+                        'players.id', 'players.name', 'players.surname', 
+                        'players.birth_date', 'players.height', 'players.weight', 
+                        'countries.name as country', 'players.created_at', 'players.updated_at'
+                    )
+                    ->get(),
             'countries' => Country::all()
         ]);
     }
@@ -101,7 +106,7 @@ class PlayerController extends Controller
 
     private function validateId($collection)
     {
-        $validation = Validator::make($collection->all(),[
+        $validation = Validator::make($collection->all(), [
             'id' => 'numeric|exists:players'
         ]);
         if($validation->fails())
