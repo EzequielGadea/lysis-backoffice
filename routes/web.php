@@ -10,6 +10,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\RefereeController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\SportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +103,15 @@ Route::middleware(['web'])->group(function () {
             Route::post('playerUpdate', 'update');
             Route::post('playerDelete', 'delete');
             Route::post('playerRestore', 'restore');
+        });
+
+        Route::controller(SportController::class)->group(function () {
+            Route::get('sportManagement', 'show')->name('sportManagement');
+            Route::get('sportUpdate/{id}', 'edit');
+            Route::post('sportRegister', 'create');
+            Route::post('sportUpdate', 'update');
+            Route::post('sportDelete', 'delete');
+            Route::post('sportRestore', 'restore');
         });
     });
 });
