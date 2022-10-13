@@ -28,9 +28,13 @@
             @csrf
             <button class="font-medium text-zinc-800" id="nav-managers" type="submit">Managers</button>
         </form>
+        <form action="/playerManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800" id="nav-players" type="submit">Players</button>
+        </form>
     </div>
     <form action="logout" method="POST" class="mt-12">
         @csrf
-        <button type="submit">Log out</button>
+        <button type="submit" class="font-semibold">Log out</button>
     </form>
 </nav>
