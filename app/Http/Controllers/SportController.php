@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Collection;
+use Illuminate\Support\Facades\DB;
 use App\Models\Common\Sport;
+use App\Models\Common\League;
 
 class SportController extends Controller
 {
@@ -60,7 +62,14 @@ class SportController extends Controller
         if($validation !== true)
             return back()->withErrors($validation);
         
-        Sport::destroy($request->post('id'));
+        try {
+            DB::transaction(function () use ($request) {
+                League::where('sport_id', $request->post('id'))->delete();
+                Sport::destroy($request->post('id'));
+            });
+        } catch (QueryExcpetion $e) {
+            return back()->with('statusDelete', 'Unable to delete sport right now.');
+        }   
         return back()->with([
             'statusDelete' => 'Sport deleted successfully.',
             'deletedId' => $request->post('id')
@@ -73,9 +82,18 @@ class SportController extends Controller
         if($validation !== true)
             return back()->withErrors($validation);
 
-        Sport::withTrashed()
-            ->find($request->post('id'))
-            ->restore();
+        try {
+            DB::transaction(function () use ($request) {
+                League::withTrashed()
+                    ->where('sport_id', $request->post('id'))
+                    ->restore();
+                Sport::withTrashed()
+                    ->find($request->post('id'))
+                    ->restore();
+            });
+        } catch (QueryExcpetion $e) {
+            return back()->with('statusRestore', 'Unable to restore sport right now.');
+        }   
         return back()->with('statusRestore', 'Sport restored successfully.');
     }
 
