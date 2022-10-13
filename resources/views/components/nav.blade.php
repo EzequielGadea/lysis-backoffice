@@ -32,6 +32,10 @@
             @csrf
             <button class="font-medium text-zinc-800" id="nav-players" type="submit">Players</button>
         </form>
+        <form action="/sportManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800" id="nav-sports" type="submit">Sports</button>
+        </form>
     </div>
     <form action="logout" method="POST" class="mt-12">
         @csrf
