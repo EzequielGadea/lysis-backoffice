@@ -9,6 +9,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\RefereeController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\PlayerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +93,15 @@ Route::middleware(['web'])->group(function () {
             Route::post('managerUpdate', 'update');
             Route::post('managerDelete', 'delete');
             Route::post('managerRestore', 'restore');
+        });
+
+        Route::controller(PlayerController::class)->group(function () {
+            Route::get('playerManagement', 'show')->name('playerManagement');
+            Route::get('playerUpdate/{id}', 'edit');
+            Route::post('playerRegister', 'create');
+            Route::post('playerUpdate', 'update');
+            Route::post('playerDelete', 'delete');
+            Route::post('playerRestore', 'restore');
         });
     });
 });
