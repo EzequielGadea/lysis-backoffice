@@ -32,7 +32,7 @@ class RefereeController extends Controller
         if($validation !== true)
             return back()->withErrors($validation);
         
-        Referees::withTrashed()
+        Referee::withTrashed()
             ->find($request->post('id'))
             ->restore();
         return back()->with('statusRestore', 'Referee restored succesfuly');
@@ -58,11 +58,10 @@ class RefereeController extends Controller
 
     public function delete(Request $request)
     {
-        $validation = Validator::make($request->all(), [
-            'id' => 'numeric|exists:referees'
-        ]);
-        if($validation->fails())
+        $validation = $this->validateId($request);
+        if($validation !== true)
             return back()->withErrors($validation);
+
         Referee::destroy($request->post('id'));
         return back()->with([
             'statusDelete' => 'Referee deleted succesfuly.',
@@ -101,7 +100,6 @@ class RefereeController extends Controller
         if($validation->fails())
             return $validation;
         return true;
-        
     }
 
     private function validateUpdate($request)
@@ -127,6 +125,4 @@ class RefereeController extends Controller
             return $validation;
         return true;
     }
-
-
 }
