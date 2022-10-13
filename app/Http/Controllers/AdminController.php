@@ -27,7 +27,7 @@ class AdminController extends Controller
             return back()->with('statusCreate', 'Couldn\'t create admin.');
         }
 
-        return back()->with('statusCreate', 'Admin created succesfully.');
+        return back()->with('statusCreate', 'Admin created successfully.');
     }
 
     public function update(Request $request)
@@ -46,7 +46,7 @@ class AdminController extends Controller
             ]);
         
         return back()->with([
-            'statusUpdate' => 'Admin updated succesfully, you will soon be redirected.',
+            'statusUpdate' => 'Admin updated successfully, you will soon be redirected.',
             'isRedirected' => 'true'
         ]);
     }
@@ -60,7 +60,7 @@ class AdminController extends Controller
         Admin::destroy($request->post('id'));
 
         return back()->with([
-            'statusDelete' => 'Admin deleted succesfully',
+            'statusDelete' => 'Admin deleted successfully',
             'deletedId' => $request->post('id')
         ]);
     }
@@ -75,7 +75,7 @@ class AdminController extends Controller
             ->find($request->post('id'))
             ->restore();
 
-        return back()->with('statusRestore', 'Admin restored succesfully.');
+        return back()->with('statusRestore', 'Admin restored successfully.');
     }
 
     public function show() 
