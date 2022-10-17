@@ -42,7 +42,11 @@
         </form>
         <form action="/sanctionCardManagement" method="GET">
             @csrf
-            <button class="font-medium text-zinc-800" id="nav-sanction-cards" type="submit">Sanction cards</button>
+            <button class="font-medium text-zinc-800 whitespace-nowrap" id="nav-sanction-cards" type="submit">Sanction cards</button>
+        </form>
+        <form action="/sanctionCardlessManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800 whitespace-nowrap" id="nav-sanction-cardless" type="submit">Sanction cardless</button>
         </form>
     </div>
     <form action="logout" method="POST" class="mt-12">

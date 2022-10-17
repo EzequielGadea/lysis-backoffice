@@ -13,6 +13,7 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\SportController;
 use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\SanctionCardController;
+use App\Http\Controllers\SanctionCardlessController;
 
 /*
 |--------------------------------------------------------------------------
@@ -132,6 +133,15 @@ Route::middleware(['web'])->group(function () {
             Route::post('sanctionCardUpdate', 'update');
             Route::post('sanctionCardDelete', 'delete');
             Route::post('sanctionCardRestore', 'restore');
+        });
+
+        Route::controller(SanctionCardlessController::class)->group(function () {
+            Route::get('sanctionCardlessManagement', 'show')->name('sanctionCardlessManagement');
+            Route::get('sanctionCardlessUpdate/{id}', 'edit');
+            Route::post('sanctionCardlessRegister', 'create');
+            Route::post('sanctionCardlessUpdate', 'update');
+            Route::post('sanctionCardlessDelete', 'delete');
+            Route::post('sanctionCardlessRestore', 'restore');
         });
     });
 });
