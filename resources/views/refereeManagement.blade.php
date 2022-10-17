@@ -9,9 +9,8 @@
                     <tr class="bg-slate-300">
                         <td class="pl-3 py-3 font-light text-zinc-800">REFEREE ID</td>
                         <td class="py-3 font-light text-zinc-800">NAME</td>
-                        <td class="py-3 font-light text-zinc-800">SURNAME</td>
                         <td class="py-3 font-light text-zinc-800">BIRTH DATE</td>
-                        <td class="py-3 font-light text-zinc-800">COUNTRY ID</td>
+                        <td class="py-3 font-light text-zinc-800">COUNTRY</td>
                         <td class="py-3 font-light text-zinc-800">CREATED AT</td>
                         <td class="py-3 font-light text-zinc-800">UPDATED AT</td>
                         <td class="pr-3 py-3 font-light text-zinc-800 text-center">ACTIONS</td>
@@ -22,10 +21,9 @@
                         @foreach ($referees as $referee)
                             <tr class="border-b border-slate-300">
                                 <td class="pl-3 text-zinc-800">{{ $referee->id }}</td>
-                                <td class="py-3 text-zinc-800">{{ $referee->name }}</td>
-                                <td class="py-3 text-zinc-800">{{ $referee->surname }}</td>
+                                <td class="py-3 text-zinc-800">{{ $referee->name }} {{ $referee->surname }}</td>
                                 <td class="py-3 text-zinc-800">{{ $referee->birth_date }}</td>
-                                <td class="py-3 text-zinc-800">{{ $referee->country_id }}</td>
+                                <td class="py-3 text-zinc-800">{{ $referee->country->name }}</td>
                                 <td class="py-3 text-zinc-800">{{ $referee->created_at }}</td>
                                 <td class="py-3 text-zinc-800">{{ $referee->updated_at }}</td>
                                 <td class="pr-3 text-zinc-800">
