@@ -18,7 +18,10 @@ class Team extends Model
 
     protected $fillable = [
         'name',
-        'logo_link'
+        'logo_link',
+        'country_id',
+        'league_id',
+        'manager_id'
     ];
 
     public function country()

@@ -14,6 +14,7 @@ use App\Http\Controllers\SportController;
 use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\SanctionCardController;
 use App\Http\Controllers\SanctionCardlessController;
+use App\Http\Controllers\TeamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +143,15 @@ Route::middleware(['web'])->group(function () {
             Route::post('sanctionCardlessUpdate', 'update');
             Route::post('sanctionCardlessDelete', 'delete');
             Route::post('sanctionCardlessRestore', 'restore');
+        });
+
+        Route::controller(TeamController::class)->group(function () {
+            Route::get('teamManagement', 'show')->name('teamManagement');
+            Route::get('teamUpdate/{id}', 'edit');
+            Route::post('teamRegister', 'create');
+            Route::post('teamUpdate', 'update');
+            Route::post('teamDelete', 'delete');
+            Route::post('teamRestore', 'restore');
         });
     });
 });
