@@ -73,7 +73,12 @@ class ManagerController extends Controller
     public function show()
     {
         return view('managerManagement')->with([
-            'managers' => Manager::all(),
+            'managers' => DB::table('managers')
+                ->join('countries', 'managers.country_id', '=', 'countries.id')
+                ->select('managers.name', 'managers.surname', 'managers.id', 
+                'managers.birth_date', 'managers.created_at', 'managers.updated_at', 
+                'countries.name as country')
+                ->get(),
             'countries' => Country::all()
         ]);
     }

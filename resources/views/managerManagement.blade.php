@@ -9,9 +9,8 @@
                     <tr class="bg-slate-300">
                         <td class="pl-3 py-3 font-light text-zinc-800">MANAGER ID</td>
                         <td class="py-3 font-light text-zinc-800">NAME</td>
-                        <td class="py-3 font-light text-zinc-800">SURNAME</td>
                         <td class="py-3 font-light text-zinc-800">BIRTH DATE</td>
-                        <td class="py-3 font-light text-zinc-800">COUNTRY ID</td>
+                        <td class="py-3 font-light text-zinc-800">COUNTRY</td>
                         <td class="py-3 font-light text-zinc-800">CREATED AT</td>
                         <td class="py-3 font-light text-zinc-800">UPDATED AT</td>
                         <td class="pr-3 py-3 font-light text-zinc-800 text-center">ACTIONS</td>
@@ -22,10 +21,9 @@
                         @foreach ($managers as $manager)
                             <tr class="border-b border-slate-300">
                                 <td class="pl-3 text-zinc-800">{{ $manager->id }}</td>
-                                <td class="py-3 text-zinc-800">{{ $manager->name }}</td>
-                                <td class="py-3 text-zinc-800">{{ $manager->surname }}</td>
+                                <td class="py-3 text-zinc-800">{{ $manager->name }} {{ $manager->surname }}</td>
                                 <td class="py-3 text-zinc-800">{{ $manager->birth_date }}</td>
-                                <td class="py-3 text-zinc-800">{{ $manager->country_id }}</td>
+                                <td class="py-3 text-zinc-800">{{ $manager->country }}</td>
                                 <td class="py-3 text-zinc-800">{{ $manager->created_at }}</td>
                                 <td class="py-3 text-zinc-800">{{ $manager->updated_at }}</td>
                                 <td class="pr-3 text-zinc-800">
