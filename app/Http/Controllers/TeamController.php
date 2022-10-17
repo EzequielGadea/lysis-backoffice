@@ -9,6 +9,7 @@ use App\Models\Teams\Team;
 use App\Models\Teams\Manager;
 use App\Models\Whereabouts\Country;
 use App\Models\Common\League;
+use App\Models\Players\Player;
 
 class TeamController extends Controller
 {
@@ -60,19 +61,11 @@ class TeamController extends Controller
             'leagues' => League::all()
         ]);
     }
-
+    
     public function show()
     {
         return view('teamManagement')->with([
-            'teams' => DB::table('teams')
-                ->join('countries AS c', 'teams.country_id', '=', 'c.id')
-                ->join('leagues AS l', 'teams.league_id', '=', 'l.id')
-                ->join('managers AS m', 'teams.manager_id', '=', 'm.id')
-                ->select('teams.id', 'teams.name', 'teams.logo_link', 'teams.created_at', 
-                    'teams.updated_at', 'c.name AS country', 'l.name AS league', 
-                    'm.name AS managerName', 'm.surname AS managerSurname')
-                ->whereNull('teams.deleted_at')
-                ->get(),
+            'teams' => Team::all(),
             'countries' => Country::all(),
             'managers' => Manager::all(),
             'leagues' => League::all()
@@ -106,6 +99,18 @@ class TeamController extends Controller
             ->find($request->post('id'))
             ->restore();
         return back()->with('statusRestore', 'Team restored successfully.');
+    }
+
+    public function updatePlayers(Request $request)
+    {
+        $validation = $this->validateId($request);
+        if($validation !== true)
+            return back();
+
+        return view('teamPlayersUpdate')->with([
+            'team' => Team::find($request->post('id')),
+            'players' => Player::all()
+        ]);
     }
 
     private function validateId($collection)
