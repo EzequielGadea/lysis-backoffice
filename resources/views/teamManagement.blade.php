@@ -1,36 +1,36 @@
 <x-layout>
     <x-slot name="title">Team management</x-slot>
     <x-nav/>
-    <div class="flex flex-col items-center pt-6 px-8 w-full flex-grow">
+    <div class="flex flex-col items-center pt-6 px-8 w-[50rem] flex-grow">
         <p class="text-2xl text-zinc-800 font-semibold mb-6 w-full">Teams</p>
         <div class="rounded-md overflow-x-auto shadow-xl w-full">
-            <table class="table-auto border-collapse w-full">
+            <table class="table-auto border-collapse whitespace-nowrap w-full">
                 <thead>
                     <tr class="bg-slate-300">
-                        <td class="pl-3 py-3 font-light text-zinc-800">TEAM ID</td>
-                        <td class="py-3 font-light text-zinc-800">NAME</td>
-                        <td class="py-3 font-light text-zinc-800">COUNTRY</td>
-                        <td class="py-3 font-light text-zinc-800">LEAGUE</td>
-                        <td class="py-3 font-light text-zinc-800">MANAGER</td>
-                        <td class="py-3 font-light text-zinc-800">LOGO LINK</td>
-                        <td class="py-3 font-light text-zinc-800">CREATED AT</td>
-                        <td class="py-3 font-light text-zinc-800">UPDATED AT</td>
-                        <td class="pr-3 py-3 font-light text-zinc-800 text-center">ACTIONS</td>
+                        <td class="pl-3 px-3 py-3 font-light text-zinc-800">TEAM ID</td>
+                        <td class="py-3 px-3 font-light text-zinc-800">NAME</td>
+                        <td class="py-3 px-3 font-light text-zinc-800">COUNTRY</td>
+                        <td class="py-3 px-3 font-light text-zinc-800">LEAGUE</td>
+                        <td class="py-3 px-3 font-light text-zinc-800">MANAGER</td>
+                        <td class="py-3 px-3 font-light text-zinc-800">LOGO LINK</td>
+                        <td class="py-3 px-3 font-light text-zinc-800">CREATED AT</td>
+                        <td class="py-3 px-3 font-light text-zinc-800">UPDATED AT</td>
+                        <td class="pr-3 px-3 py-3 font-light text-zinc-800 text-center">ACTIONS</td>
                     </tr>
                 </thead>
                 <tbody>
                     @if (isset($teams))
                         @foreach ($teams as $team)
                             <tr class="border-b border-slate-300">
-                                <td class="pl-3 text-zinc-800">{{ $team->id }}</td>
-                                <td class="py-3 text-zinc-800">{{ $team->name }}</td>
-                                <td class="py-3 text-zinc-800">{{ $team->country }}</td>
-                                <td class="py-3 text-zinc-800">{{ $team->league }}</td>
-                                <td class="py-3 text-zinc-800">{{ $team->manager }}</td>
-                                <td class="py-3 text-zinc-800">{{ $team->logo_link }}</td>
-                                <td class="py-3 text-zinc-800">{{ $team->created_at }}</td>
-                                <td class="py-3 text-zinc-800">{{ $team->updated_at }}</td>
-                                <td class="pr-3 text-zinc-800">
+                                <td class="pl-3 px-3 text-zinc-800">{{ $team->id }}</td>
+                                <td class="py-3 px-3 text-zinc-800">{{ $team->name }}</td>
+                                <td class="py-3 px-3 text-zinc-800">{{ $team->country }}</td>
+                                <td class="py-3 px-3 text-zinc-800">{{ $team->league }}</td>
+                                <td class="py-3 px-3 text-zinc-800">{{ $team->manager }}</td>
+                                <td class="py-3 px-3 text-zinc-800">{{ $team->logo_link }}</td>
+                                <td class="py-3 px-3 text-zinc-800">{{ $team->created_at }}</td>
+                                <td class="py-3 px-3 text-zinc-800">{{ $team->updated_at }}</td>
+                                <td class="pr-3 px-3 text-zinc-800">
                                     <div class="flex flex-col items-center">
                                         <form action="teamUpdate/{{ $team->id }}" method="GET">
                                             <button class="font-semibold text-blue-600">Edit</button>

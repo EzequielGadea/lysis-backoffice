@@ -3,27 +3,27 @@
     <x-nav/>
     <div class="flex flex-col items-center pt-6 px-8 w-[50rem] flex-grow">
         <p class="text-2xl text-zinc-800 font-semibold mb-6 w-full">Users</p>
-        <div class="rounded-md overflow-hidden shadow-xl w-full">
-            <table class="table-auto border-collapse w-full">
+        <div class="rounded-md overflow-x-auto shadow-xl w-full">
+            <table class="table-auto border-collapse w-full whitespace-nowrap">
                 <thead>
                     <tr class="bg-slate-300">
-                        <td class="pl-3 py-3 font-light text-zinc-800">USER ID</td>
-                        <td class="py-3 font-light text-zinc-800">CLIENT ID</td>
-                        <td class="py-3 font-light text-zinc-800">NAME</td>
-                        <td class="py-3 font-light text-zinc-800">EMAIL</td>
-                        <td class="py-3 font-light text-zinc-800">SUBSCRIPTION</td>
-                        <td class="py-3 font-light text-zinc-800">CREATED AT (UTC)</td>
-                        <td class="py-3 font-light text-zinc-800">UPDATED AT (UTC)</td>
-                        <td class="pr-3 py-3 font-light text-zinc-800 text-center">ACTIONS</td>
+                        <td class="pl-3 px-6 py-3 font-light text-zinc-800">USER ID</td>
+                        <td class="py-3 px-6 font-light text-zinc-800">CLIENT ID</td>
+                        <td class="py-3 px-6 font-light text-zinc-800">NAME</td>
+                        <td class="py-3 px-6 font-light text-zinc-800">EMAIL</td>
+                        <td class="py-3 px-6 font-light text-zinc-800">SUBSCRIPTION</td>
+                        <td class="py-3 px-6 font-light text-zinc-800">CREATED AT (UTC)</td>
+                        <td class="py-3 px-6 font-light text-zinc-800">UPDATED AT (UTC)</td>
+                        <td class="pr-3 px-6 py-3 font-light text-zinc-800 text-center">ACTIONS</td>
                     </tr>
                 </thead>
                 <tbody>
                     @if (isset($users))
                         @foreach ($users as $user)
                             <tr class="border-b border-slate-300">
-                                <td class="pl-3 text-zinc-800">{{ $user->id }}</td>
-                                <td class="py-3 text-zinc-800">{{ $user->client_id }}</td>
-                                <td class="py-3 text-zinc-800">
+                                <td class="pl-3 px-6 text-zinc-800">{{ $user->id }}</td>
+                                <td class="py-3 px-6 text-zinc-800">{{ $user->client_id }}</td>
+                                <td class="py-3 px-6 text-zinc-800">
                                     <p class="text-zinc-800">
                                         {{ $user->name }} {{ $user->surname }} 
                                     </p>
@@ -31,14 +31,14 @@
                                         Birthdate: {{ $user->birth_date }}
                                     </p>
                                 </td>
-                                <td class="py-3 text-zinc-800">
+                                <td class="py-3 px-6 text-zinc-800">
                                     <p>{{ $user->email }}</p>
                                     <p class="text-sm text-zinc-600">Verified at (UTC): {{ $user->email_verified_at }}</p>
                                 </td>
-                                <td class="py-3 text-zinc-800">{{ $user->type}}</td>
-                                <td class="py-3 text-zinc-800">{{ $user->created_at }}</td>
-                                <td class="py-3 text-zinc-800">{{ $user->updated_at }}</td>
-                                <td class="pr-3 text-zinc-800">
+                                <td class="py-3 px-6 text-zinc-800">{{ $user->type}}</td>
+                                <td class="py-3 px-6 text-zinc-800">{{ $user->created_at }}</td>
+                                <td class="py-3 px-6 text-zinc-800">{{ $user->updated_at }}</td>
+                                <td class="pr-3 px-6 text-zinc-800">
                                     <div class="flex flex-col items-center">
                                         <form action="userUpdate/{{ $user->id }}" method="GET">
                                             <button class="font-semibold text-blue-600" type="submit">Edit</button>
