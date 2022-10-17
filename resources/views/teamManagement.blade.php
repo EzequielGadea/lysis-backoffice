@@ -7,7 +7,7 @@
             <table class="table-auto border-collapse whitespace-nowrap w-full">
                 <thead>
                     <tr class="bg-slate-300">
-                        <td class="pl-3 px-3 py-3 font-light text-zinc-800">TEAM ID</td>
+                        <td class="pl-3 px-3 py-3 font-light text-zinc-800">ID</td>
                         <td class="py-3 px-3 font-light text-zinc-800">NAME</td>
                         <td class="py-3 px-3 font-light text-zinc-800">COUNTRY</td>
                         <td class="py-3 px-3 font-light text-zinc-800">LEAGUE</td>
@@ -26,7 +26,7 @@
                                 <td class="py-3 px-3 text-zinc-800">{{ $team->name }}</td>
                                 <td class="py-3 px-3 text-zinc-800">{{ $team->country }}</td>
                                 <td class="py-3 px-3 text-zinc-800">{{ $team->league }}</td>
-                                <td class="py-3 px-3 text-zinc-800">{{ $team->manager }}</td>
+                                <td class="py-3 px-3 text-zinc-800">{{ $team->managerName }} {{ $team->managerSurname }}</td>
                                 <td class="py-3 px-3 text-zinc-800">{{ $team->logo_link }}</td>
                                 <td class="py-3 px-3 text-zinc-800">{{ $team->created_at }}</td>
                                 <td class="py-3 px-3 text-zinc-800">{{ $team->updated_at }}</td>
@@ -39,6 +39,11 @@
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $team->id }}">
                                             <button class="font-semibold text-blue-600" type="submit">Delete</button>
+                                        </form>
+                                        <form action="teamUpdatePlayers">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $team->id }}">
+                                            <button class="font-semibold text-blue-600" type="submit">Players</button>
                                         </form>
                                     </div>
                                 </td>

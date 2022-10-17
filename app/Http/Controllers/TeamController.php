@@ -53,7 +53,12 @@ class TeamController extends Controller
         if($validation !== true)
             return back()->withErrors($validation);
         
-        return view('teamUpdate')->with('team', Team::find($id));
+        return view('teamUpdate')->with([
+            'team' => Team::find($id),
+            'countries' => Country::all(),
+            'managers' => Manager::all(),
+            'leagues' => League::all()
+        ]);
     }
 
     public function show()
@@ -65,7 +70,7 @@ class TeamController extends Controller
                 ->join('managers AS m', 'teams.manager_id', '=', 'm.id')
                 ->select('teams.id', 'teams.name', 'teams.logo_link', 'teams.created_at', 
                     'teams.updated_at', 'c.name AS country', 'l.name AS league', 
-                    'm.name AS manager')
+                    'm.name AS managerName', 'm.surname AS managerSurname')
                 ->whereNull('teams.deleted_at')
                 ->get(),
             'countries' => Country::all(),
