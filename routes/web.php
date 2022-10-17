@@ -152,6 +152,7 @@ Route::middleware(['web'])->group(function () {
             Route::post('teamUpdate', 'update');
             Route::post('teamDelete', 'delete');
             Route::post('teamRestore', 'restore');
+            Route::post('teamUpdatePlayers', 'updatePlayers');
         });
     });
 });
