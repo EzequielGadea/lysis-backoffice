@@ -15,6 +15,11 @@ use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\SanctionCardController;
 use App\Http\Controllers\SanctionCardlessController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\VenueController;
+use App\Http\Controllers\PositionController;
+use App\Http\Controllers\MarkNameController;
 
 /*
 |--------------------------------------------------------------------------
@@ -152,6 +157,51 @@ Route::middleware(['web'])->group(function () {
             Route::post('teamUpdate', 'update');
             Route::post('teamDelete', 'delete');
             Route::post('teamRestore', 'restore');
+        });
+
+        Route::controller(CountryController::class)->group(function () {
+            Route::get('countryManagement', 'show')->name('countryManagement');
+            Route::get('countryUpdate/{id}', 'edit');
+            Route::post('countryRegister', 'create');
+            Route::post('countryUpdate', 'update');
+            Route::post('countryDelete', 'delete');
+            Route::post('countryRestore', 'restore');
+        });
+
+        Route::controller(CityController::class)->group(function () {
+            Route::get('cityManagement', 'show')->name('cityManagement');
+            Route::get('cityUpdate/{id}', 'edit');
+            Route::post('cityRegister', 'create');
+            Route::post('cityUpdate', 'update');
+            Route::post('cityDelete', 'delete');
+            Route::post('cityRestore', 'restore');
+        });
+
+        Route::controller(VenueController::class)->group(function () {
+            Route::get('venueManagement', 'show')->name('venueManagement');
+            Route::get('venueUpdate/{id}', 'edit');
+            Route::post('venueRegister', 'create');
+            Route::post('venueUpdate', 'update');
+            Route::post('venueDelete', 'delete');
+            Route::post('venueRestore', 'restore');
+        });
+
+        Route::controller(PositionController::class)->group(function () {
+            Route::get('positionManagement', 'show')->name('positionManagement');
+            Route::get('positionUpdate/{id}', 'edit');
+            Route::post('positionRegister', 'create');
+            Route::post('positionUpdate', 'update');
+            Route::post('positionDelete', 'delete');
+            Route::post('positionRestore', 'restore');
+        });
+
+        Route::controller(MarkNameController::class)->group(function () {
+            Route::get('markNameManagement', 'show')->name('markNameManagement');
+            Route::get('markNameUpdate/{id}', 'edit');
+            Route::post('markNameRegister', 'create');
+            Route::post('markNameUpdate', 'update');
+            Route::post('markNameDelete', 'delete');
+            Route::post('markNameRestore', 'restore');
         });
     });
 });
