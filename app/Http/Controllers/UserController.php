@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\CreateUserRequest;
-use App\Models\Users\User;
+use App\Models\User;
 use App\Models\Users\Client;
 use App\Models\Users\Subscription;
 
