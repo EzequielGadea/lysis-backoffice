@@ -23,7 +23,7 @@ class ManagerController extends Controller
             'birth_date' => $request->post('birthDate'),
             'country_id' => $request->post('countryId')
         ]);
-        return back()->with('statusCreate', 'Manager created succesfuly');
+        return back()->with('statusCreate', 'Manager created succesfully');
     }
 
     public function restore(Request $request)
@@ -32,10 +32,10 @@ class ManagerController extends Controller
         if($validation !== true)
             return back()->withErrors($validation);
         
-        Managers::withTrashed()
+        Manager::withTrashed()
             ->find($request->post('id'))
             ->restore();
-        return back()->with('statusRestore', 'Manager restored succesfuly');
+        return back()->with('statusRestore', 'Manager restored succesfully');
     }
 
     public function update(Request $request)
@@ -51,22 +51,21 @@ class ManagerController extends Controller
             'country_id' => $request->post('countryId')
         ]);
         return back()->with([
-            'statusUpdate' => 'Manager updated succesfuly, you will soon be redirected.',
+            'statusUpdate' => 'Manager updated succesfully, you will soon be redirected.',
             'isRedirected' => 'true'
         ]);
     }
 
     public function delete(Request $request)
     {
-        $validation = Validator::make($request->all(), [
-            'id' => 'numeric|exists:managers'
-        ]);
-        if($validation->fails())
+        $validation = $this->validateId($request);
+        if($validation !== true)
             return back()->withErrors($validation);
+
         Manager::destroy($request->post('id'));
         return back()->with([
-            'statusDelete' => 'Manager deleted succesfuly.',
-            'deleteId' => $request->post('id')
+            'statusDelete' => 'Manager deleted succesfully.',
+            'deletedId' => $request->post('id')
         ]);
     }
 
@@ -98,8 +97,8 @@ class ManagerController extends Controller
     private function validateCreation($request)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'surname' => 'required|max:255',
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
             'birthDate' => 'required|date|before:today',
             'countryId' => 'required|exists:countries,id'
         ]);
@@ -113,8 +112,8 @@ class ManagerController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:managers',
-            'name' => 'required|max:255',
-            'surname' => 'required|max:255',
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
             'birthDate' => 'required|date',
             'countryId' => 'required|numeric|exists:countries,id'
         ]);
