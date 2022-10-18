@@ -52,6 +52,26 @@
             @csrf
             <button class="font-medium text-zinc-800 whitespace-nowrap" id="nav-teams" type="submit">Teams</button>
         </form>
+        <form action="/countryManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800 whitespace-nowrap" id="nav-country" type="submit">Countries</button>
+        </form>
+        <form action="/cityManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800 whitespace-nowrap" id="nav-city" type="submit">Cities</button>
+        </form>
+        <form action="/venueManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800 whitespace-nowrap" id="nav-venue" type="submit">Venues</button>
+        </form>
+        <form action="/positionManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800 whitespace-nowrap" id="nav-position" type="submit">Positions</button>
+        </form>
+        <form action="/markNameManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800 whitespace-nowrap" id="nav-mark-name" type="submit">Marks names</button>
+        </form>
     </div>
     <form action="logout" method="POST" class="mt-12">
         @csrf
