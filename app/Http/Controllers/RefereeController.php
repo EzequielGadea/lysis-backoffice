@@ -65,7 +65,7 @@ class RefereeController extends Controller
         Referee::destroy($request->post('id'));
         return back()->with([
             'statusDelete' => 'Referee deleted succesfuly.',
-            'deleteId' => $request->post('id')
+            'deletedId' => $request->post('id')
         ]);
     }
 
