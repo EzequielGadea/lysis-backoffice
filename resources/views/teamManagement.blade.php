@@ -24,9 +24,9 @@
                             <tr class="border-b border-slate-300">
                                 <td class="pl-3 px-3 text-zinc-800">{{ $team->id }}</td>
                                 <td class="py-3 px-3 text-zinc-800">{{ $team->name }}</td>
-                                <td class="py-3 px-3 text-zinc-800">{{ $team->country }}</td>
-                                <td class="py-3 px-3 text-zinc-800">{{ $team->league }}</td>
-                                <td class="py-3 px-3 text-zinc-800">{{ $team->managerName }} {{ $team->managerSurname }}</td>
+                                <td class="py-3 px-3 text-zinc-800">{{ $team->country->name }}</td>
+                                <td class="py-3 px-3 text-zinc-800">{{ $team->league->name }}</td>
+                                <td class="py-3 px-3 text-zinc-800">{{ $team->manager->name }} {{ $team->manager->surname }}</td>
                                 <td class="py-3 px-3 text-zinc-800">{{ $team->logo_link }}</td>
                                 <td class="py-3 px-3 text-zinc-800">{{ $team->created_at }}</td>
                                 <td class="py-3 px-3 text-zinc-800">{{ $team->updated_at }}</td>
@@ -40,7 +40,7 @@
                                             <input type="hidden" name="id" value="{{ $team->id }}">
                                             <button class="font-semibold text-blue-600" type="submit">Delete</button>
                                         </form>
-                                        <form action="teamUpdatePlayers">
+                                        <form action="teamUpdatePlayers" method="POST">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $team->id }}">
                                             <button class="font-semibold text-blue-600" type="submit">Players</button>

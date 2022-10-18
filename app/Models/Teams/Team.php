@@ -5,12 +5,12 @@ namespace App\Models\Teams;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Model\Whereabouts\Country;
-use App\Model\Common\League;
-use App\Model\Teams\Manager;
-use App\Model\Players\PlayerTeam;
-use App\Model\Players\Player;
-use App\Model\Events\EventPlayerTeam;
+use App\Models\Whereabouts\Country;
+use App\Models\Common\League;
+use App\Models\Teams\Manager;
+use App\Models\Players\PlayerTeam;
+use App\Models\Players\Player;
+use App\Models\Events\EventPlayerTeam;
 
 class Team extends Model
 {
@@ -36,7 +36,7 @@ class Team extends Model
 
     public function manager()
     {
-        return $this->belongsTo(Mananger::class);
+        return $this->belongsTo(Manager::class);
     }
 
     public function playerTeams()
@@ -46,7 +46,7 @@ class Team extends Model
 
     public function players()
     {
-        return $this->hasManyThrough(Player::class, PlayerTeam::class);
+        return $this->hasManyThrough(Player::class, PlayerTeam::class, 'id', 'id', 'id', 'player_id');
     }
 
     public function events()
