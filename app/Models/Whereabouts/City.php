@@ -5,15 +5,16 @@ namespace App\Models\Whereabouts;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Country;
-use App\Models\Venue;
+use App\Models\Whereabouts\Country;
+use App\Models\Whereabouts\Venue;
 
 class City extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name'
+        'name',
+        'country_id'
     ];
 
     public function country()
