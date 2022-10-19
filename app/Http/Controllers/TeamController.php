@@ -10,6 +10,7 @@ use App\Models\Teams\Manager;
 use App\Models\Whereabouts\Country;
 use App\Models\Common\League;
 use App\Models\Players\Player;
+use App\Models\Players\Position;
 
 class TeamController extends Controller
 {
@@ -109,7 +110,8 @@ class TeamController extends Controller
 
         return view('teamPlayersUpdate')->with([
             'team' => Team::find($request->post('id')),
-            'players' => Player::all()
+            'players' => Player::all(),
+            'positions' => Position::all()
         ]);
     }
 
