@@ -9,8 +9,6 @@ use App\Models\Teams\Team;
 use App\Models\Teams\Manager;
 use App\Models\Whereabouts\Country;
 use App\Models\Common\League;
-use App\Models\Players\Player;
-use App\Models\Players\Position;
 
 class TeamController extends Controller
 {
@@ -100,19 +98,6 @@ class TeamController extends Controller
             ->find($request->post('id'))
             ->restore();
         return back()->with('statusRestore', 'Team restored successfully.');
-    }
-
-    public function updatePlayers(Request $request)
-    {
-        $validation = $this->validateId($request);
-        if($validation !== true)
-            return back();
-
-        return view('teamPlayersUpdate')->with([
-            'team' => Team::find($request->post('id')),
-            'players' => Player::all(),
-            'positions' => Position::all()
-        ]);
     }
 
     private function validateId($collection)
