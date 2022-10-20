@@ -40,7 +40,7 @@
                                             <input type="hidden" name="id" value="{{ $team->id }}">
                                             <button class="font-semibold text-blue-600" type="submit">Delete</button>
                                         </form>
-                                        <form action="teamUpdatePlayers" method="POST">
+                                        <form action="playerTeamManagement/{{ $team->id }}" method="GET">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $team->id }}">
                                             <button class="font-semibold text-blue-600" type="submit">Players</button>
