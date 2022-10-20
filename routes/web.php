@@ -20,6 +20,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\MarkNameController;
+use App\Http\Controllers\PlayerTeamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -157,7 +158,15 @@ Route::middleware(['web'])->group(function () {
             Route::post('teamUpdate', 'update');
             Route::post('teamDelete', 'delete');
             Route::post('teamRestore', 'restore');
-            Route::post('teamUpdatePlayers', 'updatePlayers');
+        });
+
+        Route::controller(PlayerTeamController::class)->group(function () {
+            Route::get('playerTeamManagement/{id}', 'show');
+            Route::get('playerTeamUpdate/{id}', 'edit');
+            Route::post('playerTeamRegister', 'create');
+            Route::post('playerTeamDelete', 'delete');
+            Route::post('playerTeamRestore', 'restore');
+            Route::post('playerTeamUpdate', 'update');
         });
 
         Route::controller(CountryController::class)->group(function () {
