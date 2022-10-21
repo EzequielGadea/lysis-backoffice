@@ -14,6 +14,7 @@ use App\Models\Results\ByMark;
 use App\Models\Results\BySet;
 use App\Models\Players\PlayerVisitor;
 use App\Models\Players\PlayerLocal;
+use App\Models\Common\League;
 
 class Event extends Model
 {
@@ -31,6 +32,11 @@ class Event extends Model
 
     public function city(){
         return $this->hasOneThrough(City::class, Venue::class);
+    }
+
+    public function league()
+    {
+        return $this->belongsToMany(League::class)->withTimestamps();
     }
 
     public function referees()
@@ -66,5 +72,20 @@ class Event extends Model
     public function playerLocal()
     {
         return $this->hasOne(PlayerLocal::class);
+    }
+
+    public function hasLeague()
+    {
+        $eventsInLeagues = Event::has('league')->get();
+        if($eventsInLeagues->doesntContain('id', $this->id))
+            return false;
+        return true;
+    }
+
+    public function isIndividual()
+    {
+        if($this->playerVisitor !== null)
+            return true;
+        return false;
     }
 }
