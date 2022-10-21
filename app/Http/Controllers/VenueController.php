@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
 use App\Models\Whereabouts\Venue;
+use App\Models\Whereabouts\City;
 
 class VenueController extends Controller
 {
@@ -16,7 +17,8 @@ class VenueController extends Controller
             return back()->withErrors($validation);
         
         Venue::create([
-            'name' => $request->post('name')
+            'name' => $request->post('name'),
+            'city_id' => $request->post('cityId')
         ]);
         return back()->with('statusCreate', 'Venue created succesfully');
     }
@@ -42,7 +44,8 @@ class VenueController extends Controller
             return back()->withErrors($validation);
 
         Venue::find($request->post('id'))->update([
-            'name' => $request->post('name')
+            'name' => $request->post('name'),
+            'city_id' => $request->post('cityId')
         ]);
         return back()->with([
             'statusUpdate' => 'Venue updated succesfully, you will soon be redirected.',
@@ -65,7 +68,10 @@ class VenueController extends Controller
 
     public function show()
     {
-        return view('venueManagement')->with('venues', Venue::all());
+        return view('venueManagement')->with([
+            'venues' => Venue::all(),
+            'cities' => City::all()
+        ]);
     }
 
     public function edit($id)
@@ -74,13 +80,17 @@ class VenueController extends Controller
         if($validation !== true)
             return back();
 
-        return view('venueUpdate')->with('venue', Venue::find($id));
+        return view('venueUpdate')->with([
+            'venue' => Venue::find($id),
+            'cities' => City::all()
+        ]);
     }
 
     private function validateCreation($request)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'required|string|max:255'
+            'name' => 'required|string|max:255',
+            'cityId' => 'required|numeric|exists:cities,id'
         ]);
         if($validation->fails())
             return $validation;
@@ -91,7 +101,8 @@ class VenueController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:countries',
-            'name' => 'required|string|max:255'
+            'name' => 'required|string|max:255',
+            'cityId' => 'required|numeric|exists:cities,id'
         ]);
         if($validation->fails())
             return $validation;

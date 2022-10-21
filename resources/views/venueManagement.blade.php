@@ -9,6 +9,7 @@
                     <tr class="bg-slate-300">
                         <td class="pl-3 py-3 font-light text-zinc-800">VENUE ID</td>
                         <td class="py-3 font-light text-zinc-800">NAME</td>
+                        <td class="py-3 font-light text-zinc-800">CITY</td>
                         <td class="py-3 font-light text-zinc-800">CREATED AT</td>
                         <td class="py-3 font-light text-zinc-800">UPDATED AT</td>
                         <td class="pr-3 py-3 font-light text-zinc-800 text-center">ACTIONS</td>
@@ -20,6 +21,7 @@
                             <tr class="border-b border-slate-300">
                                 <td class="pl-3 text-zinc-800">{{ $venue->id }}</td>
                                 <td class="py-3 text-zinc-800">{{ $venue->name }}</td>
+                                <td class="py-3 text-zinc-800">{{ $venue->city->name }}</td>
                                 <td class="py-3 text-zinc-800">{{ $venue->created_at }}</td>
                                 <td class="py-3 text-zinc-800">{{ $venue->updated_at }}</td>
                                 <td class="pr-3 text-zinc-800">
@@ -55,6 +57,16 @@
         <div class="flex flex-col gap-1">
             <label for="name" class="font-medium text-zinc-700">Name</label>
             <input type="text" name="name" id="name" placeholder="Enter name" value="{{ old('name') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            <p class="text-sm text-red-600">{{ $errors->first('name') }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+            <label for="city" class="font-medium text-zinc-700">City</label>
+            <select name="cityId" id="city" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+                <option selected disabled>Choose city</option>
+                @foreach ($cities as $city)
+                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                @endforeach
+            </select>
             <p class="text-sm text-red-600">{{ $errors->first('name') }}</p>
         </div>
     </x-create-section>
