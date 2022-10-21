@@ -72,6 +72,10 @@
             @csrf
             <button class="font-medium text-zinc-800 whitespace-nowrap" id="nav-mark-name" type="submit">Marks names</button>
         </form>
+        <form action="/eventManagement" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800 whitespace-nowrap" id="nav-mark-name" type="submit">Events</button>
+        </form>
     </div>
     <form action="logout" method="POST" class="mt-12">
         @csrf
