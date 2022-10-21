@@ -21,7 +21,6 @@ class Event extends Model
 
     protected $fillable = [
         'start_date',
-        'city_id',
         'venue_id',
     ];
 
