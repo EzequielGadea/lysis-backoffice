@@ -20,7 +20,9 @@ class Event extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'start_date'
+        'start_date',
+        'city_id',
+        'venue_id',
     ];
 
     public function venue()
