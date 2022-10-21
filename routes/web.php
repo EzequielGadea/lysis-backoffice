@@ -21,6 +21,7 @@ use App\Http\Controllers\VenueController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\MarkNameController;
 use App\Http\Controllers\PlayerTeamController;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -212,6 +213,10 @@ Route::middleware(['web'])->group(function () {
             Route::post('markNameUpdate', 'update');
             Route::post('markNameDelete', 'delete');
             Route::post('markNameRestore', 'restore');
+        });
+
+        Route::controller(EventController::class)->group(function () {
+            Route::get('eventManagement', 'show');
         });
     });
 });
