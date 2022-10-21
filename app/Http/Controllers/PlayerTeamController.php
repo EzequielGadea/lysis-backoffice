@@ -102,7 +102,7 @@ class PlayerTeamController extends Controller
             'playerTeamId' => 'required|numeric|exists:player_team,id',
             'positionId' => 'required|numeric|exists:positions,id',
             'shirtNumber' => ['required', 'numeric', Rule::unique('player_team', 'shirt_number')->ignore($request->post('playerTeamId')), 'gte:0'],
-            'contractStart' => 'required|date',
+            'contractStart' => 'required|date'
         ]);
         if($validation->stopOnFirstFailure()->fails())
             return $validation;
