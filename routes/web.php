@@ -216,7 +216,12 @@ Route::middleware(['web'])->group(function () {
         });
 
         Route::controller(EventController::class)->group(function () {
-            Route::get('eventManagement', 'show');
+            Route::get('eventManagement', 'show')->name('eventManagement');
+            Route::get('eventUpdate/{id}', 'edit');
+            Route::post('eventRegister', 'create');
+            Route::post('eventUpdate', 'update');
+            Route::post('eventDelete', 'delete');
+            Route::post('eventRestore', 'restore');
         });
     });
 });
