@@ -15,6 +15,8 @@ use App\Models\Results\BySet;
 use App\Models\Players\PlayerVisitor;
 use App\Models\Players\PlayerLocal;
 use App\Models\Common\League;
+use App\Models\Teams\TeamVisitor;
+use App\Models\Teams\TeamLocal;
 
 class Event extends Model
 {
@@ -72,6 +74,16 @@ class Event extends Model
     public function playerLocal()
     {
         return $this->hasOne(PlayerLocal::class);
+    }
+
+    public function teamVisitor()
+    {
+        return $this->hasOne(TeamVisitor::class);
+    }
+
+    public function teamLocal()
+    {
+        return $this->hasOne(TeamLocal::class);
     }
 
     public function hasLeague()
