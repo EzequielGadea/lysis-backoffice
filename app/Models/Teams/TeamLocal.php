@@ -16,7 +16,7 @@ class TeamLocal extends Model
 
     protected $fillable = [
         'event_id',
-        'player_id'
+        'team_id'
     ];
 
     public function event()
