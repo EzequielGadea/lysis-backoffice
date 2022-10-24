@@ -43,6 +43,5 @@
         @else
             @livewire('event-update-teams', ['event' => $event])
         @endif
-
     </x-update-card>
 </x-layout>
