@@ -96,7 +96,7 @@ class Event extends Model
 
     public function isIndividual()
     {
-        if($this->playerVisitor !== null)
+        if($this->playerVisitor !== null && $this->playerLocal !== null)
             return true;
         return false;
     }
