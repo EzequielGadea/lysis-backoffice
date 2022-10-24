@@ -28,7 +28,7 @@ class EventUpdateRequest extends FormRequest
             'startDate' => 'required|date',
             'venueId' => 'required|numeric|exists:venues,id',
             'isIndividual' => 'required|boolean',
-            'leagueId' => 'required|numeric|exists:leagues,id',
+            'leagueId' => 'exclude_if:leagueId,NULL|numeric|exists:leagues,id',
             'playerVisitorId' => 'exclude_unless:isIndiviual,true|required|numeric|exists:players,id',
             'playerLocalId' => 'exclude_unless:isIndiviual,true|required|numeric|exists:players,id',
             'teamLocalId' => 'exclude_if:isIndividual,true|required|numeric|exists:teams,id',
