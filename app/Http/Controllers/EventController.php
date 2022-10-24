@@ -58,7 +58,22 @@ class EventController extends Controller
                     $event->league()->updateExistingPivot($event->id, [
                         'league_id' => $request->post('leagueId')
                     ]);
-                if($event->isIndividual());
+                if($event->isIndividual()){
+                    $event->playerLocal->update([
+                        'player_id' => $request->post('playerLocalId')
+                    ]);
+                    $event->playerVisitor->update([
+                        'player_id' => $request->post('playerVisitorId')
+                    ]);
+                    return back()->with('statusUpdate', 'Individual event updated successfully.');
+                }
+                $event->teamLocal->update([
+                    'team_id' => $request->post('localTeamId')
+                ]);
+                $event->teamVisitor->update([
+                    'team_id' => $request->post('visitorTeamId')
+                ]);
+                return back()->with('statusUpdate', 'Team event updated successfully.');
             });
         } catch (QueryException $e) {
             return back()->with('statusUpdate', 'Unable to update event right now.');
