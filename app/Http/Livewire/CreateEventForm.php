@@ -25,7 +25,6 @@ class CreateEventForm extends Component
                 'localPlayers' => Player::all()->except($this->chosenVisitorPlayer),
                 'visitorPlayers' => Player::all()->except($this->chosenLocalPlayer)
             ]);
-
         return view('livewire.create-event-form', [
             'localTeams' => Team::all()->except($this->chosenVisitorTeam),
             'visitorTeams' => Team::all()->except($this->chosenLocalTeam)
