@@ -36,8 +36,8 @@
                                         {{ $event->playerLocal ? $event->playerLocal->player->surname : '' }}
                                     </p>
                                 </td>
-                                <td class="p-3 text-zinc-800">{{ $event->league->first->name->name ?? 'Not in league' }}</td>
-                                <td class="p-3 text-zinc-800">{{ $event->league->first->sport->sport->name ?? 'Not in sport' }}</td>
+                                <td class="p-3 text-zinc-800">{{ $event->league->name }}</td>
+                                <td class="p-3 text-zinc-800">{{ $event->league->sport->name }}</td>
                                 <td class="p-3 text-zinc-800">{{ $event->created_at }}</td>
                                 <td class="p-3 text-zinc-800">{{ $event->updated_at }}</td>
                                 <td class="p-3 text-zinc-800">
@@ -78,7 +78,6 @@
         <div class="flex flex-col gap-1">
             <label for="leagueId" class="font-medium text-zinc-700">League</label>
             <select name="leagueId" id="leagueId" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
-                <option value="" selected>Doesn't belong to league</option>
                 @foreach ($leagues as $league)
                     <option value="{{ $league->id }}">{{ $league->name }}</option>
                 @endforeach
