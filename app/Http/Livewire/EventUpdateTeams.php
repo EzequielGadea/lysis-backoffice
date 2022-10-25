@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Models\Teams\Team;
 
 class EventUpdateTeams extends Component
 {
@@ -12,26 +13,21 @@ class EventUpdateTeams extends Component
 
     public $chosenVisitor;
 
-    public function rensder()
-    {
-        return view('livewire.event-update-individual', [
-            'visitors' => Player::all()->except([
-                $this->event->teamVisitor->player->id,
-                $this->event->teamLocal->player->id,
-                $this->chosenLocal
-            ]),
-            'locals' => Player::all()->except([
-                $this->event->playerLocal->player->id,
-                $this->event->playerVisitor->player->id,
-                $this->chosenVisitor
-            ]),
-            'visitor' => $this->event->playerVisitor->player,
-            'local' => $this->event->playerLocal->player
-        ]);
-    }
-
     public function render()
     {
-        return view('livewire.event-update-teams');
+        return view('livewire.event-update-teams', [
+            'visitors' => Team::all()->except([
+                $this->event->teamVisitor->team->id,
+                $this->event->teamLocal->team->id,
+                $this->chosenLocal
+            ]),
+            'locals' => Team::all()->except([
+                $this->event->teamLocal->team->id,
+                $this->event->teamVisitor->team->id,
+                $this->chosenVisitor
+            ]),
+            'visitor' => $this->event->teamVisitor->team,
+            'local' => $this->event->teamLocal->team
+        ]);
     }
 }
