@@ -25,9 +25,8 @@ class EventController extends Controller
                 $event = Event::create([
                     'start_date' => $request->post('startDate'),
                     'venue_id' => $request->post('venueId'),
+                    'league_id' => $request->post('leagueId')
                 ]);
-                if($request->post('leagueId'))
-                    $event->league()->attach($request->post('leagueId'));
 
                 /**
                  * PERDON PROFE USE UN ELSE :(
@@ -52,32 +51,29 @@ class EventController extends Controller
             DB::transaction(function () use ($request, $event){
                 $event->update([
                     'start_date' => $request->post('startDate'),
-                    'venue_id' => $request->post('venueId')
+                    'venue_id' => $request->post('venueId'),
+                    'league_id' => $request->post('leagueId')
                 ]);
-                if($event->hasLeague())
-                    $event->league()->updateExistingPivot($event->id, [
-                        'league_id' => $request->post('leagueId')
-                    ]);
+                
+                /**
+                 * PERDON PROFE USE OTRO ELSE :(
+                 */
                 if($event->isIndividual()){
-                    $event->playerLocal->update([
-                        'player_id' => $request->post('playerLocalId')
-                    ]);
-                    $event->playerVisitor->update([
-                        'player_id' => $request->post('playerVisitorId')
-                    ]);
-                    return back()->with('statusUpdate', 'Individual event updated successfully.');
+                    $this->updatePlayers($event, $request->post('playerLocalId'), $request->post('playerVisitorId'));
+                } else {
+                    $this->updateTeams($event, $request->post('localTeamId'), $request->post('visitorTeamId'));
                 }
-                $event->teamLocal->update([
-                    'team_id' => $request->post('localTeamId')
-                ]);
-                $event->teamVisitor->update([
-                    'team_id' => $request->post('visitorTeamId')
-                ]);
-                return back()->with('statusUpdate', 'Team event updated successfully.');
             });
         } catch (QueryException $e) {
-            return back()->with('statusUpdate', 'Unable to update event right now.');
+            return back()->with([
+                'statusUpdate' => 'Unable to update event right now.',
+                'isRedirected' => 'true'
+            ]);
         }
+        return back()->with([
+            'statusUpdate' => 'Event updated successfully, you will soon be redirected.',
+            'isRedirected' => 'true'
+        ]);
     }
 
     public function delete(CheckIdRequest $request)
@@ -119,16 +115,6 @@ class EventController extends Controller
         ]);
     }
 
-    private function validateId($id)
-    {
-        $validation = Validator::make(['id' => $id], [
-            'id' => 'numeric|exists:events'
-        ]);
-        if($validation->fails())
-            return $validation;
-        return true;
-    }
-
     private function createIndividualEvent($request, $eventId)
     {
         PlayerVisitor::create([
@@ -151,5 +137,35 @@ class EventController extends Controller
             'event_id' => $eventId,
             'team_id' => $request->post('teamLocalId')
         ]);
+    }
+
+    private function updatePlayers($event, $localId, $visitorId)
+    {
+        $event->playerLocal->update([
+            'player_id' => $localId
+        ]);
+        $event->playerVisitor->update([
+            'player_id' => $visitorId
+        ]);
+    }
+
+    private function updateTeams($event, $localId, $visitorId)
+    {
+        $event->teamLocal->update([
+            'team_id' => $localId
+        ]);
+        $event->teamVisitor->update([
+            'team_id' => $visitorId
+        ]);
+    }
+
+    private function validateId($id)
+    {
+        $validation = Validator::make(['id' => $id], [
+            'id' => 'numeric|exists:events'
+        ]);
+        if($validation->fails())
+            return $validation;
+        return true;
     }
 }
