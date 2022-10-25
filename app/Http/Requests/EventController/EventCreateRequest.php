@@ -27,7 +27,7 @@ class EventCreateRequest extends FormRequest
             'startDate' => 'required|date_format:"Y-m-d\TH:i"',
             'venueId' => 'required|numeric|exists:venues,id',
             'isIndividual' => 'required|boolean',
-            'leagueId' => 'exclude_if:leagueId,NULL|numeric|exists:leagues,id',
+            'leagueId' => 'required|numeric|exists:leagues,id',
             'playerVisitorId' => 'exclude_unless:isIndividual,1|required|numeric|exists:players,id',
             'playerLocalId' => 'exclude_unless:isIndividual,1|required|numeric|exists:players,id',
             'teamLocalId' => 'exclude_if:isIndividual,1|required|numeric|exists:teams,id',
