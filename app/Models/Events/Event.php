@@ -25,6 +25,7 @@ class Event extends Model
     protected $fillable = [
         'start_date',
         'venue_id',
+        'league_id'
     ];
 
     public function venue()
@@ -38,7 +39,7 @@ class Event extends Model
 
     public function league()
     {
-        return $this->belongsToMany(League::class)->withTimestamps();
+        return $this->belongsTo(League::class);
     }
 
     public function referees()
@@ -84,14 +85,6 @@ class Event extends Model
     public function teamLocal()
     {
         return $this->hasOne(TeamLocal::class);
-    }
-
-    public function hasLeague()
-    {
-        $eventsInLeagues = Event::has('league')->get();
-        if($eventsInLeagues->doesntContain('id', $this->id))
-            return false;
-        return true;
     }
 
     public function isIndividual()
