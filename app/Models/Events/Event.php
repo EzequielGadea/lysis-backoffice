@@ -14,6 +14,9 @@ use App\Models\Results\ByMark;
 use App\Models\Results\BySet;
 use App\Models\Players\PlayerVisitor;
 use App\Models\Players\PlayerLocal;
+use App\Models\Common\League;
+use App\Models\Teams\TeamVisitor;
+use App\Models\Teams\TeamLocal;
 
 class Event extends Model
 {
@@ -21,8 +24,8 @@ class Event extends Model
 
     protected $fillable = [
         'start_date',
-        'city_id',
         'venue_id',
+        'league_id'
     ];
 
     public function venue()
@@ -32,6 +35,11 @@ class Event extends Model
 
     public function city(){
         return $this->hasOneThrough(City::class, Venue::class);
+    }
+
+    public function league()
+    {
+        return $this->belongsTo(League::class);
     }
 
     public function referees()
@@ -67,5 +75,22 @@ class Event extends Model
     public function playerLocal()
     {
         return $this->hasOne(PlayerLocal::class);
+    }
+
+    public function teamVisitor()
+    {
+        return $this->hasOne(TeamVisitor::class);
+    }
+
+    public function teamLocal()
+    {
+        return $this->hasOne(TeamLocal::class);
+    }
+
+    public function isIndividual()
+    {
+        if($this->playerVisitor !== null && $this->playerLocal !== null)
+            return true;
+        return false;
     }
 }

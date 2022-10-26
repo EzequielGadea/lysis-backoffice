@@ -16,6 +16,11 @@ class PlayerVisitor extends Model
 
     protected $table = 'player_visitor';
 
+    protected $fillable = [
+        'event_id',
+        'player_id'
+    ];
+
     public function event()
     {
         return $this->belongsTo(Event::class);

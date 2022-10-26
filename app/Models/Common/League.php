@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Common\Sport;
 use App\Models\Whereabouts\Country;
 use App\Models\Teams\Team;
+use App\Models\Events\Event;
 
 class League extends Model
 {
@@ -28,6 +29,11 @@ class League extends Model
     public function country()
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class)->withTimestamps();
     }
 
     public function teams()
