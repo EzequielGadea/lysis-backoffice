@@ -4,7 +4,7 @@
         <x-slot name="action">eventUpdate</x-slot>
         <x-slot name="backTo">eventManagement</x-slot>
         <input type="hidden" name="eventId" value="{{ $event->id }}">
-        <input type="hidden" name="isIndividual" value="{{ $event->isIndividual() }}">
+        <input type="hidden" name="isIndividual" value="{{ $event->isIndividual() ? '1' : '0' }}">
         <div class="flex flex-col gap-1">
             <label for="startDate" class="font-medium text-zinc-700">Start date</label>
             <input type="datetime-local" name="startDate" id="startDate" value="{{ $event->start_date }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
