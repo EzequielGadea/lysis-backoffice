@@ -61,7 +61,7 @@ class EventController extends Controller
                 if($event->isIndividual()){
                     $this->updatePlayers($event, $request->post('playerLocalId'), $request->post('playerVisitorId'));
                 } else {
-                    $this->updateTeams($event, $request->post('localTeamId'), $request->post('visitorTeamId'));
+                    $this->updateTeams($event, $request->post('teamLocalId'), $request->post('teamVisitorId'));
                 }
             });
         } catch (QueryException $e) {
