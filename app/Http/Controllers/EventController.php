@@ -28,9 +28,6 @@ class EventController extends Controller
                     'league_id' => $request->post('leagueId')
                 ]);
 
-                /**
-                 * PERDON PROFE USE UN ELSE :(
-                 */
                 if($request->post('isIndividual')) {
                     $this->createIndividualEvent($request, $event->id);
                 } else {
@@ -54,14 +51,17 @@ class EventController extends Controller
                     'venue_id' => $request->post('venueId'),
                     'league_id' => $request->post('leagueId')
                 ]);
-                
-                /**
-                 * PERDON PROFE USE OTRO ELSE :(
-                 */
+
                 if($event->isIndividual()){
-                    $this->updatePlayers($event, $request->post('playerLocalId'), $request->post('playerVisitorId'));
+                    $this->updatePlayers($event, [
+                        'localId' => $request->post('playerLocalId'), 
+                        'visitorId' => $request->post('playerVisitorId')
+                    ]);
                 } else {
-                    $this->updateTeams($event, $request->post('teamLocalId'), $request->post('teamVisitorId'));
+                    $this->updateTeams($event, [
+                        'localId' => $request->post('teamLocalId'), 
+                        'visitorId' => $request->post('teamVisitorId')
+                    ]);
                 }
             });
         } catch (QueryException $e) {
@@ -139,23 +139,23 @@ class EventController extends Controller
         ]);
     }
 
-    private function updatePlayers($event, $localId, $visitorId)
+    private function updatePlayers($event, $players)
     {
         $event->playerLocal->update([
-            'player_id' => $localId
+            'player_id' => $players['localId']
         ]);
         $event->playerVisitor->update([
-            'player_id' => $visitorId
+            'player_id' => $players['visitorId']
         ]);
     }
 
-    private function updateTeams($event, $localId, $visitorId)
+    private function updateTeams($event, $teams)
     {
         $event->teamLocal->update([
-            'team_id' => $localId
+            'team_id' => $teams['localId']
         ]);
         $event->teamVisitor->update([
-            'team_id' => $visitorId
+            'team_id' => $teams['visitorId']
         ]);
     }
 
