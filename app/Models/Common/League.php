@@ -9,6 +9,7 @@ use App\Models\Common\Sport;
 use App\Models\Whereabouts\Country;
 use App\Models\Teams\Team;
 use App\Models\Events\Event;
+use App\Models\Common\Image;
 
 class League extends Model
 {
@@ -18,7 +19,8 @@ class League extends Model
         'name',
         'logo_link',
         'country_id',
-        'sport_id'
+        'sport_id',
+        'image_id'
     ];
 
     public function sport()
@@ -39,5 +41,10 @@ class League extends Model
     public function teams()
     {
         return $this->hasMany(Team::class);
+    }
+    
+    public function image()
+    {
+        return $this->belongsTo(Image::class);
     }
 }

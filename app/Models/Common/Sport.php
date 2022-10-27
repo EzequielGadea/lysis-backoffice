@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Common\League;
+use App\Models\Common\Image;
 
 class Sport extends Model
 {
@@ -13,11 +14,16 @@ class Sport extends Model
 
     protected $fillable = [
         'name',
-        'logo_link'
+        'image_id'
     ];
 
     public function leagues()
     {
         return $this->hasMany(League::class);
+    }
+    
+    public function image()
+    {
+        return $this->belongsTo(Image::class);
     }
 }
