@@ -1,4 +1,4 @@
-<div class="bg-red-100 text-red-600 p-4 rounded-md mt-12 inline-block">
+<div class="bg-red-100 text-red-600 p-4 mb-4 rounded-md inline-block">
     <form action="{{ $action }}" method="POST">
         @csrf
         {{ session('statusDelete') }}
