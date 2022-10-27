@@ -7,8 +7,9 @@
             <table class="table-auto border-collapse w-full">
                 <thead>
                     <tr class="bg-slate-300">
-                        <td class="pl-3 py-3 font-light text-zinc-800">MANAGER ID</td>
+                        <td class="pl-3 py-3 font-light text-zinc-800">ID</td>
                         <td class="py-3 font-light text-zinc-800">NAME</td>
+                        <td class="py-3 font-light text-zinc-800">MANAGES</td>
                         <td class="py-3 font-light text-zinc-800">BIRTH DATE</td>
                         <td class="py-3 font-light text-zinc-800">COUNTRY</td>
                         <td class="py-3 font-light text-zinc-800">CREATED AT</td>
@@ -21,9 +22,17 @@
                         @foreach ($managers as $manager)
                             <tr class="border-b border-slate-300">
                                 <td class="pl-3 text-zinc-800">{{ $manager->id }}</td>
-                                <td class="py-3 text-zinc-800">{{ $manager->name }} {{ $manager->surname }}</td>
+                                <td class="py-3 text-zinc-800">
+                                    <div class="flex flex-row items-center gap-2">
+                                        <img src="images/{{ $manager->picture }}" class="h-12 w-12 rounded-full shadow-md">
+                                        <p>
+                                            {{ $manager->name }} {{ $manager->surname }}
+                                        </p>
+                                    </div>
+                                </td>
+                                <td class="py-3 text-zinc-800">{{ $manager->team->name ?? 'Unemployed' }}</td>
                                 <td class="py-3 text-zinc-800">{{ $manager->birth_date }}</td>
-                                <td class="py-3 text-zinc-800">{{ $manager->country }}</td>
+                                <td class="py-3 text-zinc-800">{{ $manager->country->name }}</td>
                                 <td class="py-3 text-zinc-800">{{ $manager->created_at }}</td>
                                 <td class="py-3 text-zinc-800">{{ $manager->updated_at }}</td>
                                 <td class="pr-3 text-zinc-800">
@@ -79,6 +88,11 @@
                 @endforeach
             </select>
             <p class="text-sm text-red-600">{{ $errors->first('country') }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+            <label for="picture" class="font-medium text-zinc-700">Picture</label>
+            <input type="file" name="picture" id="picture" value="{{ old('picture') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            <p class="text-sm text-red-600">{{ $errors->first('picture') }}</p>
         </div>
     </x-create-section>
 </x-layout>
