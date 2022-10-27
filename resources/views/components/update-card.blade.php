@@ -1,4 +1,4 @@
-<form action="/{{ $action }}" method="post" {{ $attributes->merge(['class' => 'flex flex-col items-start gap-5 p-0 pt-6 rounded-md bg-white shadow-md w-fit m-auto mt-5 mb-5']) }}>
+<form action="/{{ $action }}" method="post" enctype="multipart/form-data" {{ $attributes->merge(['class' => 'flex flex-col items-start gap-5 p-0 pt-6 rounded-md bg-white shadow-md w-fit m-auto mt-5 mb-5']) }}>
     <p class="text-2xl font-semibold text-zinc-800 px-6 w-full">Edit</p>
     @csrf
     <div class="flex flex-col items-start px-6 gap-2 flex-wrap">
