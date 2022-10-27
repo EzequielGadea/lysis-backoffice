@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\CreateUserRequest;
 use App\Models\User;
@@ -17,12 +18,15 @@ use App\Models\Users\Subscription;
 
 class UserController extends Controller
 {
+    private $profilePicturesFolder = 'images';
+
     public function create(CreateUserRequest $request) 
     {
         $client = new Client([
             'surname' => $request->post('surname'),
             'birth_date' => $request->post('birthdate'),
-            'subscription_id' => $request->post('subscriptionId')
+            'subscription_id' => $request->post('subscriptionId'),
+            'profile_picture' => $this->storeProfilePicture($request->file('profilePicture'))
         ]);
         $user = new User([
             'name' => $request->post('name'),
@@ -57,7 +61,7 @@ class UserController extends Controller
                     'name' => $request->post('name'),
                     'email' => $request->post('email')
                 ]);
-                if(!empty($request->post('password')))
+                if(! empty($request->post('password')))
                     $user->update([
                         'password' => Hass::make($request->post('password'))
                     ]);
@@ -67,6 +71,10 @@ class UserController extends Controller
                     'birth_date' => $request->post('birthdate'),
                     'subscription_id' => $request->post('subscription')
                 ]);
+                if($request->file('profilePicture') !== NULL)
+                    $user->client->update([
+                        'profile_picture' => $this->storeProfilePicture($request->file('profilePicture'))
+                    ]);
             });
         } catch (QueryExcpetion $e) {
             return view('updateUser')->with('statusUpdate', 'Couldn\'t update user. If this issue persists please contact the developer team.');
@@ -123,15 +131,10 @@ class UserController extends Controller
 
     public function show() 
     {
-        return view('userManagement')->with('users', 
-            DB::table('users')
-            ->join('clients', 'users.client_id', '=', 'clients.id')
-            ->join('subscriptions', 'subscriptions.id', '=', 'clients.subscription_id')
-            ->where('users.deleted_at', '=', null)
-            ->select('users.id', 'users.client_id', 'users.name', 'users.email', 'clients.surname', 
-                'clients.birth_date', 'subscriptions.type', 'users.created_at', 'clients.updated_at', 'users.email_verified_at')
-            ->get()
-        )->with('subscriptions', Subscription::all());
+        return view('userManagement', [
+            'users' => User::all(),
+            'subscriptions' => Subscription::all()
+        ]);
     }
 
     public function showUpdate($id)
@@ -154,6 +157,14 @@ class UserController extends Controller
         )->with('subscriptions', Subscription::all());
     }
 
+    private function storeProfilePicture($file)
+    {
+        $fileName = Str::random(32) . '.' . $file->extension();
+        $file->move($this->profilePicturesFolder, $fileName);
+
+        return $fileName;
+    }
+
     private function validateUpdate($request)
     {
         $validation = Validator::make($request->all(), [
@@ -163,13 +174,14 @@ class UserController extends Controller
             'birthdate' => 'required',
             'email' => ['required', 'email', Rule::unique('users')->ignore($request->post('id'))],
             'subscription' => 'required|exists:subscriptions,id',
-            'password' => 'nullable|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/'
+            'password' => 'nullable|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
+            'profilePicture' => 'nullable|image|max:5000'
         ]);
         if($validation->stopOnFirstFailure()->fails())
             return $validation;
 
         return true;
-    }    
+    }
 
     private function validateRestore($request)
     {
