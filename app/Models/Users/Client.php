@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
-use App\Models\Subscription;
-use App\Models\SubscriptionType;
+use App\Models\Users\Subscription;
+use App\Models\Common\Image;
 
 class Client extends Model
 {
@@ -16,7 +16,8 @@ class Client extends Model
     protected $fillable = [
         'surname',
         'birth_date',
-        'subscription_id'
+        'subscription_id',
+        'image_id'
     ];
 
     public function user() 
@@ -29,8 +30,8 @@ class Client extends Model
         return $this->hasOne(Subscription::class);
     }
 
-    public function subscriptionType() 
+    public function image()
     {
-        return $this->hasOneThrough(SubscriptionType::class, Subscription::class);
+        return $this->belongsTo(Image::class);
     }
 }
