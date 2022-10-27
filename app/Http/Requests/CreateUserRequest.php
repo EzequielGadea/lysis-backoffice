@@ -32,7 +32,7 @@ class CreateUserRequest extends FormRequest
             'email' => 'required|email|unique:users',
             'subscriptionId' => 'required|exists:subscriptions,id',
             'password' => 'required|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
-            'image' => 'required|mimetypes:image/jpeg,image/png'
+            'profilePicture' => 'required|image|max:5000'
         ];
     }
 
