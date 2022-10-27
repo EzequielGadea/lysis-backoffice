@@ -17,7 +17,7 @@ class Client extends Model
         'surname',
         'birth_date',
         'subscription_id',
-        'image_id'
+        'profile_picture'
     ];
 
     public function user() 
@@ -27,11 +27,6 @@ class Client extends Model
 
     public function subscription() 
     {
-        return $this->hasOne(Subscription::class);
-    }
-
-    public function image()
-    {
-        return $this->belongsTo(Image::class);
+        return $this->belongsTo(Subscription::class);
     }
 }
