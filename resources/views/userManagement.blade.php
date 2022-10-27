@@ -86,23 +86,29 @@
                 <p class="text-sm text-red-600">{{ $errors->first('birthdate') }}</p>
             </div>
             <div class="flex flex-col gap-1">
-                <label for="email">Email</label>
+                <label for="email" class="font-medium text-zinc-700">Email</label>
                 <input type="email" name="email" id="email" placeholder="Enter email" value="{{ old('email') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
                 <p class="text-sm text-red-600">{{ $errors->first('email') }}</p>
             </div>
             <div class="flex flex-col gap-1">
-                <label for="subscription">Subscription</label>
+                <label for="subscription" class="font-medium text-zinc-700">Subscription</label>
                 <select name="subscriptionId" id="subscription" placeholder="Choose subscription type" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner" autocomplete="off">
+                    <option selected disabled>Choose subscription</option>
                     @foreach($subscriptions as $subscription)
                         <option value="{{ $subscription->id }}">{{ $subscription->type }}</option>
                     @endforeach
                 </select>
-                <p class="text-sm text-red-600">{{ $errors->first('subscription') }}</p>
+                <p class="text-sm text-red-600">{{ $errors->first('subscriptionId') }}</p>
             </div>
             <div class="flex flex-col gap-1">
-                <label for="password">Password</label>
+                <label for="password" class="font-medium text-zinc-700">Password</label>
                 <input type="password" name="password" id="password" placeholder="Enter password" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
                 <p class="text-sm text-red-600">{{ $errors->first('password') }}</p>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="image" class="font-medium text-zinc-700">Image</label>
+                <input type="file" name="image" id="image" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+                <p class="text-sm text-red-600">{{ $errors->first('image') }}</p>
             </div>
             <button type="submit" class="bg-blue-600 text-white px-3 py-1 w-fit rounded-md">Create user</button>
          </form>
