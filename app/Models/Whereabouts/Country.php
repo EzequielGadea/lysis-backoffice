@@ -5,12 +5,13 @@ namespace App\Models\Whereabouts;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Player;
-use App\Models\Manager;
-use App\Models\League;
-use App\Models\Team;
-use App\Models\Referee;
-use App\Models\City;
+use App\Models\Players\Player;
+use App\Models\Teams\Team;
+use App\Models\Teams\Manager;
+use App\Models\Common\League;
+use App\Models\Common\Image;
+use App\Models\Events\Referee;
+use App\Models\Whereabouts\City;
 
 class Country extends Model
 {
@@ -18,7 +19,7 @@ class Country extends Model
 
     protected $fillable = [
         'name',
-        'country_flag_link'
+        'image_id'
     ];
 
     public function players()
@@ -49,5 +50,10 @@ class Country extends Model
     public function cities()
     {
         return $this->hasMany(City::class);
+    }
+    
+    public function image()
+    {
+        return $this->belongsTo(Image::class);
     }
 }
