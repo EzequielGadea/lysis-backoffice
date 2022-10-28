@@ -10,9 +10,9 @@
             <p class="text-sm text-red-600">{{ $errors->first('link') }}</p>
         </div>
         <div class="flex flex-col gap-1">
-            <label for="path" class="font-medium text-zinc-700">Path (image resource)</label>
-            <input type="text" name="path" id="path" value="{{ $ad->path }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
-            <p class="text-sm text-red-600">{{ $errors->first('path') }}</p>
+            <label for="image" class="font-medium text-zinc-700">Image</label>
+            <input type="file" name="image" id="image" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            <p class="text-sm text-red-600">{{ $errors->first('image') }}</p>
         </div>
         <div class="flex flex-col gap-1">
             <label for="viewsHired" class="font-medium text-zinc-700">Views hired</label>
