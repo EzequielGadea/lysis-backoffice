@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 use App\Models\Events\Referee;
 use App\Models\Whereabouts\Country;
 
@@ -17,7 +16,7 @@ class RefereeController extends Controller
     public function create(Request $request)
     {
         $validation = $this->validateCreation($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
 
         Referee::create([
@@ -33,7 +32,7 @@ class RefereeController extends Controller
     public function restore(Request $request)
     {
         $validation = $this->validateId($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
         
         Referee::withTrashed()
@@ -45,7 +44,7 @@ class RefereeController extends Controller
     public function update(Request $request)
     {
         $validation = $this->validateUpdate($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
 
         $referee = Referee::find($request->post('id'));
@@ -55,9 +54,9 @@ class RefereeController extends Controller
             'birth_date' => $request->post('birthDate'),
             'country_id' => $request->post('countryId')
         ]);
-        if($request->file('picture') !== null)
+        if ($request->file('picture') !== null)
             $referee->update([
-                'picture' => $this->storeProfilePicture($request->file('picture'))
+                'picture' => $this->changeProfilePicture($referee->picture, $request->file('picture'))
             ]);
 
         return back()->with([
@@ -69,7 +68,7 @@ class RefereeController extends Controller
     public function delete(Request $request)
     {
         $validation = $this->validateId($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
 
         Referee::destroy($request->post('id'));
@@ -81,7 +80,7 @@ class RefereeController extends Controller
 
     public function show()
     {
-        return view('refereeManagement')->with([
+        return view('refereeManagement', [
             'referees' => Referee::all(),
             'countries' => Country::all()
         ]);
@@ -90,20 +89,25 @@ class RefereeController extends Controller
     public function edit($id)
     {
         $validation = $this->validateId(collect(['id' => $id]));
-        if($validation !== true)
+        if ($validation !== true)
             return back();
         
-        return view('refereeUpdate')->with([
+        return view('refereeUpdate', [
             'referee' => Referee::find($id),
             'countries' => Country::all()
         ]);
+    }
+
+    private function changeProfilePicture($oldPicture, $newPicture)
+    {
+        File::delete($this->profilePicturesFolder . '/' . $oldPicture);
+        return $this->storeProfilePicture($newPicture);
     }
 
     private function storeProfilePicture($file)
     {
         $fileName = Str::random(32) . '.' . $file->extension();
         $file->move($this->profilePicturesFolder, $fileName);
-
         return $fileName;
     }
 
@@ -116,7 +120,7 @@ class RefereeController extends Controller
             'countryId' => 'required|exists:countries,id',
             'picture' => 'required|image|max:5000'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
@@ -131,7 +135,7 @@ class RefereeController extends Controller
             'countryId' => 'required|numeric|exists:countries,id',
             'picture' => 'nullable|image|max:5000'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
@@ -141,7 +145,7 @@ class RefereeController extends Controller
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:referees'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
