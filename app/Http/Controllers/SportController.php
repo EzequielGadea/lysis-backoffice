@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Collection;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use App\Models\Common\Sport;
 use App\Models\Common\League;
 
@@ -17,12 +18,12 @@ class SportController extends Controller
     public function create(Request $request)
     {
         $validation = $this->validateCreation($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
         
         Sport::create([
             'name' => $request->post('name'),
-            'picture' => $this->storeProfilePicture($request->file('picture'))
+            'picture' => $this->storePicture($request->file('picture'))
         ]);
         return back()->with('statusCreate', 'Sport created successfully.');
     }
@@ -30,16 +31,16 @@ class SportController extends Controller
     public function update(Request $request)
     {
         $validation = $this->validateUpdate($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
 
         $sport = Sport::find($request->post('id'));
         $sport->update([
             'name' => $request->post('name')
         ]);
-        if($request->file('picture') !== null)
+        if ($request->file('picture') !== null)
             $sport->update([
-                'picture' => $this->storeProfilePicture($request->file('picture'))
+                'picture' => $this->changePicture($sport->picture, $request->file('picture'))
             ]);
 
         return back()->with([
@@ -51,15 +52,19 @@ class SportController extends Controller
     public function edit($id)
     {
         $validation = $this->validateId(collect(['id' => $id]));
-        if($validation !== true)
+        if ($validation !== true)
             return back();
         
-        return view('sportUpdate')->with('sport', Sport::find($id));
+        return view('sportUpdate', [
+            'sport' => Sport::find($id)
+        ]);
     }
 
     public function show()
     {
-        return view('sportManagement')->with('sports', Sport::all());
+        return view('sportManagement', [
+            'sports' => Sport::all()
+        ]);
     }
 
     /**
@@ -69,7 +74,7 @@ class SportController extends Controller
     public function delete(Request $request)
     {
         $validation = $this->validateId($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
         
         try {
@@ -77,7 +82,7 @@ class SportController extends Controller
                 League::where('sport_id', $request->post('id'))->delete();
                 Sport::destroy($request->post('id'));
             });
-        } catch (QueryExcpetion $e) {
+        } catch (QueryException $e) {
             return back()->with('statusDelete', 'Unable to delete sport right now.');
         }   
         return back()->with([
@@ -89,7 +94,7 @@ class SportController extends Controller
     public function restore(Request $request)
     {
         $validation = $this->validateId($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
 
         try {
@@ -101,17 +106,22 @@ class SportController extends Controller
                     ->find($request->post('id'))
                     ->restore();
             });
-        } catch (QueryExcpetion $e) {
+        } catch (QueryException $e) {
             return back()->with('statusRestore', 'Unable to restore sport right now.');
         }   
         return back()->with('statusRestore', 'Sport restored successfully.');
     }
 
-    private function storeProfilePicture($file)
+    private function changePicture($oldPicture, $newPicture)
+    {
+        File::delete($this->profilePicturesFolder . '/' . $oldPicture);
+        return $this->storePicture($newPicture);
+    }
+
+    private function storePicture($file)
     {
         $fileName = Str::random(32) . '.' . $file->extension();
         $file->move($this->profilePicturesFolder, $fileName);
-
         return $fileName;
     }
 
@@ -120,7 +130,7 @@ class SportController extends Controller
         $validation = Validator::make($collection->all(), [
             'id' => 'numeric|exists:sports'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
@@ -131,7 +141,7 @@ class SportController extends Controller
             'id' => 'required|numeric|exists:sports',
             'name' => 'required|string|max:255'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
@@ -141,7 +151,7 @@ class SportController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required|string|max:255'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
