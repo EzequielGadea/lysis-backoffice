@@ -6,11 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use App\Models\Common\Sport;
 use App\Models\Common\League;
 
 class SportController extends Controller
 {
+    private $profilePicturesFolder = 'images';
+
     public function create(Request $request)
     {
         $validation = $this->validateCreation($request);
@@ -18,7 +21,8 @@ class SportController extends Controller
             return back()->withErrors($validation);
         
         Sport::create([
-            'name' => $request->post('name')
+            'name' => $request->post('name'),
+            'picture' => $this->storeProfilePicture($request->file('picture'))
         ]);
         return back()->with('statusCreate', 'Sport created successfully.');
     }
@@ -28,10 +32,16 @@ class SportController extends Controller
         $validation = $this->validateUpdate($request);
         if($validation !== true)
             return back()->withErrors($validation);
-        
-        Sport::find($request->post('id'))->update([
+
+        $sport = Sport::find($request->post('id'));
+        $sport->update([
             'name' => $request->post('name')
         ]);
+        if($request->file('picture') !== null)
+            $sport->update([
+                'picture' => $this->storeProfilePicture($request->file('picture'))
+            ]);
+
         return back()->with([
             'statusUpdate' => 'Sport updated successfully, you will soon be redirected.',
             'isRedirected' => 'true'
@@ -95,6 +105,14 @@ class SportController extends Controller
             return back()->with('statusRestore', 'Unable to restore sport right now.');
         }   
         return back()->with('statusRestore', 'Sport restored successfully.');
+    }
+
+    private function storeProfilePicture($file)
+    {
+        $fileName = Str::random(32) . '.' . $file->extension();
+        $file->move($this->profilePicturesFolder, $fileName);
+
+        return $fileName;
     }
 
     private function validateId($collection)
