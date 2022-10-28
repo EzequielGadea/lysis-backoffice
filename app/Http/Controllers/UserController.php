@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -63,7 +63,7 @@ class UserController extends Controller
                 ]);
                 if(! empty($request->post('password')))
                     $user->update([
-                        'password' => Hass::make($request->post('password'))
+                        'password' => Hash::make($request->post('password'))
                     ]);
                 
                 $user->client->update([
@@ -73,10 +73,10 @@ class UserController extends Controller
                 ]);
                 if($request->file('profilePicture') !== NULL)
                     $user->client->update([
-                        'profile_picture' => $this->storeProfilePicture($request->file('profilePicture'))
+                        'profile_picture' => $this->updateProfilePicture($user->client->picture, $request->file('profilePicture'))
                     ]);
             });
-        } catch (QueryExcpetion $e) {
+        } catch (QueryException $e) {
             return view('updateUser')->with('statusUpdate', 'Couldn\'t update user. If this issue persists please contact the developer team.');
         }
 
@@ -97,7 +97,7 @@ class UserController extends Controller
                 User::destroy($request->post('userId'));
             });
         }
-        catch (QueryExcpetion $e) {
+        catch (QueryException $e) {
             return Redirect::back()->with('statusDelete', 'Could not delete user.');
         }
 
@@ -157,11 +157,16 @@ class UserController extends Controller
         )->with('subscriptions', Subscription::all());
     }
 
+    private function updateProfilePicture($oldPicture, $newPicture)
+    {
+        File::delete($this->profilePicturesFolder . '/' . $oldPicture);
+        return $this->storeProfilePicture($newPicture);
+    }
+
     private function storeProfilePicture($file)
     {
         $fileName = Str::random(32) . '.' . $file->extension();
         $file->move($this->profilePicturesFolder, $fileName);
-
         return $fileName;
     }
 
