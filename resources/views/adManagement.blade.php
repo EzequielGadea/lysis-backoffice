@@ -1,35 +1,35 @@
 <x-layout>
     <x-slot name="title">Ad management</x-slot>
     <x-nav/>
-    <div class="flex flex-col items-center pt-6 px-8 w-full flex-grow">
+    <div class="flex flex-col items-center pt-6 px-8 w-[50rem] flex-grow">
         <p class="text-2xl text-zinc-800 font-semibold mb-6 w-full">Ads</p>
         <div class="rounded-md overflow-x-auto shadow-xl w-full">
-            <table class="table-auto border-collapse w-full">
+            <table class="table-auto border-collapse w-full whitespace-nowrap">
                 <thead>
                     <tr class="bg-slate-300">
-                        <td class="pl-3 py-3 font-light text-zinc-800">AD ID</td>
-                        <td class="py-3 font-light text-zinc-800">LINK</td>
-                        <td class="py-3 font-light text-zinc-800">PATH</td>
-                        <td class="py-3 font-light text-zinc-800">LOCATION</td>
-                        <td class="py-3 font-light text-zinc-800">VIEWS HIRED</td>
-                        <td class="py-3 font-light text-zinc-800">CURRENT VIEWS</td>
-                        <td class="py-3 font-light text-zinc-800">TAG:VALUE</td>
-                        <td class="py-3 font-light text-zinc-800">CREATED AT</td>
-                        <td class="py-3 font-light text-zinc-800">UPDATED AT</td>
-                        <td class="pr-3 py-3 font-light text-zinc-800 text-center">ACTIONS</td>
+                        <td class="p-3 font-light text-zinc-800">ID</td>
+                        <td class="p-3 font-light text-zinc-800">LINK</td>
+                        <td class="p-3 font-light text-zinc-800">IMAGE</td>
+                        <td class="p-3 font-light text-zinc-800">LOCATION</td>
+                        <td class="p-3 font-light text-zinc-800">VIEWS HIRED</td>
+                        <td class="p-3 font-light text-zinc-800">CURRENT VIEWS</td>
+                        <td class="p-3 font-light text-zinc-800">TAG:VALUE</td>
+                        <td class="p-3 font-light text-zinc-800">CREATED AT</td>
+                        <td class="p-3 font-light text-zinc-800">UPDATED AT</td>
+                        <td class="p-3 font-light text-zinc-800 text-center">ACTIONS</td>
                     </tr>
                 </thead>
                 <tbody>
                     @if (isset($ads))
                         @foreach ($ads as $ad)
                             <tr class="border-b border-slate-300">
-                                <td class="pl-3 text-zinc-800">{{ $ad->id }}</td>
-                                <td class="py-3 text-zinc-800">{{ $ad->link }}</td>
-                                <td class="py-3 text-zinc-800">{{ $ad->path }}</td>
-                                <td class="py-3 text-zinc-800">{{ $ad->location }}</td>
-                                <td class="py-3 text-zinc-800">{{ $ad->views_hired }}</td>
-                                <td class="py-3 text-zinc-800">{{ $ad->current_views }}</td>
-                                <td class="py-3 text-zinc-800">
+                                <td class="p-3 text-zinc-800">{{ $ad->id }}</td>
+                                <td class="p-3 text-zinc-800">{{ $ad->link }}</td>
+                                <td class="p-3 text-zinc-800">{{ $ad->image }}</td>
+                                <td class="p-3 text-zinc-800">{{ $ad->location }}</td>
+                                <td class="p-3 text-zinc-800">{{ $ad->views_hired }}</td>
+                                <td class="p-3 text-zinc-800">{{ $ad->current_views }}</td>
+                                <td class="p-3 text-zinc-800">
                                     @foreach($tagsValues as $tagValue)
                                         @if($tagValue->id == $ad->id)
                                             <p><span class="font-semibold capitalize">{{ $tagValue->name }}:</span>
@@ -37,9 +37,9 @@
                                         @endif
                                     @endforeach
                                 </td>
-                                <td class="py-3 text-zinc-800">{{ $ad->created_at }}</td>
-                                <td class="py-3 text-zinc-800">{{ $ad->updated_at }}</td>
-                                <td class="pr-3 text-zinc-800">
+                                <td class="p-3 text-zinc-800">{{ $ad->created_at }}</td>
+                                <td class="p-3 text-zinc-800">{{ $ad->updated_at }}</td>
+                                <td class="p-3 text-zinc-800">
                                     <div class="flex flex-col items-center">
                                         <form action="adUpdate/{{ $ad->id }}" method="GET">
                                             <button class="font-semibold text-blue-600">Edit</button>
@@ -75,9 +75,9 @@
             <p class="text-sm text-red-600">{{ $errors->first('link') }}</p>
         </div>
         <div class="flex flex-col gap-1">
-            <label for="path" class="font-medium text-zinc-700">Path</label>
-            <input type="text" name="path" id="path" placeholder="Enter path" value="{{ old('path') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
-            <p class="text-sm text-red-600">{{ $errors->first('path') }}</p>
+            <label for="image" class="font-medium text-zinc-700">Image</label>
+            <input type="file" name="image" id="image" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            <p class="text-sm text-red-600">{{ $errors->first('image') }}</p>
         </div>
         <div class="flex flex-col gap-1">
             <label for="viewsHired" class="font-medium text-zinc-700">Views hired</label>

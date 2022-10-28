@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
-use App\Models\Subscription;
-use App\Models\SubscriptionType;
+use App\Models\Users\Subscription;
 
 class Client extends Model
 {
@@ -16,21 +15,17 @@ class Client extends Model
     protected $fillable = [
         'surname',
         'birth_date',
-        'subscription_id'
+        'subscription_id',
+        'profile_picture'
     ];
 
     public function user() 
     {
-        return $this->hasOne(User::Class);
+        return $this->hasOne(User::class);
     }
 
     public function subscription() 
     {
-        return $this->hasOne(Subscription::class);
-    }
-
-    public function subscriptionType() 
-    {
-        return $this->hasOneThrough(SubscriptionType::class, Subscription::class);
+        return $this->belongsTo(Subscription::class);
     }
 }

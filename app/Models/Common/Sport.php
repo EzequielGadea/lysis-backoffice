@@ -13,7 +13,7 @@ class Sport extends Model
 
     protected $fillable = [
         'name',
-        'logo_link'
+        'picture'
     ];
 
     public function leagues()

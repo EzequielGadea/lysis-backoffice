@@ -9,7 +9,7 @@
 </head>
 <body>
     @if(isset($user))
-        <form action="/userUpdate" method="POST" class="flex flex-col items-start gap-5 p-0 pt-6 rounded-md bg-white overflow-hidden shadow-md w-fit m-auto mt-5">
+        <form action="/userUpdate" method="POST" class="flex flex-col items-start gap-5 p-0 pt-6 rounded-md bg-white overflow-hidden shadow-md w-fit m-auto mt-5" enctype="multipart/form-data">
             <p class="text-2xl font-semibold text-zinc-800 px-6 w-full">Edit</p>
             @csrf
             <input type="hidden" name="id" value="{{ $user->id }}">
@@ -51,7 +51,12 @@
                     <label for="password" class="font-medium text-zinc-700">Password</label>
                     <input type="password" name="password" id="password" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner" placeholder="Leave empty to keep current">
                 </div>
-                <p class="text-sm text-red-600">{{ $errors->first('id') }}</p>
+                <p class="text-sm text-red-600">{{ $errors->first('password') }}</p>
+                <div class="flex flex-col">
+                    <label for="profilePicture" class="font-medium text-zinc-700">Profile picture</label>
+                    <input type="file" name="profilePicture" id="profilePicture" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+                </div>
+                <p class="text-sm text-red-600">{{ $errors->first('profilePicture') }}</p>
                 @if (session('statusUpdate'))
                     <p class="p-4 text-green-600 bg-green-100 rounded-md">{{ session('statusUpdate') }}</p>
                 @endif

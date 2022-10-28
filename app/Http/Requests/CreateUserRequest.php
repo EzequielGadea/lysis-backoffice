@@ -31,7 +31,8 @@ class CreateUserRequest extends FormRequest
             'birthdate' => 'required',
             'email' => 'required|email|unique:users',
             'subscriptionId' => 'required|exists:subscriptions,id',
-            'password' => 'required|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/'
+            'password' => 'required|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
+            'profilePicture' => 'required|image|max:5000'
         ];
     }
 

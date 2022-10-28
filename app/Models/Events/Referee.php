@@ -15,7 +15,8 @@ class Referee extends Model
         'name',
         'surname',
         'birth_date',
-        'country_id'
+        'country_id',
+        'picture'
     ];
 
     public function country()

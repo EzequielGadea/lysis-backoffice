@@ -3,25 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File; 
 use App\Models\Common\League;
 use App\Models\Common\Sport;
 use App\Models\Whereabouts\Country;
 
 class LeagueController extends Controller
 {
+    private $picturesFolder = 'images';
+
     public function create(Request $request)
     {
         $validation = $this->validateCreation($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
         
         League::create([
             'name' => $request->post('name'),
-            'logo_link' => $request->post('logoLink'),
             'country_id' => $request->post('countryId'),
-            'sport_id' => $request->post('sportId')
+            'sport_id' => $request->post('sportId'),
+            'picture' => $this->storePicture($request->file('picture'))
         ]);
         return back()->with('statusCreate', 'League created successfully.');
     }
@@ -29,15 +32,20 @@ class LeagueController extends Controller
     public function update(Request $request)
     {
         $validation = $this->validateUpdate($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
 
-        League::find($request->post('id'))->update([
+        $league = League::find($request->post('id'));
+        $league->update([
             'name' => $request->post('name'),
-            'logo_link' => $request->post('logoLink'),
             'country_id' => $request->post('countryId'),
-            'sport_id' => $request->post('sportId')
+            'sport_id' => $request->post('sportId'),
         ]);
+        if ($request->file('picture') !== null) 
+            $league->update([
+                'picture' => $this->changePicture($league->picture, $request->file('picture'))
+            ]);
+
         return back()->with([
             'statusUpdate' => 'League updated successfully, you will soon be redirected.',
             'isRedirected' => 'true'
@@ -47,10 +55,10 @@ class LeagueController extends Controller
     public function edit($id)
     {
         $validation = $this->validateId(collect(['id' => $id]));
-        if($validation !== true)
+        if ($validation !== true)
             return back();
 
-        return view('leagueUpdate')->with([
+        return view('league.leagueUpdate', [
             'league' => League::find($id),
             'countries' => Country::all(),
             'sports' => Sport::all()
@@ -59,14 +67,8 @@ class LeagueController extends Controller
 
     public function show()
     {
-        return view('leagueManagement')->with([
-            'leagues' => DB::table('leagues')
-                        ->join('sports', 'leagues.sport_id', '=', 'sports.id')
-                        ->join('countries', 'leagues.country_id', '=', 'countries.id')
-                        ->select('leagues.id', 'leagues.created_at', 'leagues.updated_at',
-                            'leagues.name', 'leagues.logo_link', 'countries.name as country', 'sports.name as sport')
-                        ->whereNull('leagues.deleted_at')
-                        ->get(),
+        return view('league.leagueManagement', [
+            'leagues' => League::all(),
             'sports' => Sport::all(),
             'countries' => Country::all()
         ]);
@@ -80,7 +82,7 @@ class LeagueController extends Controller
     public function delete(Request $request)
     {
         $validation = $this->validateId($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
         
         League::destroy($request->post('id'));
@@ -93,7 +95,7 @@ class LeagueController extends Controller
     public function restore(Request $request)
     {
         $validation = $this->validateId($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
         
         League::withTrashed()
@@ -102,12 +104,25 @@ class LeagueController extends Controller
         return back()->with('statusRestore', 'League restored successfully');
     }
 
+    private function changePicture($oldPicture, $newPicture)
+    {
+        File::delete($this->picturesFolder . '/' . $oldPicture);
+        return $this->storePicture($newPicture);
+    }
+
+    private function storePicture($file)
+    {
+        $fileName = Str::random(32) . '.' . $file->extension();
+        $file->move($this->picturesFolder, $fileName);
+        return $fileName;
+    }
+
     private function validateId($collection)
     {
         $validation = Validator::make($collection->all(), [
             'id' => 'numeric|exists:leagues'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
@@ -117,11 +132,11 @@ class LeagueController extends Controller
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:leagues',
             'name' => 'required|string|max:255',
-            'logoLink' => 'required|string|max:255',
             'countryId' => 'required|numeric|exists:countries,id',
-            'sportId' => 'required|numeric|exists:sports,id'
+            'sportId' => 'required|numeric|exists:sports,id',
+            'picture' => 'nullable|image|max:5000'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
@@ -130,11 +145,11 @@ class LeagueController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'logoLink' => 'required|string|max:255',
             'countryId' => 'required|numeric|exists:countries,id',
-            'sportId' => 'required|numeric|exists:sports,id'
+            'sportId' => 'required|numeric|exists:sports,id',
+            'picture' => 'required|image|max:5000'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }

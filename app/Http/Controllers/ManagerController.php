@@ -3,25 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use App\Models\Teams\Manager;
 use App\Models\Whereabouts\Country;
 
 class ManagerController extends Controller
 {
+    private $profilePicturesFolder = 'images';
+
     public function create(Request $request)
     {
         $validation = $this->validateCreation($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
 
         Manager::create([
             'name' => $request->post('name'),
             'surname' => $request->post('surname'),
             'birth_date' => $request->post('birthDate'),
-            'country_id' => $request->post('countryId')
+            'country_id' => $request->post('countryId'),
+            'picture' => $this->storeProfilePicture($request->file('picture'))
         ]);
         return back()->with('statusCreate', 'Manager created succesfully');
     }
@@ -29,7 +32,7 @@ class ManagerController extends Controller
     public function restore(Request $request)
     {
         $validation = $this->validateId($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
         
         Manager::withTrashed()
@@ -41,15 +44,21 @@ class ManagerController extends Controller
     public function update(Request $request)
     {
         $validation = $this->validateUpdate($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
 
-        Manager::find($request->post('id'))->update([
+        $manager = Manager::find($request->post('id'));
+        $manager->update([
             'name' => $request->post('name'),
             'surname' => $request->post('surname'),
             'birth_date' => $request->post('birthDate'),
             'country_id' => $request->post('countryId')
         ]);
+        if ($request->file('picture') !== null)
+            $manager->update([
+                'picture' => $this->changeProfilePicture($manager->picture, $request->file('picture'))
+            ]);
+        
         return back()->with([
             'statusUpdate' => 'Manager updated succesfully, you will soon be redirected.',
             'isRedirected' => 'true'
@@ -59,7 +68,7 @@ class ManagerController extends Controller
     public function delete(Request $request)
     {
         $validation = $this->validateId($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
 
         Manager::destroy($request->post('id'));
@@ -71,13 +80,8 @@ class ManagerController extends Controller
 
     public function show()
     {
-        return view('managerManagement')->with([
-            'managers' => DB::table('managers')
-                ->join('countries', 'managers.country_id', '=', 'countries.id')
-                ->select('managers.name', 'managers.surname', 'managers.id', 
-                'managers.birth_date', 'managers.created_at', 'managers.updated_at', 
-                'countries.name as country')
-                ->get(),
+        return view('managerManagement', [
+            'managers' => Manager::all(),
             'countries' => Country::all()
         ]);
     }
@@ -85,13 +89,26 @@ class ManagerController extends Controller
     public function edit($id)
     {
         $validation = $this->validateId(collect(['id' => $id]));
-        if($validation !== true)
+        if ($validation !== true)
             return back();
         
-        return view('managerUpdate')->with([
+        return view('managerUpdate', [
             'manager' => Manager::find($id),
             'countries' => Country::all()
         ]);
+    }
+
+    private function changeProfilePicture($oldPicture, $newPicture)
+    {
+        File::delete($this->profilePicturesFolder . '/' . $oldPicture);
+        return $this->storeProfilePicture($newPicture);
+    }
+
+    private function storeProfilePicture($file)
+    {
+        $fileName = Str::random(32) . '.' . $file->extension();
+        $file->move($this->profilePicturesFolder, $fileName);
+        return $fileName;
     }
 
     private function validateCreation($request)
@@ -100,9 +117,10 @@ class ManagerController extends Controller
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'birthDate' => 'required|date|before:today',
-            'countryId' => 'required|exists:countries,id'
+            'countryId' => 'required|exists:countries,id',
+            'picture' => 'required|image|max:5000'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
         
@@ -115,9 +133,10 @@ class ManagerController extends Controller
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'birthDate' => 'required|date',
-            'countryId' => 'required|numeric|exists:countries,id'
+            'countryId' => 'required|numeric|exists:countries,id',
+            'picture' => 'nullable|image|max:5000'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
@@ -127,7 +146,7 @@ class ManagerController extends Controller
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:managers'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }

@@ -7,9 +7,8 @@
             <table class="table-auto border-collapse w-full">
                 <thead>
                     <tr class="bg-slate-300">
-                        <td class="pl-3 py-3 font-light text-zinc-800">LEAGUE ID</td>
+                        <td class="pl-3 py-3 font-light text-zinc-800">ID</td>
                         <td class="py-3 font-light text-zinc-800">NAME</td>
-                        <td class="py-3 font-light text-zinc-800">LOGO LINK</td>
                         <td class="py-3 font-light text-zinc-800">SPORT</td>
                         <td class="py-3 font-light text-zinc-800">COUNTRY</td>
                         <td class="py-3 font-light text-zinc-800">CREATED AT</td>
@@ -22,10 +21,16 @@
                         @foreach ($leagues as $league)
                             <tr class="border-b border-slate-300">
                                 <td class="pl-3 text-zinc-800">{{ $league->id }}</td>
-                                <td class="py-3 text-zinc-800">{{ $league->name }}</td>
-                                <td class="py-3 text-zinc-800">{{ $league->logo_link }}</td>
-                                <td class="py-3 text-zinc-800">{{ $league->sport }}</td>
-                                <td class="py-3 text-zinc-800">{{ $league->country }}</td>
+                                <td class="py-3 text-zinc-800">
+                                    <div class="flex flex-row gap-4 items-center">
+                                        <img src="images/{{ $league->picture }}" class="h-16 w-16 rounded-full shadow-md">
+                                        <p>
+                                            {{ $league->name }}
+                                        </p>
+                                    </div>
+                                </td>
+                                <td class="py-3 text-zinc-800">{{ $league->sport->name }}</td>
+                                <td class="py-3 text-zinc-800">{{ $league->country->name }}</td>
                                 <td class="py-3 text-zinc-800">{{ $league->created_at }}</td>
                                 <td class="py-3 text-zinc-800">{{ $league->updated_at }}</td>
                                 <td class="pr-3 text-zinc-800">
@@ -64,11 +69,6 @@
             <p class="text-sm text-red-600">{{ $errors->first('name') }}</p>
         </div>
         <div class="flex flex-col gap-1">
-            <label for="logoLink" class="font-medium text-zinc-700">Logo link</label>
-            <input type="text" name="logoLink" id="logoLink" placeholder="Enter name" value="{{ old('logoLink') }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
-            <p class="text-sm text-red-600">{{ $errors->first('logoLink') }}</p>
-        </div>
-        <div class="flex flex-col gap-1">
             <label for="sport" class="font-medium text-zinc-700">Sport</label>
             <select name="sportId" id="sport" autocomplete="off" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
                 <option disabled selected>Select a sport</option>
@@ -87,6 +87,11 @@
                 @endforeach
             </select>
             <p class="text-sm text-red-600">{{ $errors->first('countryId') }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+            <label for="picture" class="font-medium text-zinc-700">Picture</label>
+            <input type="file" name="picture" id="picture" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            <p class="text-sm text-red-600">{{ $errors->first('picture') }}</p>
         </div>
     </x-create-section>
 </x-layout>

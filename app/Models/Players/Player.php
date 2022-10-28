@@ -22,7 +22,8 @@ class Player extends Model
         'birth_date',
         'height',
         'weight',
-        'country_id'
+        'country_id',
+        'picture'
     ];
 
     public function country()

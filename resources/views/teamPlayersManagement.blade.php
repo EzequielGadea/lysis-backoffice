@@ -24,7 +24,12 @@
                                 @foreach ($team->playerTeams as $playerInTeam)
                                     <tr class="border-b border-slate-300">
                                         <td class="p-3 text-zinc-800">
-                                            {{ $playerInTeam->player->name }} {{ $playerInTeam->player->surname }}
+                                            <div class="flex flex-row items-center gap-4">
+                                                <img src="{{ asset('images/' . $playerInTeam->player->picture) }}" class="h-12 w-12 rounded-full shadow-sm">
+                                                <p>
+                                                    {{ $playerInTeam->player->name }} {{ $playerInTeam->player->surname }}
+                                                </p>
+                                            </div>
                                         </td>
                                         <td class="p-3 text-zinc-800">{{ $playerInTeam->player->country->name }}</td>
                                         <td class="p-3 text-zinc-800">{{ $playerInTeam->position->name }}</td>

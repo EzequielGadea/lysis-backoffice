@@ -9,5 +9,10 @@
             <input type="text" name="name" id="name" value="{{ $sport->name }}" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             <p class="text-sm text-red-600">{{ $errors->first('name') }}</p>
         </div>
+        <div class="flex flex-col gap-1">
+            <label for="picture" class="font-medium text-zinc-700">Picture</label>
+            <input type="file" name="picture" id="picture" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            <p class="text-sm text-red-600">{{ $errors->first('picture') }}</p>
+        </div>
     </x-update-card>
 </x-layout>

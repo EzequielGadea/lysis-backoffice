@@ -21,7 +21,8 @@ class Team extends Model
         'logo_link',
         'country_id',
         'league_id',
-        'manager_id'
+        'manager_id',
+        'picture'
     ];
 
     public function country()

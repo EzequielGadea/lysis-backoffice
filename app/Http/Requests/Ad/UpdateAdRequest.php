@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Ad;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateAdRequest extends FormRequest
+class UpdateAdRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,15 +24,16 @@ class CreateAdRequest extends FormRequest
     public function rules()
     {
         return [
-            'link' => 'required|url',
-            'path' => 'required|unique:ads',
-            'location' => 'required',
-            'viewsHired' => 'required|integer|gte:1',
-            'tagOneId' => 'required|exists:tags,id',
+            'id' => 'required|numeric|exists:ads',
+            'link' => 'required',
+            'image' => 'required|image|max:5000',
+            'viewsHired' => 'required|numeric|gte:1',
+            'currentViews' => 'required|numeric|gte:0',
+            'tagOneId' => 'required|numeric|exists:tags,id',
             'valueTagOne' => 'required',
-            'tagTwoId' => 'required|exists:tags,id',
+            'tagTwoId' => 'required|numeric|exists:tags,id',
             'valueTagTwo' => 'required',
-            'tagThreeId' => 'required|exists:tags,id',
+            'tagThreeId' => 'required|numeric|exists:tags,id',
             'valueTagThree' => 'required'
         ];
     }
