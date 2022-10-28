@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Collection;
 use App\Models\Whereabouts\Country;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class CountryController extends Controller
 {
+    private $picturesFolder = 'images';
+
     public function create(Request $request)
     {
         $validation = $this->validateCreation($request);
@@ -17,7 +20,7 @@ class CountryController extends Controller
         
         Country::create([
             'name' => $request->post('name'),
-            'country_flag_link' => $request->post('countryFlagLink')
+            'picture' => $this->storePicture($request->file('picture'))
         ]);
         return back()->with('statusCreate', 'Country created succesfully');
     }
@@ -42,10 +45,15 @@ class CountryController extends Controller
         if($validation !== true)
             return back()->withErrors($validation);
 
-        Country::find($request->post('id'))->update([
-            'name' => $request->post('name'),
-            'country_flag_link' => $request->post('countryFlagLink')
+        $country = Country::find($request->post('id'));
+        $country->update([
+            'name' => $request->post('name')
         ]);
+        if ($request->file('picture') !== null)
+            $country->update([
+                'picture' => $this->changePicture($country->picture, $request->file('picture'))
+            ]);
+
         return back()->with([
             'statusUpdate' => 'Country updated succesfully, you will soon be redirected.',
             'isRedirected' => 'true'
@@ -79,11 +87,24 @@ class CountryController extends Controller
         return view('countryUpdate')->with('country', Country::find($id));
     }
 
+    private function changePicture($oldPicture, $newPicture)
+    {
+        File::delete($this->picturesFolder . '/' . $oldPicture);
+        return $this->storePicture($newPicture);
+    }
+
+    private function storePicture($file)
+    {
+        $fileName = Str::random(32) . '.' . $file->extension();
+        $file->move($this->picturesFolder, $fileName);
+        return $fileName;
+    }
+
     private function validateCreation($request)
     {
         $validation = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'countryFlagLink' => 'required|string|max:255'
+            'picture' => 'required|image|max:5000'
         ]);
         if($validation->fails())
             return $validation;
@@ -95,7 +116,7 @@ class CountryController extends Controller
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:countries',
             'name' => 'required|string|max:255',
-            'countryFlagLink' => 'required|string|max:255'
+            'picture' => 'nullable|image|max:5000'
         ]);
         if($validation->fails())
             return $validation;
