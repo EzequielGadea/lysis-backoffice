@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Collection;
-use Illuminate\Validation\Rule;
-use App\Http\Requests\CreateAdRequest;
 use App\Models\Ads\Ad;
 use App\Models\Ads\Tag;
 use App\Models\Ads\Value;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use App\Http\Requests\Ad\UpdateAdRequest;
+use App\Http\Requests\Ad\CreateAdRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AdController extends Controller
 {
@@ -22,10 +24,10 @@ class AdController extends Controller
         try {
             DB::transaction(function () use ($request, $tagValues) {
                 $ad = Ad::create([
-                    'path' => $request->post('path'),
+                    'image' => $this->storeImage($request->file('image')),
                     'views_hired' => $request->post('viewsHired'),
                     'location' => $request->post('location'),
-                    'link' => $request->post('link')
+                    'link' => $request->post('link'),
                 ]);
                 foreach ($tagValues as $value) {
                     $values = Value::create([
@@ -35,7 +37,7 @@ class AdController extends Controller
                     $ad->values()->save($values);
                 }
             });                
-        } catch (QueryExcpetion $e) {
+        } catch (QueryException $e) {
             return back()->with('statusCreate', 'Couldn\'t create ad.');
         }
 
@@ -44,7 +46,7 @@ class AdController extends Controller
 
     public function show()
     {
-        return view('adManagement')->with([
+        return view('adManagement', [
             'ads' => Ad::all(),
             'tagsValues' => 
                 DB::table('ads')
@@ -59,20 +61,25 @@ class AdController extends Controller
 
     public function update(UpdateAdRequest $request)
     {    
+        $ad = Ad::find($request->post('id'));
+        $tagValues = $this->tagValuesToArray($request);
         try {
-            DB::transaction(function () use ($request, $tagValues) {
-                $ad = Ad::find($request->post('id'))->update([
+            DB::transaction(function () use ($request, $tagValues, $ad) {
+                $ad->update([
                     'link' => $request->post('link'),
-                    'path' => $request->post('path'),
                     'views_hired' => $request->post('viewsHired'),
                     'current_views' => $request->post('currentViews')
                 ]);
-                $values = Ad::find($request->post('id'))->values()->get();
+                $values = $ad->values()->get();
                 $values->map(function ($item, $key) use ($tagValues) {
                     $item->update($tagValues[$key]);
-                });             
+                });
+                if ($request->file('image') !== null)
+                    $ad->update([
+                        'image' => $this->changeImage($ad->image, $request->file('image'))
+                    ]);
             });
-        } catch (QueryExcpetion $e) {
+        } catch (QueryException $e) {
             return back()->with('statusUpdate', 'Couldn\'t update ad.');
         }
     
@@ -87,10 +94,10 @@ class AdController extends Controller
         $validation = Validator::make(['id' => $id], [
             'id' => 'numeric|exists:ads'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return back();
 
-        return view('adUpdate')->with([
+        return view('adUpdate', [
             'ad' => Ad::find($id),
             'adTags' => Ad::find($id)->values()->get(),
             'tags' => Tag::all()
@@ -102,7 +109,7 @@ class AdController extends Controller
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:ads'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return back()->withErrors($validation);
 
         Ad::destroy($request->post('id'));
@@ -116,7 +123,7 @@ class AdController extends Controller
     public function restore(Request $request)
     {
         $validation = $this->validateRestore($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
 
         Ad::withTrashed()
@@ -126,18 +133,31 @@ class AdController extends Controller
         return back()->with('statusRestore', 'Ad restored succesfully.');
     }
 
+    private function changeImage($oldImage, $newImage)
+    {
+        File::delete($this->imagesFolder . '/' . $oldImage);
+        return $this->storeImage($newImage);
+    }
+
+    private function storeImage($file)
+    {
+        $fileName = Str::random(32) . '.' . $file->extension();
+        $file->move($this->imagesFolder, $fileName);
+        return $fileName;
+    }
+
     private function validateRestore($request)
     {
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:ads'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
 
     private function tagValuesToArray($request) {
-        return $tagValues = [
+        return [
             [
                 'tag_id' => $request->post('tagOneId'),
                 'value' => $request->post('valueTagOne')
