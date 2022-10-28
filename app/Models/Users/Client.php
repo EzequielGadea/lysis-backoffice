@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
 use App\Models\Users\Subscription;
-use App\Models\Common\Image;
 
 class Client extends Model
 {
@@ -22,7 +21,7 @@ class Client extends Model
 
     public function user() 
     {
-        return $this->hasOne(User::Class);
+        return $this->hasOne(User::class);
     }
 
     public function subscription() 
