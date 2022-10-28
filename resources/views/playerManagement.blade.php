@@ -1,10 +1,10 @@
 <x-layout>
     <x-slot name="title">Player management</x-slot>
     <x-nav/>
-    <div class="flex flex-col items-center pt-6 px-8 w-full flex-grow">
+    <div class="flex flex-col items-center pt-6 px-8 w-[50rem] flex-grow">
         <p class="text-2xl text-zinc-800 font-semibold mb-6 w-full">Players</p>
         <div class="rounded-md overflow-x-auto shadow-xl w-full">
-            <table class="table-auto border-collapse w-full">
+            <table class="table-auto border-collapse w-full whitespace-nowrap">
                 <thead>
                     <tr class="bg-slate-300">
                         <td class="pl-3 py-3 font-light text-zinc-800">ID</td>
@@ -22,11 +22,24 @@
                         @foreach ($players as $player)
                             <tr class="border-b border-slate-300">
                                 <td class="pl-3 text-zinc-800">{{ $player->id }}</td>
-                                <td class="py-3 text-zinc-800">{{ $player->name }} {{ $player->surname }}</td>
+                                <td class="py-3 text-zinc-800">
+                                    <div class="flex flex-row items-center gap-4">
+                                        <img src="images/{{ $player->picture }}" class="h-16 w-16 rounded-full shadow-md">
+                                        <p>
+                                            {{ $player->name }} {{ $player->surname }}
+                                        </p>
+                                    </div>
+                                </td>
                                 <td class="py-3 text-zinc-800">{{ $player->birth_date }}</td>
-                                <td class="py-3 text-zinc-800"><p><span class="font-semibold">Height(cm): </span>{{ $player->height }}</p>
-                                <p><span class="font-semibold">Weight(kg): </span>{{ $player->weight }}</p></td>
-                                <td class="py-3 text-zinc-800">{{ $player->country }}</td>
+                                <td class="py-3 text-zinc-800">
+                                    <p>
+                                        <span class="font-semibold">Height(cm): </span>{{ $player->height }}
+                                    </p>
+                                    <p>
+                                        <span class="font-semibold">Weight(kg): </span>{{ $player->weight }}
+                                    </p>
+                                </td>
+                                <td class="py-3 text-zinc-800">{{ $player->country->name }}</td>
                                 <td class="py-3 text-zinc-800">{{ $player->created_at }}</td>
                                 <td class="py-3 text-zinc-800">{{ $player->updated_at }}</td>
                                 <td class="pr-3 text-zinc-800">
@@ -93,6 +106,11 @@
                 @endforeach
             </select>
             <p class="text-sm text-red-600">{{ $errors->first('countryId') }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+            <label for="picture" class="font-medium text-zinc-700">Picture</label>
+            <input type="file" name="picture" id="picture" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            <p class="text-sm text-red-600">{{ $errors->first('picture') }}</p>
         </div>
     </x-create-section>
 </x-layout>
