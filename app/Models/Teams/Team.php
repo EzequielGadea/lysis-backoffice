@@ -11,7 +11,6 @@ use App\Models\Teams\Manager;
 use App\Models\Players\PlayerTeam;
 use App\Models\Players\Player;
 use App\Models\Events\EventPlayerTeam;
-use App\Models\Common\Image;
 
 class Team extends Model
 {
@@ -23,7 +22,7 @@ class Team extends Model
         'country_id',
         'league_id',
         'manager_id',
-        'image_id'
+        'picture'
     ];
 
     public function country()
@@ -54,10 +53,5 @@ class Team extends Model
     public function events()
     {
         return $this->hasManyThrough(EventPlayerTeam::class, PlayerTeam::class);
-    }
-
-    public function image()
-    {
-        return $this->belongsTo(Image::class);
     }
 }
