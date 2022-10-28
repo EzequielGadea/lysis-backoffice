@@ -23,8 +23,8 @@
                             <tr class="border-b border-slate-300">
                                 <td class="pl-3 text-zinc-800">{{ $manager->id }}</td>
                                 <td class="py-3 text-zinc-800">
-                                    <div class="flex flex-row items-center gap-2">
-                                        <img src="images/{{ $manager->picture }}" class="h-12 w-12 rounded-full shadow-md">
+                                    <div class="flex flex-row items-center gap-4">
+                                        <img src="images/{{ $manager->picture }}" class="h-16 w-16 rounded-full shadow-md">
                                         <p>
                                             {{ $manager->name }} {{ $manager->surname }}
                                         </p>

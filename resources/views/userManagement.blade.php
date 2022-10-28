@@ -35,8 +35,8 @@
                                 <td class="pl-3 px-6 text-zinc-800">{{ $user->id }}</td>
                                 <td class="py-3 px-6 text-zinc-800">{{ $user->client_id }}</td>
                                 <td class="py-3 px-6 text-zinc-800">
-                                    <div class="flex flex-row items-center gap-2">
-                                        <img src="images/{{ $user->client->profile_picture }}" class="w-12 h-12 rounded-full shadow-md">
+                                    <div class="flex flex-row items-center gap-4">
+                                        <img src="images/{{ $user->client->profile_picture }}" class="w-16 h-16 rounded-full shadow-md">
                                         <div>
                                             <p class="text-zinc-800">
                                                 {{ $user->name }} {{ $user->client->surname }} 
