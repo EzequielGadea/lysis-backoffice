@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
+use App\Models\Common\League;
 use App\Models\Teams\Team;
 use App\Models\Teams\Manager;
 use App\Models\Whereabouts\Country;
-use App\Models\Common\League;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class TeamController extends Controller
 {
+    private $picturesFolder = 'images';
+
     public function create(Request $request)
     {
         $validation = $this->validateCreation($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
     
         Team::create([
@@ -23,7 +26,7 @@ class TeamController extends Controller
             'country_id' => $request->post('countryId'),
             'manager_id' => $request->post('managerId'),
             'league_id' => $request->post('leagueId'),
-            'logo_link' => $request->post('logoLink')
+            'picture' => $this->storePicture($request->file('picture'))
         ]);
         return back()->with('statusCreate', 'Team created successfully.');
     }
@@ -31,16 +34,20 @@ class TeamController extends Controller
     public function update(Request $request)
     {
         $validation = $this->validateUpdate($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
         
-        Team::find($request->post('id'))->update([
+        $team = Team::find($request->post('id'));
+        $team->update([
             'name' => $request->post('name'),
             'country_id' => $request->post('countryId'),
             'manager_id' => $request->post('managerId'),
             'league_id' => $request->post('leagueId'),
-            'logoLink' => $request->post('logoLink')
         ]);
+        if ($request->file('picture') !== null)
+            $team->update([
+                'picture' => $this->changePicture($team->picture, $request->file('picture'))
+            ]);
         return back()->with([
             'statusUpdate' => 'Team updated successfully, you will soon be redirected.',
             'isRedirected' => 'true'
@@ -50,10 +57,10 @@ class TeamController extends Controller
     public function edit($id)
     {
         $validation = $this->validateId(collect(['id' => $id]));
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
         
-        return view('teamUpdate')->with([
+        return view('teamUpdate', [
             'team' => Team::find($id),
             'countries' => Country::all(),
             'managers' => Manager::all(),
@@ -63,7 +70,7 @@ class TeamController extends Controller
     
     public function show()
     {
-        return view('teamManagement')->with([
+        return view('teamManagement', [
             'teams' => Team::all(),
             'countries' => Country::all(),
             'managers' => Manager::all(),
@@ -78,7 +85,7 @@ class TeamController extends Controller
     public function delete(Request $request)
     {
         $validation = $this->validateId($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
     
         Team::destroy($request->post('id'));
@@ -91,7 +98,7 @@ class TeamController extends Controller
     public function restore(Request $request)
     {
         $validation = $this->validateId($request);
-        if($validation !== true)
+        if ($validation !== true)
             return back()->withErrors($validation);
 
         Team::withTrashed()
@@ -100,12 +107,25 @@ class TeamController extends Controller
         return back()->with('statusRestore', 'Team restored successfully.');
     }
 
+    private function changePicture($oldPicture, $newPicture)
+    {
+        File::delete($this->picturesFolder . '/' . $oldPicture);
+        return $this->storePicture($newPicture);
+    }
+
+    private function storePicture($file)
+    {
+        $fileName = Str::random(32) . '.' . $file->extension();
+        $file->move($this->picturesFolder, $fileName);
+        return $fileName;
+    }
+
     private function validateId($collection)
     {
         $validation = Validator::make($collection->all(), [
             'id' => 'numeric|exists:teams'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
@@ -115,12 +135,12 @@ class TeamController extends Controller
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:teams',
             'name' => 'required|string|max:255',
-            'logoLink' => 'required|string|max:255',
             'countryId' => 'required|numeric|exists:countries,id',
             'managerId' => 'required|numeric|exists:managers,id',
-            'leagueId' => 'required|numeric|exists:leagues,id'
+            'leagueId' => 'required|numeric|exists:leagues,id',
+            'picture' => 'nullable|image|max:5000'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
@@ -132,9 +152,9 @@ class TeamController extends Controller
             'countryId' => 'required|numeric|exists:countries,id',
             'managerId' => 'required|numeric|exists:managers,id',
             'leagueId' => 'required|numeric|exists:leagues,id',
-            'logoLink' => 'required|string|max:255'
+            'picture' => 'required|image|max:5000'
         ]);
-        if($validation->fails())
+        if ($validation->fails())
             return $validation;
         return true;
     }
