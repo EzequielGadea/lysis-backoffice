@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use App\Models\Players\Player;
 use App\Models\Whereabouts\Country;
 
 class PlayerController extends Controller
 {
+    private $profilePicturesFolder = 'images';
+
     public function create(Request $request)
     {
         $validation = $this->validateCreation($request);
@@ -23,7 +26,8 @@ class PlayerController extends Controller
             'birth_date' => $request->post('birthDate'),
             'height' => $request->post('height'),
             'weight' => $request->post('weight'),
-            'country_id' => $request->post('countryId')
+            'country_id' => $request->post('countryId'),
+            'picture' => $this->storeProfilePicture($request->file('picture'))
         ]);
         return back()->with('statusCreate', 'Player created succesfully.');
     }
@@ -33,8 +37,9 @@ class PlayerController extends Controller
         $validation = $this->validateUpdate($request);
         if($validation !== true)
             return back()->withErrors($validation);
-        
-        Player::find($request->post('id'))->update([
+
+        $player = Player::find($request->post('id'));
+        $player->update([
             'name' => $request->post('name'),
             'surname' => $request->post('surname'),
             'birth_date' => $request->post('birthDate'),
@@ -42,6 +47,11 @@ class PlayerController extends Controller
             'weight' => $request->post('weight'),
             'country_id' => $request->post('countryId')
         ]);
+        if($request->file('picture') !== null)
+            $player->update([
+                'picture' => $this->storeProfilePicture($request->file('picture'))
+            ]);
+
         return back()->with([
             'statusUpdate' => 'Player updated successfully, you will soon be redirected.',
             'isRedirected' => 'true'
@@ -62,15 +72,7 @@ class PlayerController extends Controller
     public function show()
     {
         return view('playerManagement')->with([
-            'players' => DB::table('players')
-                    ->join('countries', 'players.country_id', '=', 'countries.id')
-                    ->whereNull('players.deleted_at')
-                    ->select(
-                        'players.id', 'players.name', 'players.surname', 
-                        'players.birth_date', 'players.height', 'players.weight', 
-                        'countries.name as country', 'players.created_at', 'players.updated_at'
-                    )
-                    ->get(),
+            'players' => Player::all(),
             'countries' => Country::all()
         ]);
     }
@@ -104,6 +106,13 @@ class PlayerController extends Controller
         return back()->with('statusRestore', 'Player restored successfully.');
     }
 
+    private function storeProfilePicture($file)
+    {
+        $fileName = Str::random(32) . '.' . $file->extension();
+        $file->move($this->profilePicturesFolder, $fileName);
+        return $fileName;
+    }
+
     private function validateId($collection)
     {
         $validation = Validator::make($collection->all(), [
@@ -123,7 +132,8 @@ class PlayerController extends Controller
             'birthDate' => 'required|string|before:today',
             'height' => 'required|digits_between:2,3',
             'weight' => 'required|digits_between:2,3',
-            'countryId' => 'required|numeric|exists:countries,id'
+            'countryId' => 'required|numeric|exists:countries,id',
+            'picture' => 'nullable|image|max:5000'
         ]);
         if($validation->fails())
             return $validation;
@@ -138,7 +148,8 @@ class PlayerController extends Controller
             'birthDate' => 'required|string|before:today',
             'height' => 'required|digits_between:2,3',
             'weight' => 'required|digits_between:2,3',
-            'countryId' => 'required|numeric|exists:countries,id'
+            'countryId' => 'required|numeric|exists:countries,id',
+            'picture' => 'required|image|max:5000'
         ]);
         if($validation->fails())
             return $validation;
