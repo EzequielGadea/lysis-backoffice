@@ -7,7 +7,7 @@
             <table class="table-auto border-collapse w-full">
                 <thead>
                     <tr class="bg-slate-300">
-                        <td class="pl-3 py-3 font-light text-zinc-800">REFEREE ID</td>
+                        <td class="pl-3 py-3 font-light text-zinc-800">ID</td>
                         <td class="py-3 font-light text-zinc-800">NAME</td>
                         <td class="py-3 font-light text-zinc-800">BIRTH DATE</td>
                         <td class="py-3 font-light text-zinc-800">COUNTRY</td>
@@ -21,7 +21,14 @@
                         @foreach ($referees as $referee)
                             <tr class="border-b border-slate-300">
                                 <td class="pl-3 text-zinc-800">{{ $referee->id }}</td>
-                                <td class="py-3 text-zinc-800">{{ $referee->name }} {{ $referee->surname }}</td>
+                                <td class="py-3 text-zinc-800">
+                                    <div class="flex flex-row gap-4 items-center">
+                                        <img src="images/{{ $referee->picture }}" class="h-16 w-16 rounded-full shadow-md">
+                                        <p>
+                                            {{ $referee->name }} {{ $referee->surname }}
+                                        </p>
+                                    </div>
+                                </td>
                                 <td class="py-3 text-zinc-800">{{ $referee->birth_date }}</td>
                                 <td class="py-3 text-zinc-800">{{ $referee->country->name }}</td>
                                 <td class="py-3 text-zinc-800">{{ $referee->created_at }}</td>
@@ -79,6 +86,11 @@
                 @endforeach
             </select>
             <p class="text-sm text-red-600">{{ $errors->first('country') }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+            <label for="picture" class="font-medium text-zinc-700">Picture</label>
+            <input type="file" name="picture" id="picture" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            <p class="text-sm text-red-600">{{ $errors->first('picture') }}</p>
         </div>
     </x-create-section>
 </x-layout>
