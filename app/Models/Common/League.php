@@ -2,13 +2,13 @@
 
 namespace App\Models\Common;
 
+use App\Models\Common\Sport;
+use App\Models\Events\Event;
+use App\Models\Teams\Team;
+use App\Models\Whereabouts\Country;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Common\Sport;
-use App\Models\Whereabouts\Country;
-use App\Models\Teams\Team;
-use App\Models\Events\Event;
 
 class League extends Model
 {
