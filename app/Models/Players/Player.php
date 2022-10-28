@@ -11,7 +11,6 @@ use App\Models\Players\PlayerTeam;
 use App\Models\Players\PlayerVisitor;
 use App\Models\Players\PlayerLocal;
 use App\Models\Events\EventPlayerTeam;
-use App\Models\Common\Image;
 
 class Player extends Model
 {
@@ -24,7 +23,7 @@ class Player extends Model
         'height',
         'weight',
         'country_id',
-        'image_id'
+        'picture'
     ];
 
     public function country()
@@ -55,10 +54,5 @@ class Player extends Model
     public function events()
     {
         return $this->hasManyThrough(EventPlayerTeam::class, PlayerTeam::class);
-    }
-
-    public function image()
-    {
-        return $this->belongsTo(Image::class);
     }
 }
