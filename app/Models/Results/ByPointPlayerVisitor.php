@@ -2,6 +2,10 @@
 
 namespace App\Models\Results;
 
+use App\Models\Events\Event;
+use App\Models\Players\Player;
+use App\Models\Players\PlayerVisitor;
+use App\Models\Results\ByPoint;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

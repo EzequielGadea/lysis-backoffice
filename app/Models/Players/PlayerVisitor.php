@@ -2,13 +2,15 @@
 
 namespace App\Models\Players;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Events\Event;
+use App\Models\Events\PlayerVisitorSanctionCard;
+use App\Models\Events\PlayerVisitorSanctionCardless;
 use App\Models\Players\Player;
 use App\Models\Results\ByMarkPlayerVisitor;
 use App\Models\Results\ByPointPlayerVisitor;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PlayerVisitor extends Model
 {

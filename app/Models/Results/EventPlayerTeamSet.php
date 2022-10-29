@@ -2,13 +2,14 @@
 
 namespace App\Models\Results;
 
+use App\Models\Events\Event;
+use App\Models\Events\EventPlayerTeam;
+use App\Models\Players\PlayerTeam;
+use App\Models\Results\Set;
+use App\Models\Results\BySet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Results\Set;
-use App\Models\Results\BySet;
-use App\Models\Events\EventPlayerTeam;
-use App\Models\Players\PlayerTeam;
 
 class EventPlayerTeamSet extends Model
 {

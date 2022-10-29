@@ -2,18 +2,19 @@
 
 namespace App\Models\Events;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Events\Event;
+use App\Models\Events\EventPlayerTeamSanctionCard;
+use App\Models\Events\EventPlayerTeamSanctionCardless;
 use App\Models\Players\Player;
 use App\Models\Players\PlayerTeam;
 use App\Models\Players\Position;
-use App\Models\Events\Event;
-use App\Models\Teams\Team;
 use App\Models\Results\ByMarkEventPlayerTeam;
 use App\Models\Results\ByPointEventPlayerTeam;
-use App\Models\Events\EventPlayerTeamSanctionCardless;
-use App\Models\Events\EventPlayerTeamSanctionCard;
+use App\Models\Results\EventPlayerTeamSet;
+use App\Models\Teams\Team;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EventPlayerTeam extends Model
 {
