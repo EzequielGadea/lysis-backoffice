@@ -2,12 +2,15 @@
 
 namespace App\Models\Players;
 
+use App\Models\Events\Event;
+use App\Models\Events\PlayerLocalSanctionCard;
+use App\Models\Events\PlayerLocalSanctionCardless;
+use App\Models\Players\Player;
+use App\Models\Results\ByMarkPlayerLocal;
+use App\Models\Results\ByPointPlayerLocal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Events\Event;
-use App\Models\Players\Player;
-use App\Models\Events\PlayerLocalSanctionCard;
 
 class PlayerLocal extends Model
 {
@@ -32,12 +35,12 @@ class PlayerLocal extends Model
 
     public function marks()
     {
-        return $this->hasMany(ByMarkPlayerVisitor::class, 'event_id', 'event_id');
+        return $this->hasMany(ByMarkPlayerLocal::class, 'event_id', 'event_id');
     }
 
     public function points()
     {
-        return $this->hasMany(ByPointPlayerVisitor::class, 'event_id', 'event_id');
+        return $this->hasMany(ByPointPlayerLocal::class, 'event_id', 'event_id');
     }
 
     public function cardSanctions()
