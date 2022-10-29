@@ -11,6 +11,7 @@
                         <td class="p-3 font-light text-zinc-800">START DATE</td>
                         <td class="p-3 font-light text-zinc-800">VENUE</td>
                         <td class="p-3 font-light text-zinc-800">OPPONENTS</td>
+                        <td class="p-3 font-light text-zinc-800">RESULT</td>
                         <td class="p-3 font-light text-zinc-800">LEAGUE</td>
                         <td class="p-3 font-light text-zinc-800">SPORT</td>
                         <td class="p-3 font-light text-zinc-800">CREATED AT</td>
@@ -36,6 +37,7 @@
                                         {{ $event->playerLocal ? $event->playerLocal->player->surname : '' }}
                                     </p>
                                 </td>
+                                <td class="p-3 text-zinc-800">{{ $event->result()->type->name ?? 'no tiene' }}</td>
                                 <td class="p-3 text-zinc-800">{{ $event->league->name }}</td>
                                 <td class="p-3 text-zinc-800">{{ $event->league->sport->name }}</td>
                                 <td class="p-3 text-zinc-800">{{ $event->created_at }}</td>
@@ -95,5 +97,9 @@
             <p class="text-sm text-red-600">{{ $errors->first('venueId') }}</p>
         </div>
         @livewire('create-event-form')
+        @livewire('events.create-event-result-form', [
+            'resultTypes' => $resultTypes,
+            'markNames' => $markNames,
+        ])
     </x-create-section>
 </x-layout>
