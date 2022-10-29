@@ -42,5 +42,10 @@
         @else
             @livewire('event-update-teams', ['event' => $event])
         @endif
+        @livewire('events.update-event-result-form', [
+            'result' => $event->result() ?? '',
+            'resultTypes' => $resultTypes,
+            'markNames' => $markNames,
+        ])
     </x-update-card>
 </x-layout>
