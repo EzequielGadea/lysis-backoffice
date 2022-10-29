@@ -2,6 +2,7 @@
 
 namespace App\Models\Results;
 
+use App\Models\Common\ResultType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,6 +14,12 @@ use App\Models\Events\Event;
 class ByMark extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'event_id',
+        'mark_name_id',
+        'result_type_id'
+    ];
 
     public function markName()
     {
@@ -32,5 +39,10 @@ class ByMark extends Model
     public function marksPlayerVisitor()
     {
         return $this->hasMany(ByMarkPlayerVisitor::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(ResultType::class, 'result_type_id', 'id');
     }
 }
