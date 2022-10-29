@@ -2,11 +2,10 @@
 
 namespace App\Models\Users;
 
+use App\Models\Users\Client;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\SubscriptionType;
-use App\Models\Client;
 
 class Subscription extends Model
 {
@@ -18,7 +17,7 @@ class Subscription extends Model
         'price'
     ];
 
-    public function user() {
+    public function users() {
         return $this->hasMany(Client::class);
     }
 }
