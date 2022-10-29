@@ -67,6 +67,17 @@ class Event extends Model
         return $this->hasOne(BySet::class);
     }
 
+    public function result()
+    {
+        if ($this->resultByPoint !== null)
+            return $this->resultByPoint;
+        if ($this->resultByMark !== null)
+            return $this->resultByMark;
+        if ($this->resultBySet !== null)
+            return $this->resultBySet;
+        return null;
+    }
+
     public function playerVisitor()
     {
         return $this->hasOne(PlayerVisitor::class);
