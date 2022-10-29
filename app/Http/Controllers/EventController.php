@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EventController\EventCreateRequest;
-use App\Http\Requests\EventController\EventUpdateRequest;
-use App\Http\Requests\EventController\CheckIdRequest;
+use App\Http\Requests\Events\EventCreateRequest;
+use App\Http\Requests\Events\EventUpdateRequest;
+use App\Http\Requests\Events\CheckIdRequest;
 use App\Models\Common\League;
+use App\Models\Common\ResultType;
 use App\Models\Events\Event;
 use App\Models\Players\PlayerLocal;
 use App\Models\Players\PlayerVisitor;
 use App\Models\Teams\TeamLocal;
+use App\Models\Results\ByMark;
+use App\Models\Results\ByPoint;
+use App\Models\Results\BySet;
+use App\Models\Results\MarkName;
 use App\Models\Teams\TeamVisitor;
 use App\Models\Whereabouts\Venue;
 use Illuminate\Database\QueryException;
@@ -27,12 +32,14 @@ class EventController extends Controller
                     'venue_id' => $request->post('venueId'),
                     'league_id' => $request->post('leagueId')
                 ]);
-
                 if($request->post('isIndividual')) {
                     $this->createIndividualEvent($request, $event->id);
                 } else {
                     $this->createTeamEvent($request, $event->id);
-                }    
+                }
+
+                $this->createResult($request, $event->id);
+                
             });
             return back()->with('statusCreate', 'Event registered successfully.');
         } catch (QueryException $e) {
@@ -98,7 +105,9 @@ class EventController extends Controller
         return view('eventManagement', [
             'events' => Event::all(),
             'leagues' => League::all(),
-            'venues' => Venue::all()
+            'venues' => Venue::all(),
+            'resultTypes' => ResultType::all(),
+            'markNames' => MarkName::all(),
         ]);
     }
 
@@ -111,7 +120,48 @@ class EventController extends Controller
         return view('eventUpdate', [
             'event' => Event::find($id),
             'leagues' => League::all(),
-            'venues' => Venue::all()
+            'venues' => Venue::all(),
+            'resultTypes' => ResultType::all(),
+            'markNames' => MarkName::all(),
+        ]);
+    }
+
+    private function createResult($request, $eventId)
+    {
+        $results = array(
+            '1' => array($this, 'createByMarksResult'),
+            '2' => array($this, 'createByPointsResult'),
+            '3' => array($this, 'createBySetsResult')
+        );
+
+        call_user_func_array(
+            $results[$request->post('resultTypeId')], 
+            [$request, $eventId]
+        );
+    }
+
+    private function createByMarksResult($request, $eventId) 
+    {
+        ByMark::create([
+            'event_id' => $eventId,
+            'mark_name_id' => $request->post('markNameId'),
+            'result_type_id' => $request->post('resultTypeId')
+        ]);
+    }
+
+    private function createByPointsResult($request, $eventId) 
+    {
+        ByPoint::create([
+            'event_id' => $eventId,
+            'result_type_id' => $request->post('resultTypeId')
+        ]);
+    }
+
+    private function createBySetsResult($request, $eventId)
+    {
+        BySet::create([
+            'event_id' => $eventId,
+            'result_type_id' => $request->post('resultTypeId')
         ]);
     }
 
