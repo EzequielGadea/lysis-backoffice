@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\EventController;
+namespace App\Http\Requests\Events;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EventCreateRequest extends FormRequest
+class EventUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,6 +24,7 @@ class EventCreateRequest extends FormRequest
     public function rules()
     {
         return [
+            'eventId' => 'required|numeric|exists:events,id',
             'startDate' => 'required|date_format:"Y-m-d\TH:i"',
             'venueId' => 'required|numeric|exists:venues,id',
             'isIndividual' => 'required|boolean',
