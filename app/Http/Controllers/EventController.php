@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-use App\Models\Events\Event;
-use App\Models\Common\League;
-use App\Models\Whereabouts\Venue;
-use App\Models\Players\PlayerVisitor;
-use App\Models\Players\PlayerLocal;
-use App\Models\Teams\TeamVisitor;
-use App\Models\Teams\TeamLocal;
 use App\Http\Requests\EventController\EventCreateRequest;
 use App\Http\Requests\EventController\EventUpdateRequest;
 use App\Http\Requests\EventController\CheckIdRequest;
+use App\Models\Common\League;
+use App\Models\Events\Event;
+use App\Models\Players\PlayerLocal;
+use App\Models\Players\PlayerVisitor;
+use App\Models\Teams\TeamLocal;
+use App\Models\Teams\TeamVisitor;
+use App\Models\Whereabouts\Venue;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
