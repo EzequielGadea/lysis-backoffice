@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Events\EventRequest;
+use App\Http\Requests\EventRequest;
 use App\Models\Common\League;
 use App\Models\Common\ResultType;
 use App\Models\Events\Event;
