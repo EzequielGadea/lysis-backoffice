@@ -22,6 +22,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\MarkNameController;
 use App\Http\Controllers\PlayerTeamController;
 use App\Http\Controllers\EventController;
+use App\Models\Events\Event;
 
 /*
 |--------------------------------------------------------------------------
@@ -217,10 +218,10 @@ Route::middleware(['web'])->group(function () {
 
         Route::controller(EventController::class)->group(function () {
             Route::get('eventManagement', 'show')->name('eventManagement');
-            Route::get('eventUpdate/{id}', 'edit');
+            Route::get('eventUpdate/{event}', 'edit');
             Route::post('eventRegister', 'create');
-            Route::post('eventUpdate', 'update');
-            Route::post('eventDelete', 'delete');
+            Route::post('eventUpdate/{event}', 'update');
+            Route::delete('eventDelete/{event}', 'delete');
             Route::post('eventRestore', 'restore');
         });
     });
