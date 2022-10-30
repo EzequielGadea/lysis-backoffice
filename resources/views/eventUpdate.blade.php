@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot name="title">Updating event...</x-slot>
     <x-update-card>
-        <x-slot name="action">eventUpdate</x-slot>
+        <x-slot name="action">eventUpdate/{{ $event->id }}</x-slot>
         <x-slot name="backTo">eventManagement</x-slot>
         <input type="hidden" name="eventId" value="{{ $event->id }}">
         <input type="hidden" name="isIndividual" value="{{ $event->isIndividual() ? '1' : '0' }}">
