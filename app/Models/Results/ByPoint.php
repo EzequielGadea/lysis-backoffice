@@ -30,6 +30,6 @@ class ByPoint extends Model
 
     public function type()
     {
-        return $this->belongsTo(ResultType::class);
+        return $this->belongsTo(ResultType::class, 'result_type_id', 'id');
     }
 }
