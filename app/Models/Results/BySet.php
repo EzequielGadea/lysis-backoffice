@@ -15,6 +15,7 @@ class BySet extends Model
 
     protected $fillable = [
         'event_id',
+        'set_amount',
         'result_type_id'
     ];
 
@@ -35,6 +36,6 @@ class BySet extends Model
 
     public function type()
     {
-        return $this->belongsTo(ResultType::class);
+        return $this->belongsTo(ResultType::class, 'result_type_id', 'id');
     }
 }
