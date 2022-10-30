@@ -6,9 +6,8 @@
             @foreach ($resultTypes as $type)
                 <option value="{{ $type->id }}">{{ $type->name }}</option>
             @endforeach
-            <p class="text-sm text-red-600">{{ $errors->first('resultTypeId') }}</p>
         </select>
-
+        <p class="text-sm text-red-600">{{ $errors->first('resultTypeId') }}</p>
     </div>
     @if ($resultTypeId == 1)
     <div class="flex flex-col gap-1">

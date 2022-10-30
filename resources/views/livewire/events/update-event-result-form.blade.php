@@ -10,8 +10,8 @@
                     <option value="{{ $type->id }}">{{ $type->name }}</option>
                 @endif
             @endforeach
-            <p class="text-sm text-red-600">{{ $errors->first('resultTypeId') }}</p>
         </select>
+        <p class="text-sm text-red-600">{{ $errors->first('resultTypeId') }}</p>
     </div>
     @if ($selectedResultTypeId == 1)
         <div class="flex flex-col gap-1">
@@ -32,7 +32,7 @@
     @if ($selectedResultTypeId == 3)
         <div class="flex flex-col gap-1">
             <label for="setAmount" class="font-medium text-zinc-700">Amount of sets</label>
-            <input type="number" min="1" name="setAmount" id="setAmount" placeholder="Enter amount of sets" value="{{ old('setAmount') }}"  class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
+            <input type="number" min="1" name="setAmount" id="setAmount" placeholder="Enter amount of sets" value="{{ $result->set_amount }}"  class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
             <p class="text-sm text-red-600">{{ $errors->first('setAmount') }}</p>
         </div>
     @endif
