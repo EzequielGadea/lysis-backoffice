@@ -47,9 +47,9 @@
                                         <form action="eventUpdate/{{ $event->id }}" method="GET">
                                             <button class="font-semibold text-blue-600">Edit</button>
                                         </form>
-                                        <form action="eventDelete" method="POST">
+                                        <form action="eventDelete/{{ $event->id }}" method="POST">
                                             @csrf
-                                            <input type="hidden" name="id" value="{{ $event->id }}">
+                                            @method('delete')
                                             <button class="font-semibold text-blue-600" type="submit">Delete</button>
                                         </form>
                                     </div>
