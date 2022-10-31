@@ -23,7 +23,10 @@ class EventPlayerTeam extends Model
     protected $table = 'event_player_team';
 
     protected $fillable = [
-        'contract_start'
+        'player_id',
+        'team_id',
+        'contract_start',
+        'event_id'
     ];
 
     public function event(){

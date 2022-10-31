@@ -17,6 +17,8 @@ class ByPointEventPlayerTeam extends Model
     protected $table = 'by_point_event_player_team';
 
     protected $fillable = [
+        'by_point_id',
+        'event_player_team_id',
         'points_in_favor',
         'points_against',
         'minute'

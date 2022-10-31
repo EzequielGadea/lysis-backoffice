@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 namespace App\Models\Results;
 
@@ -15,7 +15,9 @@ class ByMarkPlayerLocal extends Model
     protected $table = 'by_mark_player_local';
 
     protected $fillable = [
-        'mark_value'
+        'by_mark_id',
+        'event_id',
+        'mark_value',
     ];
 
     public function result()

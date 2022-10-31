@@ -15,6 +15,8 @@ class ByPointPlayerLocal extends Model
     protected $table = 'by_point_player_local';
 
     protected $fillable = [
+        'by_point_id',
+        'event_id',
         'points_in_favor',
         'points_against',
         'minute'

@@ -17,7 +17,9 @@ class ByMarkEventPlayerTeam extends Model
     protected $table = 'by_mark_event_player_team';
 
     protected $fillable = [
-        'mark_value'
+        'event_player_team_id',
+        'by_mark_id',
+        'mark_value',
     ];
 
     public function eventPlayerTeam()
