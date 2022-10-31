@@ -8,16 +8,16 @@ use App\Models\Common\ResultType;
 use App\Models\Events\Event;
 use App\Models\Players\PlayerLocal;
 use App\Models\Players\PlayerVisitor;
-use App\Models\Teams\TeamLocal;
 use App\Models\Results\ByMark;
 use App\Models\Results\ByPoint;
 use App\Models\Results\BySet;
 use App\Models\Results\MarkName;
+use App\Models\Teams\TeamLocal;
 use App\Models\Teams\TeamVisitor;
 use App\Models\Whereabouts\Venue;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
