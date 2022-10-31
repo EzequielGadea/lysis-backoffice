@@ -104,4 +104,12 @@ class Event extends Model
             return true;
         return false;
     }
+
+    public function opponents()
+    {
+        if ($this->isIndividual()) {
+            return collect([$this->playerLocal->player,$this->playerVisitor->player]);
+        }
+        return collect([$this->teamLocal->team, $this->teamVisitor->team]);
+    }
 }
