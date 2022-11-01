@@ -14,7 +14,8 @@ class Set extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'set_number'
+        'by_set_id',
+        'number'
     ];
 
     public function result()
