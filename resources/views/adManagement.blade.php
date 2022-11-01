@@ -135,6 +135,5 @@
             <p class="text-sm text-red-600">{{ $errors->first('valueTagThree') }}</p>
         </div> 
     </x-create-section>
-
 </div> 
 </x-layout>
