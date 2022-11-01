@@ -15,7 +15,6 @@ use App\Models\Results\BySet;
 use App\Models\Players\PlayerVisitor;
 use App\Models\Players\PlayerLocal;
 use App\Models\Common\League;
-use App\Models\Players\Player;
 use App\Models\Teams\TeamVisitor;
 use App\Models\Teams\TeamLocal;
 
@@ -76,6 +75,7 @@ class Event extends Model
             return $this->resultByMark;
         if ($this->resultBySet !== null)
             return $this->resultBySet;
+        return null;
     }
 
     public function playerVisitor()
