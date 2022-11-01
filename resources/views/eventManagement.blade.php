@@ -52,6 +52,10 @@
                                             @method('delete')
                                             <button class="font-semibold text-blue-600" type="submit">Delete</button>
                                         </form>
+                                        <form action="/result/management/{{ $event->id }}" method="GET">
+                                            @csrf
+                                            <button class="font-semibold text-blue-600" type="submit">Results</button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
