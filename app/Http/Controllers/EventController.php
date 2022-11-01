@@ -12,6 +12,7 @@ use App\Models\Results\ByMark;
 use App\Models\Results\ByPoint;
 use App\Models\Results\BySet;
 use App\Models\Results\MarkName;
+use App\Models\Results\Set;
 use App\Models\Teams\TeamLocal;
 use App\Models\Teams\TeamVisitor;
 use App\Models\Whereabouts\Venue;
@@ -162,7 +163,17 @@ class EventController extends Controller
 
     private function updateBySetsResult(BySet $result, $request)
     {
-        $result->update([
+        if ($result->set_amount > $request->post('setAmount')) {
+            $result->sets->where('number', '>', $request->post('setAmount'))->delete();
+        } else {
+            for ($i = $result->set_amount; $i < $request->post('setAmount') + 1; $i++) { 
+                Set::create([
+                    'by_set_id' => $result->id,
+                    'number' => $i
+                ]);
+            }
+        }
+        return $result->update([
             'set_amount' => $request->post('setAmount')
         ]);
     }
@@ -186,11 +197,18 @@ class EventController extends Controller
 
     private function createBySetsResult($request, $eventId)
     {
-        BySet::create([
+        $result = BySet::create([
             'event_id' => $eventId,
             'set_amount' => $request->post('setAmount'),
             'result_type_id' => $request->post('resultTypeId')
         ]);
+        for ($i=1; $i < $request->post('setAmount') + 1; $i++) { 
+            Set::create([
+                'by_set_id' => $result->id,
+                'number' => $i
+            ]);
+        }
+        return $result;
     }
 
     private function createIndividualEvent($request, $eventId)
