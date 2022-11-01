@@ -19,7 +19,7 @@
             <select name="markNameId" id="markNameId"  class="w-64 bg-slate-200 px-3 py-1 rounded-md shadow-inner" autocomplete="off">
                 <option selected disabled>Choose mark name</option>
                 @foreach ($markNames as $markName)
-                    @if ($markName->id == $result->markName->id)
+                    @if ($markName->id ?? '' == $result->markName->id)
                         <option value="{{ $markName->id }}" selected>{{ $markName->name }}</option>
                     @else
                         <option value="{{ $markName->id }}">{{ $markName->name }}</option>
