@@ -14,9 +14,16 @@ class PlayerVisitorSet extends Model
     protected $table = 'player_visitor_set';
     
     protected $fillable = [
+        'set_id',
+        'event_id',
         'points_in_favor',
         'points_against',
         'minute'
+    ];
+
+    protected $attributes = [
+        'points_in_favor' => 0,
+        'points_against' => 0
     ];
 
     public function set()
