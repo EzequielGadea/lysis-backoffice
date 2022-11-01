@@ -1,4 +1,4 @@
-    <?php
+<?php
 
 namespace App\Models\Results;
 
@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Results\ByMark;
 use App\Models\Events\Event;
+use App\Models\Players\Player;
+use App\Models\Players\PlayerLocal;
 
 class ByMarkPlayerLocal extends Model
 {
@@ -28,5 +30,15 @@ class ByMarkPlayerLocal extends Model
     public function event()
     {
         return $this->belongsTo(Event::class);
+    }
+
+    public function playerLocal()
+    {
+        return $this->belongsTo(PlayerLocal::class);
+    }
+
+    public function player()
+    {
+        return $this->hasOneThrough(Player::class, PlayerLocal::class, 'player_id', 'id');
     }
 }
