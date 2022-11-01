@@ -18,9 +18,16 @@ class EventPlayerTeamSet extends Model
     protected $table = 'event_player_team_set';
 
     protected $fillable = [
+        'set_id',
+        'event_player_team_id',
         'points_in_favor',
         'points_against',
         'minute'
+    ];
+
+    protected $attributes = [
+        'points_in_favor' => 0,
+        'points_against' => 0
     ];
 
     public function set()
