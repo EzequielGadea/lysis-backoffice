@@ -1,35 +1,32 @@
 <x-layout>
     <x-slot name="title">Updating score</x-slot>
     <div class="flex flex-col items-center pt-6 px-8 flex-grow">
-        <p class="text-2xl text-zinc-800 font-semibold mb-6 w-full">Points</p>
-        <div class="rounded-md overflow-x-auto shadow-xl w-[30rem]">
-            <table class="table-auto border-collapse w-full whitespace-nowrap">
-                <thead>
-                    <tr class="bg-slate-300">
-                        <td class="p-3 font-light text-zinc-800">ID</td>
-                        <td class="p-3 font-light text-zinc-800">MARK NAME</td>
-                        <td class="p-3 font-light text-zinc-800">MARK VALUE</td>
-                        <td class="p-3 font-light text-zinc-800">MARK CRITERIA</td>
-                        <td class="p-3 font-light text-zinc-800">PLAYER</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    @isset($event->result()->marksPlayerLocal)
-                        @foreach ($event->result()->marksPlayerLocal as $mark)
-                            <tr class="border-b border-slate-300">
-                                <td class="p-3 text-zinc-800">{{ $mark->id }}</td>
-                                <td class="p-3 text-zinc-800">{{ $event->result()->markName->name }}</td>
-                                <td class="p-3 text-zinc-800">{{ $mark->mark_value }}</td>
-                                <td class="p-3 text-zinc-800">{{ $event->result()->markName->criteria->name }}</td>
-                                <td class="p-3 text-zinc-800">{{ $mark->player->name }} {{ $mark->player->surname }}</td>
-                            </tr>
-                        @endforeach
-                    @endisset
-                </tbody>
-            </table>
+        <div class="flex flex-row justify-between w-full">
+            <p class="text-2xl text-zinc-800 font-semibold mb-6 w-full">Points</p>
+            <form action="/eventManagement" method="GET">
+                <button class="text-xl font-semibold underline text-zinc-800 hover:cursor-pointer">Back</button>
+            </form>
         </div>
+        @if ($event->result()->result_type_id == 1)
+            <x-results.by-mark-table :result="$event->result()"/>
+        @endif
+        @if ($event->result()->result_type_id == 2)
+            {{-- AGREGAR COMPONENTE PARA TABLA DE RESULTADO POR PUNTOS --}}
+        @endif
+        @if ($event->result()->result_type_id == 3)
+            {{-- AGREGAR COMPONENTE PARA TABLA DE RESULTADO POR SETS --}}                
+        @endif
+        @if (session('statusDelete') && session('deletedId'))
+            <x-status-delete-get>
+                <x-slot name="action">/mark/{{ session('sideDeleted') }}/restore/{{ session('deletedId') }}</x-slot>
+            </x-status-delete-get>
+        @endif
+
+        @if (session('statusRestore'))
+            <x-status-restore />
+        @endif
     </div>
-    <form action="/result/create/{{ $event->id }}" method="post" class="bg-slate-50 flex flex-col gap-6 w-80 px-8 py-6">
+    <form action="/mark/create/{{ $event->id }}" method="post" class="bg-slate-50 flex flex-col gap-6 w-80 px-8 py-6">
         @csrf
         @if ($event->isIndividual())
             <div class="flex flex-col gap-1">
@@ -58,7 +55,7 @@
                 <label for="markValue" class="font-medium text-zinc-700">Value of {{ $event->result()->markName->name }}</label>
                 <div>
                     <input type="text" name="markValue" id="markValue" placeholder="Enter mark value" class="w-64 bg-slate-200 px-3 py-1 rounded-md placeholder:text-zinc-600 shadow-inner">
-                    <p class="text-sm text-zinc-600">Don't forget to add units.</p>
+                    <p class="text-sm text-zinc-600">Do not add units.</p>
                 </div>
                 <p class="text-sm text-red-600">{{ $errors->first('markValue') }}</p>
             </div>
