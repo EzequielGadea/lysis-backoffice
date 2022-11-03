@@ -29,12 +29,14 @@
                                 <td class="p-3 text-zinc-800 text-center">
                                     <p>
                                         {{ $event->playerVisitor->player->name ?? $event->teamVisitor->team->name ?? ''}}
-                                        {{ $event->playerVisitor ? $event->playerVisitor->player->surname : '' }}
+                                        {{ $event->playerVisitor ? $event->playerVisitor->player->surname : '' }} 
+                                        (V)
                                     </p>
                                     <p class="font-semibold text-zinc-800">vs</p>
                                     <p>
                                         {{ $event->playerLocal->player->name ?? $event->teamLocal->team->name ?? '' }}
-                                        {{ $event->playerLocal ? $event->playerLocal->player->surname : '' }}
+                                        {{ $event->playerLocal ? $event->playerLocal->player->surname : '' }} 
+                                        (L)
                                     </p>
                                 </td>
                                 <td class="p-3 text-zinc-800">{{ $event->result()->type->name ?? 'no tiene' }}</td>
@@ -53,10 +55,16 @@
                                             <button class="font-semibold text-blue-600" type="submit">Delete</button>
                                         </form>
                                         @if ($event->result()->result_type_id == 1)
-                                            <form action="/mark/management/{{ $event->id }}" method="GET">
-                                                @csrf
-                                                <button class="font-semibold text-blue-600" type="submit">Results</button>
-                                            </form>
+                                            @if ($event->isIndividual())
+                                                <form action="/mark/management/{{ $event->id }}" method="GET">
+                                                    @csrf
+                                                    <button class="font-semibold text-blue-600" type="submit">Results</button>
+                                                </form>
+                                            @else
+                                                <form action="/mark/team/index/{{ $event->id }}" method="get">
+                                                    <button class="font-semibold text-blue-600" type="submit">Results</button>
+                                                </form>
+                                            @endif
                                         @endif
                                     </div>
                                 </td>
