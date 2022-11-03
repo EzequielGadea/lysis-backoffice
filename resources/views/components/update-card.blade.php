@@ -19,7 +19,7 @@
     <script>
         setTimeout(() => {
             document.getElementById('redirect').submit();
-        }, 4000);
+        }, 2000);
     </script>
 @endif
 <script>
