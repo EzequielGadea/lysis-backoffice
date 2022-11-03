@@ -9,17 +9,18 @@ use App\Models\Results\ByMarkPlayerLocal;
 use App\Models\Results\ByMarkPlayerVisitor;
 
 class ByMarkService
-{
-    // private $request;
+{    
+    private $updateMethods;
 
-    // private $event;
+    public function __construct()
+    {
+        $this->updateMethods = [
+            'visitor' => 'ByMarkPlayerVisitor::update()',
+            'local' => 'ByMarkPlayerLocal::update()',
+            'teams' => 'ByMarkEventPlayerTeam::update()'
+        ];
+    }
 
-    // public function __construct($request, $event)
-    // {
-    //     $this->request = $request;
-    //     $this->event = $event;
-    // }
-    
     public function create($request, $event)
     {
         if ($event->isIndividual()) {
@@ -32,82 +33,6 @@ class ByMarkService
         $playerTeam = $this->getPlayerTeam($request->post('playerId'), $request->post('teamId'));
         $eventPlayerTeam = $this->getEventPlayerTeam($playerTeam, $event);
         return $this->createTeamMark($eventPlayerTeam, $event->result(), $request->post('markValue'));
-    }
-
-    public function edit($event)
-    {
-        return view('result-update', [
-            'event' => $event
-        ]);
-    }
-
-    public function update($playerMark, $request)
-    {
-        if ($this->event->isIndividual()) {
-            if ($this->event->isPlayerLocal($this->request->post('playerId')))
-                return $this->updatePlayerLocalMark($playerMark, $request);
-            if ($this->event->isPlayerVisitor($this->request->post('playerId')))
-                return $this->updatePlayerVisitorMark($playerMark, $request);
-        }
-        return $this->updateTeamByMark($playerMark, $request);
-    }
-
-    public function delete($point)
-    {
-        return $point->delete();
-    }
-
-    public function restore($request)
-    {
-        if ($this->event->isIndividual()) {
-            if ($this->event->isPlayerLocal($this->request->post('playerId')))
-                return $this->restorePlayerLocalMark($request->post('deletedId'));
-            if ($this->event->isPlayerVisitor($this->request->post('playerId')))
-                return $this->restorePlayerVisitorMark($request->post('deletedId'));
-        }
-        return $this->restoreTeamByMark($request->post('deletedId'));
-    }
-
-    private function restorePlayerVisitorMark($id)
-    {
-        return ByMarkPlayerVisitor::withTrashed()
-            ->findOrFail($id)
-            ->restore();
-    }
-
-    private function restorePlayerLocalMark($id)
-    {
-        return ByMarkPlayerLocal::withTrashed()
-            ->findOrFail($id)
-            ->restore();
-    }
-
-    private function restoreTeamByMark($id)
-    {
-        return ByMarkEventPlayerTeam::withTrashed()
-            ->findOrFail($id)
-            ->restore();
-    }
-
-    private function updatePlayerLocalMark($playerLocalMark, $request)
-    {
-        return $playerLocalMark->update([
-            'mark_value' => $request->post('markValue')
-        ]);
-    }
-
-    private function updatePlayerVisitorMark($playerVisitorMark, $request)
-    {
-        return $playerVisitorMark->update([
-            'mark_value' => $request->post('markValue')
-        ]);
-    }
-
-    private function updateTeamByMark($eventPlayerMark, $request)
-    {
-        return $eventPlayerMark->update([
-            'mark_value' => $request->post('markValue')
-        ]);
     }
 
     private function createPlayerVisitorMark($result, $playerVisitor, $markValue)
