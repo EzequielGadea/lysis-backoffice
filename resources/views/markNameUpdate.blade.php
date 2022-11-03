@@ -23,5 +23,19 @@
             </select>
             <p class="text-sm text-red-600">{{ $errors->first('criteriaId') }}</p>
         </div>
+        <div class="flex flex-col gap-1">
+            <label for="unitId" class="font-medium text-zinc-700">Unit</label>
+            <select name="unitId" id="unitId" class="w-64 bg-slate-200 px-3 py-1 rounded-md shadow-inner" autocomplete="off">
+                <option value="" disabled>Choose unit</option>
+                @foreach ($units as $unit)
+                    @if ($unit->id == $markName->unit->id)
+                        <option value="{{ $unit->id }}" selected>{{ $unit->name }}</option>
+                    @else
+                        <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                    @endif
+                @endforeach
+            </select>
+            <p class="text-sm text-red-600">{{ $errors->first('unitId') }}</p>
+        </div>
     </x-update-card>
 </x-layout>

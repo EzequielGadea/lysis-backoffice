@@ -9,6 +9,7 @@
                     <tr class="bg-slate-300">
                         <td class="pl-3 py-3 font-light text-zinc-800">ID</td>
                         <td class="py-3 font-light text-zinc-800">NAME</td>
+                        <td class="py-3 font-light text-zinc-800">UNIT</td>
                         <td class="py-3 font-light text-zinc-800">CRITERIA</td>
                         <td class="py-3 font-light text-zinc-800">CREATED AT</td>
                         <td class="py-3 font-light text-zinc-800">UPDATED AT</td>
@@ -21,6 +22,7 @@
                             <tr class="border-b border-slate-300">
                                 <td class="pl-3 text-zinc-800">{{ $markName->id }}</td>
                                 <td class="py-3 text-zinc-800">{{ $markName->name }}</td>
+                                <td class="py-3 text-zinc-800">{{ $markName->unit->name }} ({{ $markName->unit->unit }})</td>
                                 <td class="py-3 text-zinc-800">{{ $markName->criteria->name }}</td>
                                 <td class="py-3 text-zinc-800">{{ $markName->created_at }}</td>
                                 <td class="py-3 text-zinc-800">{{ $markName->updated_at }}</td>
@@ -68,6 +70,16 @@
                 @endforeach
             </select>
             <p class="text-sm text-red-600">{{ $errors->first('criteriaId') }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+            <label for="unitId" class="font-medium text-zinc-700">Unit</label>
+            <select name="unitId" id="unitId" class="w-64 bg-slate-200 px-3 py-1 rounded-md shadow-inner" autocomplete="off">
+                <option value="" selected disabled>Choose unit</option>
+                @foreach ($units as $unit)
+                    <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                @endforeach
+            </select>
+            <p class="text-sm text-red-600">{{ $errors->first('unitId') }}</p>
         </div>
     </x-create-section>
 </x-layout>
