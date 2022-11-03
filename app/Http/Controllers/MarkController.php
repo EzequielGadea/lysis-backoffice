@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Services\ByMarkService;
 use App\Http\Requests\ResultRequest;
+use App\Http\Requests\UpdateResultRequest;
 use App\Models\Events\Event;
 use App\Models\Results\ByMarkPlayerLocal;
 use App\Models\Results\ByMarkPlayerVisitor;
-use App\Models\Results\ByMarkEventPlayerTeam;
 
 class MarkController extends Controller
 {
@@ -88,12 +86,7 @@ class MarkController extends Controller
         return back()->with('statusRestore', 'Mark restored successfully.');
     }
 
-    public function update(Event $event, Request $request, $playerMark, $role)
-    {
-        return $this->service->update($event, $request, $request);
-    }
-
-    public function updatePlayerLocal(ByMarkPlayerLocal $playerMark, Request $request)
+    public function updatePlayerLocal(ByMarkPlayerLocal $playerMark, UpdateResultRequest $request)
     {
         $playerMark->update([
             'mark_value' => $request->post('markValue')
@@ -104,7 +97,7 @@ class MarkController extends Controller
         ]);
     }
 
-    public function updatePlayerVisitor(ByMarkPlayerVisitor $playerMark, Request $request)
+    public function updatePlayerVisitor(ByMarkPlayerVisitor $playerMark, UpdateResultRequest $request)
     {
         $playerMark->update([
             'mark_value' => $request->post('markValue')
