@@ -23,6 +23,7 @@ use App\Http\Controllers\MarkNameController;
 use App\Http\Controllers\PlayerTeamController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MarkController;
+use App\Http\Controllers\TeamMarkController;
 use App\Http\Controllers\UnitController;
 
 /*
@@ -235,22 +236,31 @@ Route::middleware(['web'])->group(function () {
             Route::get('/restore/{unit}', 'restore');
         });
 
-        Route::controller(MarkController::class)->prefix('mark')->group(function () {
-            Route::get('/management/{event}', 'show');
-            Route::post('/create/{event}', 'create');
-            Route::post('/restore', 'restore');
-            Route::prefix('local')->group(function () {
-                Route::get('/update/{playerMark}', 'editPlayerLocal');
-                Route::post('/update/{playerMark}', 'updatePlayerLocal');
-                Route::delete('/delete/{playerMark}', 'deletePlayerLocal');
-                Route::get('/restore/{id}', 'restorePlayerLocal');
+        Route::prefix('mark')->group(function () {
+            Route::controller(MarkController::class)->group(function () {
+                Route::get('/management/{event}', 'show');
+                Route::post('/create/{event}', 'create');
+                Route::prefix('local')->group(function () {
+                    Route::get('/update/{playerMark}', 'editPlayerLocal');
+                    Route::post('/update/{playerMark}', 'updatePlayerLocal');
+                    Route::delete('/delete/{playerMark}', 'deletePlayerLocal');
+                    Route::get('/restore/{id}', 'restorePlayerLocal');
+                });
+                Route::prefix('visitor')->group(function () {
+                    Route::get('/update/{playerMark}', 'editPlayerVisitor');
+                    Route::post('/update/{playerMark}', 'updatePlayerVisitor');
+                    Route::delete('/delete/{playerMark}', 'deletePlayerVisitor');
+                    Route::get('/restore/{id}', 'restorePlayerVisitor');
+                });
             });
-            Route::prefix('visitor')->group(function () {
-                Route::get('/update/{playerMark}', 'editPlayerVisitor');
-                Route::post('/update/{playerMark}', 'updatePlayerVisitor');
-                Route::delete('/delete/{playerMark}', 'deletePlayerVisitor');
-                Route::get('/restore/{id}', 'restorePlayerVisitor');
-            });            
+            Route::controller(TeamMarkController::class)->prefix('team')->group(function () {
+                Route::get('/index', 'index');
+                Route::get('/update/{playerTeamMark}', 'edit');
+                Route::post('/update/{playerTeamMark}', 'update');
+                Route::delete('/delete/{playerTeamMark}', 'delete');
+                Route::get('/restore/{id}', 'restore');
+            });
         });
+
     });
 });
