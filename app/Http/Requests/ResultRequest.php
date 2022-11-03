@@ -25,7 +25,7 @@ class ResultRequest extends FormRequest
     public function rules()
     {
         return [
-            'playerId' => 'required|numeric|exists:player_team,player_id',
+            'playerId' => 'required|numeric|exists:players,id',
             'teamId' => 'nullable|numeric|exists:teams,id',
             'markValue' => 'required_without:points,isInFavor,minute,set|string|max:255',
             'points' => 'required_without:markValue|numeric|gte:1',
