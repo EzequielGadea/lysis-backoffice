@@ -52,10 +52,12 @@
                                             @method('delete')
                                             <button class="font-semibold text-blue-600" type="submit">Delete</button>
                                         </form>
-                                        <form action="/result/management/{{ $event->id }}" method="GET">
-                                            @csrf
-                                            <button class="font-semibold text-blue-600" type="submit">Results</button>
-                                        </form>
+                                        @if ($event->result()->result_type_id == 1)
+                                            <form action="/mark/management/{{ $event->id }}" method="GET">
+                                                @csrf
+                                                <button class="font-semibold text-blue-600" type="submit">Results</button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
