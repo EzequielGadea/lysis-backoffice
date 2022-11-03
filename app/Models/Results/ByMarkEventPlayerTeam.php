@@ -29,7 +29,7 @@ class ByMarkEventPlayerTeam extends Model
 
     public function result()
     {
-        return $this->belongsTo(ByMark::class);
+        return $this->belongsTo(ByMark::class, 'by_mark_id', 'id');
     }
 
     public function event()
@@ -39,6 +39,6 @@ class ByMarkEventPlayerTeam extends Model
 
     public function playerTeam()
     {
-        return $this->hasOneThrough(PlayerTeam::class, EventPlayerTeam::class);
+        return $this->hasOneThrough(PlayerTeam::class, EventPlayerTeam::class, 'player_id', 'player_id');
     }
 }
