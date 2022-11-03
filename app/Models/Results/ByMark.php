@@ -47,6 +47,11 @@ class ByMark extends Model
         return $this->hasMany(ByMarkPlayerLocal::class);
     }
 
+    public function allPlayerMarks()
+    {
+        return $this->marksPlayerVisitor->concat($this->marksPlayerLocal);
+    }
+
     public function type()
     {
         return $this->belongsTo(ResultType::class, 'result_type_id', 'id');
