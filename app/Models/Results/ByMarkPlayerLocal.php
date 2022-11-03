@@ -24,7 +24,7 @@ class ByMarkPlayerLocal extends Model
 
     public function result()
     {
-        return $this->belongsTo(ByMark::class);
+        return $this->belongsTo(ByMark::class, 'by_mark_id', 'id');
     }
 
     public function event()
@@ -34,7 +34,7 @@ class ByMarkPlayerLocal extends Model
 
     public function playerLocal()
     {
-        return $this->belongsTo(PlayerLocal::class);
+        return $this->belongsTo(PlayerLocal::class, 'event_id', 'event_id');
     }
 
     public function player()

@@ -17,6 +17,8 @@ class ByMarkPlayerVisitor extends Model
     protected $table = 'by_mark_player_visitor';
 
     protected $fillable = [
+        'by_mark_id',
+        'event_id',
         'mark_value'
     ];
 
@@ -27,16 +29,16 @@ class ByMarkPlayerVisitor extends Model
 
     public function result()
     {
-        return $this->belongsTo(ByMark::class);
+        return $this->belongsTo(ByMark::class, 'by_mark_id', 'id');
     }
 
     public function player()
     {
-        return $this->hasOneThrough(Player::class, PlayerVisitor::class);
+        return $this->hasOneThrough(Player::class, PlayerVisitor::class, 'player_id', 'id');
     }
 
     public function event()
     {
-        return $this->hasOne(Event::class);
+        return $this->belongsTo(Event::class);
     }
 }
