@@ -27,7 +27,7 @@ class ResultRequest extends FormRequest
         return [
             'playerId' => 'required|numeric|exists:players,id',
             'teamId' => 'nullable|numeric|exists:teams,id',
-            'markValue' => 'required_without:points,isInFavor,minute,set|string|max:255',
+            'markValue' => 'required_without:points,isInFavor,minute,set|numeric|max:255',
             'points' => 'required_without:markValue|numeric|gte:1',
             'isInFavor' => 'required_without:markValue|boolean',
             'minute' => 'required_without:markValue|numeric|gte:0',
