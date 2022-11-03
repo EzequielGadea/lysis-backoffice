@@ -148,7 +148,7 @@ class EventController extends Controller
             '1' => [$this, 'updateByMarksResult'],
             '3' => [$this, 'updateBySetsResult'],
         ];
-        call_user_func_array(
+        return call_user_func_array(
             $results[$event->result()->type->id],
             [$event->result(), $request]
         );
@@ -156,7 +156,7 @@ class EventController extends Controller
 
     private function updateByMarksResult(ByMark $result, $request)
     {
-        $result->update([
+        return $result->update([
             'mark_name_id' => $request->post('markNameId')
         ]);
     }
