@@ -254,11 +254,12 @@ Route::middleware(['web'])->group(function () {
                 });
             });
             Route::controller(TeamMarkController::class)->prefix('team')->group(function () {
-                Route::get('/index', 'index');
-                Route::get('/update/{playerTeamMark}', 'edit');
-                Route::post('/update/{playerTeamMark}', 'update');
-                Route::delete('/delete/{playerTeamMark}', 'delete');
-                Route::get('/restore/{id}', 'restore');
+                Route::get('/index/{event}', 'index');
+                Route::get('/edit/{mark}', 'edit');
+                Route::post('/create/{result}', 'create');
+                Route::post('/update/{mark}', 'update');
+                Route::delete('/delete/{mark}', 'delete');
+                Route::get('/restore/{mark}', 'restore')->withTrashed();
             });
         });
 
