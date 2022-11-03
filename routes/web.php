@@ -22,8 +22,8 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\MarkNameController;
 use App\Http\Controllers\PlayerTeamController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\ResultController;
-use App\Models\Events\Event;
+use App\Http\Controllers\MarkController;
+use App\Http\Controllers\UnitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -226,13 +226,31 @@ Route::middleware(['web'])->group(function () {
             Route::post('eventRestore', 'restore');
         });
 
-        Route::controller(ResultController::class)->prefix('result')->group(function () {
+        Route::controller(UnitController::class)->prefix('unit')->group(function () {
+            Route::get('/index', 'index');
+            Route::get('/edit/{unit}', 'edit');
+            Route::post('/create', 'create');
+            Route::post('/update/{unit}', 'update');
+            Route::delete('/delete/{unit}', 'delete');
+            Route::get('/restore/{unit}', 'restore');
+        });
+
+        Route::controller(MarkController::class)->prefix('mark')->group(function () {
             Route::get('/management/{event}', 'show');
-            Route::get('/update/{event}', 'edit');
             Route::post('/create/{event}', 'create');
-            Route::post('/update/{event}', 'update');
-            Route::delete('/delete/{event}', 'delete');
             Route::post('/restore', 'restore');
+            Route::prefix('local')->group(function () {
+                Route::get('/update/{playerMark}', 'editPlayerLocal');
+                Route::post('/update/{playerMark}', 'updatePlayerLocal');
+                Route::delete('/delete/{playerMark}', 'deletePlayerLocal');
+                Route::get('/restore/{id}', 'restorePlayerLocal');
+            });
+            Route::prefix('visitor')->group(function () {
+                Route::get('/update/{playerMark}', 'editPlayerVisitor');
+                Route::post('/update/{playerMark}', 'updatePlayerVisitor');
+                Route::delete('/delete/{playerMark}', 'deletePlayerVisitor');
+                Route::get('/restore/{id}', 'restorePlayerVisitor');
+            });            
         });
     });
 });
