@@ -66,6 +66,14 @@
                                                 </form>
                                             @endif
                                         @endif
+                                        @if ($event->result()->result_type_id == 3)
+                                            @if ($event->isIndividual())
+                                            @else
+                                            @endif
+                                            <form action="/set/team/index/{{ $event->id }}" method="get">
+                                                <button class="font-semibold text-blue-600" type="submit">Results</button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
