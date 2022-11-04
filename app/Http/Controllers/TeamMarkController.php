@@ -67,7 +67,10 @@ class TeamMarkController extends Controller
 
     private function getEventPlayerTeam($playerTeam, $event)
     {
-        $eventPlayerTeam = EventPlayerTeam::firstWhere('player_team_id', $playerTeam->id);
+        $eventPlayerTeam = EventPlayerTeam::firstWhere([
+            ['player_team_id', $playerTeam->id],
+            ['event_id', $event->id]
+        ]);
         if ($eventPlayerTeam == null)
             $eventPlayerTeam = EventPlayerTeam::create([
                 'event_id' => $event->id,
