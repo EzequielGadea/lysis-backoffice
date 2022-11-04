@@ -9,18 +9,7 @@ use App\Models\Results\ByMarkPlayerLocal;
 use App\Models\Results\ByMarkPlayerVisitor;
 
 class ByMarkService
-{    
-    private $updateMethods;
-
-    public function __construct()
-    {
-        $this->updateMethods = [
-            'visitor' => 'ByMarkPlayerVisitor::update()',
-            'local' => 'ByMarkPlayerLocal::update()',
-            'teams' => 'ByMarkEventPlayerTeam::update()'
-        ];
-    }
-
+{
     public function create($request, $event)
     {
         if ($event->isIndividual()) {
@@ -64,12 +53,10 @@ class ByMarkService
 
     private function getEventPlayerTeam($playerTeam, $event)
     {
-        $eventPlayerTeam = EventPlayerTeam::where('player_id', $playerTeam->player_id)
-            ->latest('contract_start');
+        $eventPlayerTeam = EventPlayerTeam::where('player_team_id', $playerTeam->id);
         if ($eventPlayerTeam == null)
             EventPlayerTeam::create([
-                'team_id' => $playerTeam->team_id,
-                'contract_start' => $playerTeam->contract_start,
+                'player_team_id' => $playerTeam->id,
                 'event_id' => $event->id,
             ]);
         return $eventPlayerTeam;
