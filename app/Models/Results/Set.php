@@ -20,7 +20,7 @@ class Set extends Model
 
     public function result()
     {
-        return $this->belongsTo(BySet::class);
+        return $this->belongsTo(BySet::class, 'by_set_id', 'id');
     }
 
     public function pointsPlayerTeam()
