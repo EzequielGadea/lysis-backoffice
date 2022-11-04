@@ -24,7 +24,6 @@ class UpdatePointRequest extends FormRequest
     public function rules()
     {
         return [
-            'isInFavor' => 'required|boolean',
             'minute' => 'required|integer|min:0|max:999',
             'points' => 'required|integer'
         ];
