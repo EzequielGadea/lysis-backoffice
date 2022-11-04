@@ -24,6 +24,7 @@ use App\Http\Controllers\PlayerTeamController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MarkController;
 use App\Http\Controllers\TeamMarkController;
+use App\Http\Controllers\TeamSetController;
 use App\Http\Controllers\UnitController;
 
 /*
@@ -260,6 +261,17 @@ Route::middleware(['web'])->group(function () {
                 Route::post('/update/{mark}', 'update');
                 Route::delete('/delete/{mark}', 'delete');
                 Route::get('/restore/{mark}', 'restore')->withTrashed();
+            });
+        });
+
+        Route::prefix('set')->group(function () {
+            Route::controller(TeamSetController::class)->prefix('team')->group(function () {
+                Route::get('/index/{event}', 'index');
+                Route::get('/edit/{point}', 'edit');
+                Route::post('/create/{set}', 'create');
+                Route::post('/update/{point}', 'update');
+                Route::delete('/delete/{set}', 'delete');
+                Route::get('restore/{set}', 'restore');
             });
         });
 
