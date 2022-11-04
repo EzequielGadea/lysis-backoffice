@@ -38,4 +38,13 @@ class BySet extends Model
     {
         return $this->belongsTo(ResultType::class, 'result_type_id', 'id');
     }
+
+    public function allTeamPoints()
+    {
+        $points = collect();
+        foreach ($this->sets as $set) {
+            $points->concat($set->pointsPlayerTeam);
+        }
+        return $points;
+    }
 }
