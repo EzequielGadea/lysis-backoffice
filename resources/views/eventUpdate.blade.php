@@ -37,15 +37,5 @@
             </select>
             <p class="text-sm text-red-600">{{ $errors->first('venueId') }}</p>
         </div>
-        @if ($event->isIndividual())
-            @livewire('event-update-individual', ['event' => $event])
-        @else
-            @livewire('event-update-teams', ['event' => $event])
-        @endif
-        @livewire('events.update-event-result-form', [
-            'result' => $event->result() ?? '',
-            'resultTypes' => $resultTypes,
-            'markNames' => $markNames,
-        ])
     </x-update-card>
 </x-layout>
