@@ -26,7 +26,7 @@ class BySet extends Model
 
     public function sets()
     {
-        return $this->hasMany(Set::class);
+        return $this->hasMany(Set::class, 'by_set_id', 'id');
     }
 
     public function points()
