@@ -29,7 +29,7 @@ class BySet extends Model
         return $this->hasMany(Set::class, 'by_set_id', 'id');
     }
 
-    public function points()
+    public function teamPoints()
     {
         return $this->hasManyThrough(EventPlayerTeamSet::class, Set::class);
     }
@@ -37,14 +37,5 @@ class BySet extends Model
     public function type()
     {
         return $this->belongsTo(ResultType::class, 'result_type_id', 'id');
-    }
-
-    public function allTeamPoints()
-    {
-        $points = collect();
-        foreach ($this->sets as $set) {
-            $points->concat($set->pointsPlayerTeam);
-        }
-        return $points;
     }
 }
