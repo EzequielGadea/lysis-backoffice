@@ -268,12 +268,11 @@ Route::middleware(['web'])->group(function () {
             Route::controller(TeamSetController::class)->prefix('team')->group(function () {
                 Route::get('/index/{event}', 'index');
                 Route::get('/edit/{point}', 'edit');
-                Route::post('/create/{set}', 'create');
+                Route::post('/create/{result}', 'create');
                 Route::post('/update/{point}', 'update');
-                Route::delete('/delete/{set}', 'delete');
-                Route::get('restore/{set}', 'restore');
+                Route::delete('/delete/{point}', 'delete');
+                Route::get('restore/{point}', 'restore')->withTrashed();
             });
         });
-
     });
 });
