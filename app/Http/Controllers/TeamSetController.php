@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Result\BySet\Team\CreatePointRequest;
 use App\Http\Requests\Result\BySet\Team\UpdatePointRequest;
+use App\Models\Events\Event;
 use App\Models\Events\EventPlayerTeam;
 use App\Models\Players\PlayerTeam;
 use App\Models\Results\BySet;
 use App\Models\Results\EventPlayerTeamSet;
-use Event;
 
 class TeamSetController extends Controller
 {
