@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Result\ByMark;
 
 use App\Models\Players\PlayerTeam;
+use App\Models\Results\ByMark;
 use App\Models\Teams\Team;
 use Livewire\Component;
 
@@ -18,15 +19,13 @@ class CreateTeamMark extends Component
 
     public function mount()
     {
-        $this->teams = Team::all();
+        $this->teams = ByMark::find($this->result)->event->opponents();
         $this->players = collect();
     }
 
     public function render()
     {
-        return view('livewire.result.by-mark.create-team-mark', [
-            'team' => $this->teams
-        ]);
+        return view('livewire.result.by-mark.create-team-mark');
     }
 
     public function updatedTeam()
@@ -37,5 +36,6 @@ class CreateTeamMark extends Component
             ->map(function ($item) {
                 return $item->player;
             });
+        $this->teams = ByMark::find($this->result)->event->opponents();
     }
 }
