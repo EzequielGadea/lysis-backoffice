@@ -10,12 +10,6 @@
         @if ($event->result()->result_type_id == 1)
             <x-results.by-mark-table :result="$event->result()"/>
         @endif
-        @if ($event->result()->result_type_id == 2)
-            {{-- AGREGAR COMPONENTE PARA TABLA DE RESULTADO POR PUNTOS --}}
-        @endif
-        @if ($event->result()->result_type_id == 3)
-            {{-- AGREGAR COMPONENTE PARA TABLA DE RESULTADO POR SETS --}}                
-        @endif
         @if (session('statusDelete') && session('deletedId'))
             <x-status-delete-get>
                 <x-slot name="action">/mark/{{ session('sideDeleted') }}/restore/{{ session('deletedId') }}</x-slot>
