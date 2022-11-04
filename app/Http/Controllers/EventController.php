@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EventRequest;
+use App\Http\Requests\Event\CreateEventRequest;
+use App\Http\Requests\Event\UpdateEventRequest;
 use App\Models\Common\League;
 use App\Models\Common\ResultType;
 use App\Models\Events\Event;
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
-    public function create(EventRequest $request)
+    public function create(CreateEventRequest $request)
     {
         try {
             DB::transaction(function () use ($request) {
@@ -44,7 +45,7 @@ class EventController extends Controller
         return back()->with('statusCreate', 'Event registered successfully.');
     }
 
-    public function update(EventRequest $request, Event $event)
+    public function update(UpdateEventRequest $request, Event $event)
     {
         try {
             DB::transaction(function () use ($request, $event) {
@@ -53,25 +54,6 @@ class EventController extends Controller
                     'venue_id' => $request->post('venueId'),
                     'league_id' => $request->post('leagueId')
                 ]);
-    
-                if ($event->isIndividual()) {
-                    $this->updatePlayers($event, [
-                        'localId' => $request->post('playerLocalId'), 
-                        'visitorId' => $request->post('playerVisitorId')
-                    ]);
-                } else {
-                    $this->updateTeams($event, [
-                        'localId' => $request->post('teamLocalId'), 
-                        'visitorId' => $request->post('teamVisitorId')
-                    ]);
-                }
-                if ($request->post('resultTypeId') == $event->result()->type->id) {
-                    if($event->result()->type->id !== 2)
-                        $this->updateResult($event, $request);
-                } else {
-                    $this->deleteResult($event);
-                    $this->createResult($request, $event->id);
-                }
             });
         } catch (QueryException $e) {
             return back()->with([
@@ -137,47 +119,6 @@ class EventController extends Controller
         );
     }
 
-    private function deleteResult(Event $event)
-    {
-        $event->result()->delete();
-    }
-
-    private function updateResult(Event $event, $request)
-    {
-        $results = [
-            '1' => [$this, 'updateByMarksResult'],
-            '3' => [$this, 'updateBySetsResult'],
-        ];
-        return call_user_func_array(
-            $results[$event->result()->type->id],
-            [$event->result(), $request]
-        );
-    }
-
-    private function updateByMarksResult(ByMark $result, $request)
-    {
-        return $result->update([
-            'mark_name_id' => $request->post('markNameId')
-        ]);
-    }
-
-    private function updateBySetsResult(BySet $result, $request)
-    {
-        if ($result->set_amount > $request->post('setAmount')) {
-            $result->sets->where('number', '>', $request->post('setAmount'))->delete();
-        } else {
-            for ($i = $result->set_amount; $i < $request->post('setAmount') + 1; $i++) { 
-                Set::create([
-                    'by_set_id' => $result->id,
-                    'number' => $i
-                ]);
-            }
-        }
-        return $result->update([
-            'set_amount' => $request->post('setAmount')
-        ]);
-    }
-
     private function createByMarksResult($request, $eventId) 
     {
         ByMark::create([
@@ -232,26 +173,6 @@ class EventController extends Controller
         TeamLocal::create([
             'event_id' => $eventId,
             'team_id' => $request->post('teamLocalId')
-        ]);
-    }
-
-    private function updatePlayers($event, $players)
-    {
-        $event->playerLocal->update([
-            'player_id' => $players['localId']
-        ]);
-        $event->playerVisitor->update([
-            'player_id' => $players['visitorId']
-        ]);
-    }
-
-    private function updateTeams($event, $teams)
-    {
-        $event->teamLocal->update([
-            'team_id' => $teams['localId']
-        ]);
-        $event->teamVisitor->update([
-            'team_id' => $teams['visitorId']
         ]);
     }
 }
