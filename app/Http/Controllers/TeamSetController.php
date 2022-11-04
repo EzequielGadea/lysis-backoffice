@@ -17,7 +17,7 @@ class TeamSetController extends Controller
         $playerTeam = PlayerTeam::where([
             ['player_id', $request->post('player')],
             ['team_id', $request->post('team')]
-        ]);
+        ])->latest('contract_start')->first();
         $eventPlayerTeam = $this->getEventPlayerTeam($playerTeam, $result->event);
         $this->createPoint($request, $eventPlayerTeam);
         return back()->with('statusCreate', 'Point created successfully.');
