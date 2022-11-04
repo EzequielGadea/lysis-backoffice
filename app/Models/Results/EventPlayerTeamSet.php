@@ -32,12 +32,12 @@ class EventPlayerTeamSet extends Model
 
     public function set()
     {
-        return $this->belongsTo(Set::class);
+        return $this->belongsTo(Set::class, 'set_id', 'id');
     }
 
     public function eventPlayerTeam()
     {
-        return $this->belongsTo(EventPlayerTeam::class);
+        return $this->belongsTo(EventPlayerTeam::class, 'event_player_team_id', 'id');
     }
 
     public function result()
