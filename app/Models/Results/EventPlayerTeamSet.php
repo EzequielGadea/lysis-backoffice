@@ -40,11 +40,6 @@ class EventPlayerTeamSet extends Model
         return $this->belongsTo(EventPlayerTeam::class, 'event_player_team_id', 'id');
     }
 
-    public function result()
-    {
-        return $this->hasOneThrough(BySet::class, Set::class);
-    }
-
     public function playerTeam()
     {
         return $this->hasOneThrough(PlayerTeam::class, EventPlayerTeam::class); 
