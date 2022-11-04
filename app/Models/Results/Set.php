@@ -25,7 +25,7 @@ class Set extends Model
 
     public function pointsPlayerTeam()
     {
-        return $this->hasMany(EventPlayerTeamSet::class);
+        return $this->hasMany(EventPlayerTeamSet::class, 'set_id', 'id');
     }
 
     public function pointsPlayerVisitor()
