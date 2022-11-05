@@ -1,31 +1,32 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdController;
-use App\Http\Controllers\TagController;
-use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\RefereeController;
-use App\Http\Controllers\ManagerController;
-use App\Http\Controllers\PlayerController;
-use App\Http\Controllers\SportController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\IndividualSetController;
 use App\Http\Controllers\LeagueController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\MarkController;
+use App\Http\Controllers\MarkNameController;
+use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\PlayerTeamController;
+use App\Http\Controllers\PositionController;
+use App\Http\Controllers\RefereeController;
 use App\Http\Controllers\SanctionCardController;
 use App\Http\Controllers\SanctionCardlessController;
+use App\Http\Controllers\SportController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\TeamController;
-use App\Http\Controllers\CountryController;
-use App\Http\Controllers\CityController;
-use App\Http\Controllers\VenueController;
-use App\Http\Controllers\PositionController;
-use App\Http\Controllers\MarkNameController;
-use App\Http\Controllers\PlayerTeamController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\MarkController;
 use App\Http\Controllers\TeamMarkController;
 use App\Http\Controllers\TeamSetController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VenueController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,16 +37,16 @@ use App\Http\Controllers\UnitController;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::middleware(['web'])->group(function () {
     Route::get('/', function () {
         return view('login');
     })->name('login');
-    
+
     Route::post('auth', [LoginController::class, 'authenticate']);
-    
-    Route::middleware(['auth'])->group(function () {    
+
+    Route::middleware(['auth'])->group(function () {
         Route::post('logout', [LoginController::class, 'logout']);
 
         Route::controller(UserController::class)->group(function () {
@@ -56,7 +57,7 @@ Route::middleware(['web'])->group(function () {
             Route::post('userDelete', 'delete');
             Route::post('userRestore', 'restore');
         });
-        
+
         Route::controller(AdminController::class)->group(function () {
             Route::get('adminManagement', 'show')->name('adminManagement');
             Route::get('adminUpdate/{id}', 'showUpdate');
@@ -65,7 +66,7 @@ Route::middleware(['web'])->group(function () {
             Route::post('adminDelete', 'delete');
             Route::post('adminRestore', 'restore');
         });
-        
+
         Route::controller(AdController::class)->group(function () {
             Route::get('adManagement', 'show')->name('adManagement');
             Route::get('adUpdate/{id}', 'edit');
@@ -265,6 +266,22 @@ Route::middleware(['web'])->group(function () {
         });
 
         Route::prefix('set')->group(function () {
+            Route::controller(IndividualSetController::class)->prefix('individual')->group(function () {
+                Route::get('/index/{event}', 'index');
+                Route::post('/create/{result}', 'create');
+                Route::prefix('local')->group(function () {
+                    Route::get('edit/{point}', 'editLocalPoint');
+                    Route::post('update/{point}', 'updateLocalPoint');
+                    Route::delete('delete/{point}', 'deleteLocalPoint');
+                    Route::post('restore/{point}', 'restoreLocalPoint')->withTrashed();
+                });
+                Route::prefix('visitor')->group(function () {
+                    Route::get('edit/{point}', 'editVisitorPoint');
+                    Route::post('update/{point}', 'updateVisitorPoint');
+                    Route::delete('delete/{point}', 'deleteVisitorPoint');
+                    Route::post('restore/{point}', 'restoreVisitorPoint')->withTrashed();
+                });
+            });
             Route::controller(TeamSetController::class)->prefix('team')->group(function () {
                 Route::get('/index/{event}', 'index');
                 Route::get('/edit/{point}', 'edit');
