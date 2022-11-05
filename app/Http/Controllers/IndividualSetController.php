@@ -8,16 +8,21 @@ use App\Models\Events\Event;
 use App\Models\Results\BySet;
 use App\Models\Results\PlayerLocalSet;
 use App\Models\Results\PlayerVisitorSet;
+use Illuminate\Database\QueryException;
 
 class IndividualSetController extends Controller
 {
     public function create(CreatePointRequest $request, BySet $result)
     {
-        if ($result->event->isPlayerLocal($request->post('player'))) 
-            $this->createLocalPoint($request, $result);
-
-        if ($result->event->isPlayerVisitor($request->post('player')))
-            $this->createVisitorPoint($request, $result);
+        try {
+            if ($result->event->isPlayerLocal($request->post('player'))) 
+                $this->createLocalPoint($request, $result);
+    
+            if ($result->event->isPlayerVisitor($request->post('player')))
+                $this->createVisitorPoint($request, $result);
+        } catch (QueryException $e) {
+            return back()->with('statusCreate', 'Check if the same player has already scored at that minute.');
+        }
 
         return back()->with('statusCreate', 'Point created successfully.');
     }
@@ -45,10 +50,14 @@ class IndividualSetController extends Controller
 
     public function updateLocalPoint(UpdatePointRequest $request, PlayerLocalSet $point)
     {
-        $point->update([
-            'minute' => $request->post('minute'),
-            $this->checkPointOwner($point) => $request->post('points')       
-        ]);
+        try {
+            $point->update([
+                'minute' => $request->post('minute'),
+                $this->checkPointOwner($point) => $request->post('points')       
+            ]);    
+        } catch (QueryException $e) {
+            return back()->with('statusUpdate', 'Check if the same player has already scored at that minute.');
+        }
         return back()->with([
             'statusUpdate' => 'Point updated successfully.',
             'isRedirected' => 'true'
@@ -57,10 +66,14 @@ class IndividualSetController extends Controller
 
     public function updateVisitorPoint(UpdatePointRequest $request, PlayerVisitorSet $point)
     {
-        $point->update([
-            'minute' => $request->post('minute'),
-            $this->checkPointOwner($point) => $request->post('points')       
-        ]);
+        try {
+            $point->update([
+                'minute' => $request->post('minute'),
+                $this->checkPointOwner($point) => $request->post('points')       
+            ]);
+        } catch (QueryException $th) {
+            return back()->with('statusUpdate', 'Check if the same player has already scored at that minute.');
+        }
         return back()->with([
             'statusUpdate' => 'Point updated successfully.',
             'isRedirected' => 'true'

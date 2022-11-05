@@ -9,6 +9,7 @@ use App\Models\Events\EventPlayerTeam;
 use App\Models\Players\PlayerTeam;
 use App\Models\Results\BySet;
 use App\Models\Results\EventPlayerTeamSet;
+use Illuminate\Database\QueryException;
 
 class TeamSetController extends Controller
 {
@@ -19,7 +20,11 @@ class TeamSetController extends Controller
             ['team_id', $request->post('team')]
         ])->latest('contract_start')->first();
         $eventPlayerTeam = $this->getEventPlayerTeam($playerTeam, $result->event);
-        $this->createPoint($request, $eventPlayerTeam);
+        try {
+            $this->createPoint($request, $eventPlayerTeam);
+        } catch (QueryException $e) {
+            return back()->with('statusCreate', 'Check if the same player has already scored at that minute.');
+        }
         return back()->with('statusCreate', 'Point created successfully.');
     }
 
@@ -27,10 +32,14 @@ class TeamSetController extends Controller
     {
         if ($point->points_in_favor !== 0) $pointOwner = 'points_in_favor';
         if ($point->points_against !== 0) $pointOwner = 'points_against';
-        $point->update([
-            'minute' => $request->post('minute'),
-            $pointOwner => $request->post('points')
-        ]);
+        try {
+            $point->update([
+                'minute' => $request->post('minute'),
+                $pointOwner => $request->post('points')
+            ]);
+        } catch (QueryException $e) {
+            return back()->with('statusUpdate', 'Check if the same player has already scored at that minute.');
+        }
         return back()->with([
             'statusUpdate' => 'Point updated successfully.',
             'isRedirected' => 'true'
