@@ -132,7 +132,7 @@ class IndividualSetController extends Controller
 
     private function checkPointOwner($point)
     {
-        if ($point->poinst_in_favor !==0) return 'points_in_favor';
+        if ($point->points_in_favor !== 0) return 'points_in_favor';
         if ($point->points_against !== 0) return 'points_against';
     }
 }
