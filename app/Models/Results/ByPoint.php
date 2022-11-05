@@ -23,7 +23,7 @@ class ByPoint extends Model
         return $this->belongsTo(Event::class);
     }
 
-    public function points()
+    public function teamPoints()
     {
         return $this->hasMany(ByPointEventPlayerTeam::class);
     }
