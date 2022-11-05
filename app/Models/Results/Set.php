@@ -2,12 +2,13 @@
 
 namespace App\Models\Results;
 
+use App\Models\Results\BySet;
+use App\Models\Results\EventPlayerTeamSet;
+use App\Models\Results\PlayerLocalSet;
+use App\Models\Results\PlayerVisitorSet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Results\BySet;
-use App\Models\Results\EventPlayerTeamSet;
-use App\Models\Results\PlayerVisitorSet;
 
 class Set extends Model
 {
@@ -15,7 +16,7 @@ class Set extends Model
 
     protected $fillable = [
         'by_set_id',
-        'number'
+        'number',
     ];
 
     public function result()
@@ -28,8 +29,13 @@ class Set extends Model
         return $this->hasMany(EventPlayerTeamSet::class, 'set_id', 'id');
     }
 
-    public function pointsPlayerVisitor()
+    public function playerVisitorPoints()
     {
         return $this->hasMany(PlayerVisitorSet::class);
+    }
+
+    public function playerLocalPoints()
+    {
+        return $this->hasMany(PlayerLocalSet::class);
     }
 }
