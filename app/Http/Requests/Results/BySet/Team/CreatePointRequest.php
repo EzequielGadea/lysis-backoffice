@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Result\BySet\Individual;
+namespace App\Http\Requests\Results\BySet\Team;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CreatePointRequest extends FormRequest
 {
@@ -25,10 +27,17 @@ class CreatePointRequest extends FormRequest
     {
         return [
             'set' => 'required|integer|exists:sets,id',
-            'player' => 'required|integer|exists:players,id',
+            'team' => 'bail|required|integer|exists:teams,id',
+            'player' => [
+                'required',
+                'integer',
+                Rule::exists('player_team', 'player_id')->where(function ($query) {
+                    $query->where('team_id', Request::get('team'));
+                })
+            ],
             'minute' => 'required|integer|min:0|max:999',
-            'points' => 'required|integer|min:1',
-            'isInFavor' => 'required|boolean',
+            'points' => 'required|numeric|min:1',
+            'isInFavor' => 'required|boolean'
         ];
     }
 }

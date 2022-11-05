@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Result\BySet\Individual;
+namespace App\Http\Requests\Results\BySet\Individual;
 
 use Illuminate\Foundation\Http\FormRequest;
 

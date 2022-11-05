@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Result\BySet\Team;
+namespace App\Http\Requests\Results\BySet\Team;
 
 use Illuminate\Foundation\Http\FormRequest;
 
