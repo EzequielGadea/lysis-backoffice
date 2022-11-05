@@ -24,6 +24,11 @@ class ByPointEventPlayerTeam extends Model
         'minute'
     ];
 
+    protected $attributes = [
+        'points_in_favor' => 0,
+        'points_against' => 0,
+    ];
+
     public function eventPlayerTeam()
     {
         return $this->belongsTo(EventPlayerTeam::class);
