@@ -36,7 +36,7 @@ class CreatePointRequest extends FormRequest
                 })
             ],
             'minute' => 'required|integer|min:0|max:999',
-            'points' => 'required|numeric',
+            'points' => 'required|numeric|min:1',
             'isInFavor' => 'required|boolean'
         ];
     }
