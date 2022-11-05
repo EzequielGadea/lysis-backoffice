@@ -11,16 +11,9 @@ use App\Models\Results\ByMarkPlayerVisitor;
 
 class MarkController extends Controller
 {
-    private $service;
-
-    public function __construct(ByMarkService $service)
+    public function create(ResultRequest $request, Event $event, ByMarkService $service)
     {
-        $this->service = $service;
-    }
-
-    public function create(ResultRequest $request, Event $event)
-    {
-        $this->service->create($request, $event);
+        $service->create($request, $event);
         return back()->with('statusCreate', 'Result created successfully.');
     }
 
