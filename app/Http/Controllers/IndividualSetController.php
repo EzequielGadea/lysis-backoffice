@@ -72,6 +72,7 @@ class IndividualSetController extends Controller
         $point->delete();
         return back()->with([
             'statusDelete' => 'Point deleted successfully.',
+            'side' => 'local',
             'deletedId' => $point->id
         ]);
     }
@@ -81,24 +82,25 @@ class IndividualSetController extends Controller
         $point->delete();
         return back()->with([
             'statusDelete' => 'Point deleted successfully.',
+            'side' => 'visitor',
             'deletedId' => $point->id
         ]);
     }
 
     public function restoreLocalPoint(PlayerLocalSet $point)
     {
-        $point->delete();
+        $point->restore();
         return back()->with([
-            'statusDelete' => 'Point deleted successfully.',
+            'statusRestore' => 'Point restored successfully.',
             'deletedId' => $point->id
         ]);
     }
 
     public function restoreVisitorPoint(PlayerVisitorSet $point)
     {
-        $point->delete();
+        $point->restore();
         return back()->with([
-            'statusDelete' => 'Point deleted successfully.',
+            'statusRestore' => 'Point restored successfully.',
             'deletedId' => $point->id
         ]);
     }
