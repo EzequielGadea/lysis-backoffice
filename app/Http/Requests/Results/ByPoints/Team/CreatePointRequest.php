@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Results\ByPoints\Team;
 
 use App\Models\Players\PlayerTeam;
-use App\Models\Results\ByPoint;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -50,7 +49,7 @@ class CreatePointRequest extends FormRequest
                         ->first()
                         ->events
                         ->firstWhere('event_id', $this->route('result')->event->id);
-                    $query->where('event_player_team_id', $eventPlayerTeam->id);
+                    $query->where('event_player_team_id', $eventPlayerTeam->id ?? '');
                 }),
             ],
             'points' => 'required|integer|min:0|max:999',
@@ -61,7 +60,7 @@ class CreatePointRequest extends FormRequest
     public function messages()
     {
         return [
-            'minute.unique' => 'The player\'s already scored at minute ' . $this->minute
+            'minute.unique' => 'The player\'s already scored at minute ' . $this->minute,
         ];
     }
 }
