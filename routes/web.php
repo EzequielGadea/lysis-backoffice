@@ -22,6 +22,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMarkController;
+use App\Http\Controllers\TeamPointController;
 use App\Http\Controllers\TeamSetController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -289,6 +290,17 @@ Route::middleware(['web'])->group(function () {
                 Route::post('/update/{point}', 'update');
                 Route::delete('/delete/{point}', 'delete');
                 Route::get('restore/{point}', 'restore')->withTrashed();
+            });
+        });
+
+        Route::prefix('points')->group(function () {
+            Route::controller(TeamPointController::class)->prefix('team')->group(function () {
+                Route::get('/index/{event}', 'index');
+                Route::get('/edit/{point}', 'edit');
+                Route::post('/create/{result}', 'create');
+                Route::post('/update/{point}', 'update');
+                Route::delete('/delete/{point}', 'delete');
+                Route::get('/restore/{point}', 'restore')->withTrashed();
             });
         });
     });
