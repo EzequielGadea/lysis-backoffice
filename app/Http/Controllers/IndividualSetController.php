@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Result\BySet\Individual\CreatePointRequest;
-use App\Http\Requests\Result\BySet\Individual\UpdatePointRequest;
+use App\Http\Requests\Results\BySet\Individual\CreatePointRequest;
+use App\Http\Requests\Results\BySet\Individual\UpdatePointRequest;
 use App\Models\Events\Event;
 use App\Models\Results\BySet;
 use App\Models\Results\PlayerLocalSet;

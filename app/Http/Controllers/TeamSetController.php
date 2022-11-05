@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Result\BySet\Team\CreatePointRequest;
-use App\Http\Requests\Result\BySet\Team\UpdatePointRequest;
+use App\Http\Requests\Results\BySet\Team\CreatePointRequest;
+use App\Http\Requests\Results\BySet\Team\UpdatePointRequest;
 use App\Models\Events\Event;
 use App\Models\Events\EventPlayerTeam;
 use App\Models\Players\PlayerTeam;
