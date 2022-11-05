@@ -49,7 +49,7 @@ class CreatePointRequest extends FormRequest
                         ->latest('contract_start')
                         ->first()
                         ->events
-                        ->firstWhere('event_id', ByPoint::find($this->route('result'))->first()->event->id);
+                        ->firstWhere('event_id', $this->route('result')->event->id);
                     $query->where('event_player_team_id', $eventPlayerTeam->id);
                 }),
             ],
