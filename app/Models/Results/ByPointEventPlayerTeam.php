@@ -39,11 +39,6 @@ class ByPointEventPlayerTeam extends Model
         return $this->belongsTo(ByPoint::class);
     }
 
-    public function event()
-    {
-        return $this->hasOneThrough(Event::class, EventPlayerTeam::class);
-    }
-
     public function playerTeam()
     {
         return $this->hasOneThrough(PlayerTeam::class, EventPlayerTeam::class);
