@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Results\ByPoints\Team;
 
-use App\Models\Results\ByPointEventPlayerTeam;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -32,11 +31,8 @@ class UpdatePointRequest extends FormRequest
                 'min:0',
                 'max:999',
                 Rule::unique('by_point_event_player_team')->where(function ($query) {
-                    $query->where(
-                        'event_player_team_id',
-                        ByPointEventPlayerTeam::find($this->route('point'))->first()->event_player_team_id
-                    );
-                }),
+                    $query->where('event_player_team_id', $this->route('point')->event_player_team_id);
+                })->ignore($this->route('point'), 'id'),
             ],
             'points' => 'required|integer|min:1',
         ];
