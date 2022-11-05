@@ -273,13 +273,13 @@ Route::middleware(['web'])->group(function () {
                     Route::get('edit/{point}', 'editLocalPoint');
                     Route::post('update/{point}', 'updateLocalPoint');
                     Route::delete('delete/{point}', 'deleteLocalPoint');
-                    Route::post('restore/{point}', 'restoreLocalPoint')->withTrashed();
+                    Route::get('restore/{point}', 'restoreLocalPoint')->withTrashed();
                 });
                 Route::prefix('visitor')->group(function () {
                     Route::get('edit/{point}', 'editVisitorPoint');
                     Route::post('update/{point}', 'updateVisitorPoint');
                     Route::delete('delete/{point}', 'deleteVisitorPoint');
-                    Route::post('restore/{point}', 'restoreVisitorPoint')->withTrashed();
+                    Route::get('restore/{point}', 'restoreVisitorPoint')->withTrashed();
                 });
             });
             Route::controller(TeamSetController::class)->prefix('team')->group(function () {
