@@ -93,7 +93,7 @@ class TeamPointController extends Controller
         $eventPlayerTeam = EventPlayerTeam::where([
             ['player_team_id', $playerTeam->id],
             ['event_id', $eventId],
-        ]);
+        ])->first();
         if ($eventPlayerTeam == null)
             $eventPlayerTeam = EventPlayerTeam::create([
                 'event_id' => $eventId,
@@ -108,6 +108,6 @@ class TeamPointController extends Controller
         return PlayerTeam::where([
             ['player_id', $playerId],
             ['team_id', $teamId],
-        ]);
+        ])->latest('contract_start')->first();
     }
 }
