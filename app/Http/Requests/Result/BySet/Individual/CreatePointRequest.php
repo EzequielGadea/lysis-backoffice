@@ -25,6 +25,7 @@ class CreatePointRequest extends FormRequest
     {
         return [
             'set' => 'required|integer|exists:sets,id',
+            'player' => 'required|integer|exists:players,id',
             'minute' => 'required|integer|min:0|max:999',
             'points' => 'required|integer|min:1',
             'isInFavor' => 'required|boolean',
