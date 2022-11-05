@@ -54,7 +54,7 @@
                                             @method('delete')
                                             <button class="font-semibold text-blue-600" type="submit">Delete</button>
                                         </form>
-                                        @if ($event->result()->result_type_id == 1)
+                                        @if ($event->result()->result_type_id == '1')
                                             @if ($event->isIndividual())
                                                 <form action="/mark/management/{{ $event->id }}" method="GET">
                                                     @csrf
@@ -68,7 +68,7 @@
                                                 </form>
                                             @endif
                                         @endif
-                                        @if ($event->result()->result_type_id = 2)
+                                        @if ($event->result()->result_type_id == '2')
                                             @if ($event->isIndividual())
                                                 <form action="/points/individual/index/{{ $event->id }}"
                                                     method="get">
@@ -82,7 +82,7 @@
                                                 </form>
                                             @endif
                                         @endif
-                                        @if ($event->result()->result_type_id == 3)
+                                        @if ($event->result()->result_type_id == '3')
                                             @if ($event->isIndividual())
                                                 <form action="/set/individual/index/{{ $event->id }}"
                                                     method="get">
