@@ -51,6 +51,9 @@ class CreatePointRequest extends FormRequest
                         ->firstWhere('event_id', $this->route('result')->event->id);
                     $query->where('event_player_team_id', $eventPlayerTeam->id ?? '');
                 }),
+                Rule::unique('by_point_event_player_team')->where(function ($query) {
+                    $query->where('by_point_id', $this->route('result')->id);
+                }),
             ],
             'points' => 'required|integer|min:0|max:999',
             'isInFavor' => 'required|boolean',
@@ -60,7 +63,7 @@ class CreatePointRequest extends FormRequest
     public function messages()
     {
         return [
-            'minute.unique' => 'The player\'s already scored at minute ' . $this->minute,
+            'minute.unique' => 'The same player, or another player, has already scored at minute ' . $this->minute . '.',
         ];
     }
 }

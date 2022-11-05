@@ -33,6 +33,9 @@ class UpdatePointRequest extends FormRequest
                 Rule::unique('by_point_event_player_team')->where(function ($query) {
                     $query->where('event_player_team_id', $this->route('point')->event_player_team_id);
                 })->ignore($this->route('point'), 'id'),
+                Rule::unique('by_point_event_player_team')->where(function ($query) {
+                    $query->where('by_point_id', $this->route('point')->by_point_id);
+                }),
             ],
             'points' => 'required|integer|min:1',
         ];
@@ -41,7 +44,7 @@ class UpdatePointRequest extends FormRequest
     public function messages()
     {
         return [
-            'minute.unique' => 'The player\'s already scored at minute ' . $this->minute,
+            'minute.unique' => 'The same player, or another player has already scored at minute ' . $this->minute . '.',
         ];
     }
 }
