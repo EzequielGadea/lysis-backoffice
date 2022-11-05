@@ -9,6 +9,7 @@ use App\Models\Events\EventPlayerTeam;
 use App\Models\Players\PlayerTeam;
 use App\Models\Results\ByPoint;
 use App\Models\Results\ByPointEventPlayerTeam;
+use Illuminate\Database\QueryException;
 
 class TeamPointController extends Controller
 {
@@ -35,10 +36,14 @@ class TeamPointController extends Controller
 
     public function update(ByPointEventPlayerTeam $point, UpdatePointRequest $request)
     {
-        $point->update([
-            'minute' => $request->post('minute'),
-            $this->checkPointOwner($point) => $request->post('points'),
-        ]);
+        try {
+            $point->update([
+                'minute' => $request->post('minute'),
+                $this->checkPointOwner($point) => $request->post('points'),
+            ]);
+        } catch (QueryException $e) {
+            return back()->with('statusUpdate', 'Error. Check if the player has already scored at that minute.');
+        }
         return back()->with([
             'statusUpdate' => 'Point updated successfully, you will soon be redirected.',
             'isRedirected' => 'true',
