@@ -58,10 +58,12 @@
                                     </td>
                                     <td class="p-3 text-zinc-800">
                                         <div class="flex flex-col items-center">
-                                            <form action="/set/individual/local/edit/{{ $point->id }}" method="GET">
+                                            <form action="/set/individual/local/edit/{{ $point->id }}"
+                                                method="GET">
                                                 <button class="font-semibold text-blue-600">Edit</button>
                                             </form>
-                                            <form action="/set/individual/local/delete/{{ $point->id }}" method="post">
+                                            <form action="/set/individual/local/delete/{{ $point->id }}"
+                                                method="post">
                                                 @csrf
                                                 @method('delete')
                                                 <button class="font-semibold text-blue-600">Delete</button>
@@ -124,10 +126,12 @@
                                     </td>
                                     <td class="p-3 text-zinc-800">
                                         <div class="flex flex-col items-center">
-                                            <form action="/set/individual/visitor/edit/{{ $point->id }}" method="GET">
+                                            <form action="/set/individual/visitor/edit/{{ $point->id }}"
+                                                method="GET">
                                                 <button class="font-semibold text-blue-600">Edit</button>
                                             </form>
-                                            <form action="/set/individual/visitor/delete/{{ $point->id }}" method="post">
+                                            <form action="/set/individual/visitor/delete/{{ $point->id }}"
+                                                method="post">
                                                 @csrf
                                                 @method('delete')
                                                 <button class="font-semibold text-blue-600">Delete</button>
@@ -143,7 +147,8 @@
         </div>
         @if (session('statusDelete') && session('deletedId'))
             <x-status-delete-get>
-                <x-slot name="action">/set/individual/{{ session('side') }}/restore/{{ session('deletedId') }}</x-slot>
+                <x-slot name="action">/set/individual/{{ session('side') }}/restore/{{ session('deletedId') }}
+                </x-slot>
             </x-status-delete-get>
         @endif
 
@@ -232,5 +237,4 @@
             <p class="p-4 text-green-600 bg-green-100 rounded-md"> {{ session('statusCreate') }}</p>
         @endif
     </form>
-
 </x-layout>
