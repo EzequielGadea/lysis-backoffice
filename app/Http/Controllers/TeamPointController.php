@@ -36,14 +36,10 @@ class TeamPointController extends Controller
 
     public function update(ByPointEventPlayerTeam $point, UpdatePointRequest $request)
     {
-        try {
-            $point->update([
-                'minute' => $request->post('minute'),
-                $this->checkPointOwner($point) => $request->post('points'),
-            ]);
-        } catch (QueryException $e) {
-            return back()->with('statusUpdate', 'Error. Check if the player has already scored at that minute.');
-        }
+        $point->update([
+            'minute' => $request->post('minute'),
+            $this->checkPointOwner($point) => $request->post('points'),
+        ]);
         return back()->with([
             'statusUpdate' => 'Point updated successfully, you will soon be redirected.',
             'isRedirected' => 'true',
