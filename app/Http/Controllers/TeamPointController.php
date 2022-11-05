@@ -22,14 +22,14 @@ class TeamPointController extends Controller
 
     public function index(Event $event)
     {
-        return view('results.by-points.management', [
+        return view('results.by-points.team.management', [
             'event' => $event
         ]);
     }
 
     public function edit(ByPointEventPlayerTeam $point)
     {
-        return view('results.by-points.edit', [
+        return view('results.by-points.team.edit', [
             'point' => $point
         ]);
     }
