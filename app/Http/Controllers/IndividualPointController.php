@@ -72,7 +72,8 @@ class IndividualPointController extends Controller
         $point->delete();
         return back()->with([
             'statusDelete' => 'Point deleted successfully.',
-            'deletedId' => $point->id
+            'deletedId' => $point->id,
+            'side' => 'local',
         ]);
     }
 
@@ -81,7 +82,8 @@ class IndividualPointController extends Controller
         $point->delete();
         return back()->with([
             'statusDelete' => 'Point deleted successfully.',
-            'deletedId' => $point->id
+            'deletedId' => $point->id,
+            'side' => 'visitor',
         ]);
     }
 
