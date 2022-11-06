@@ -50,13 +50,11 @@ class CreatePointRequest extends FormRequest
                         ['by_point_id', $this->route('result')->event->id],
                     ])->exists();
 
-                    if ($isPointInMinuteUniqueLocal || $isPointInMinuteUniqueVisitor) {
+                    if ($isPointInMinuteUniqueLocal || $isPointInMinuteUniqueVisitor)
                         $fail('Another player has already scored at minute ' . $value . '.');
-                    }
-
                 },
                 function ($attribute, $value, $fail) {
-                    $isPlayerMinuteUniqueLocal = DB::table('by_point_player_visitor')->where([
+                    $isPlayerMinuteUniqueLocal = DB::table('by_point_player_local')->where([
                         ['minute', $value],
                         ['event_id', $this->route('result')->event->id],
                     ])->exists();
@@ -66,10 +64,8 @@ class CreatePointRequest extends FormRequest
                         ['event_id', $this->route('result')->event->id],
                     ])->exists();
 
-                    if ($isPlayerMinuteUniqueLocal || $isPlayerMinuteUniqueVisitor) {
+                    if ($isPlayerMinuteUniqueLocal || $isPlayerMinuteUniqueVisitor)
                         $fail('Another player has already scored at minute ' . $value . '.');
-                    }
-
                 },
             ],
         ];
