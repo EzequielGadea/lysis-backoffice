@@ -35,7 +35,7 @@ class ByPointPlayerLocal extends Model
 
     public function result()
     {
-        return $this->belongsTo(ByPoint::class);
+        return $this->belongsTo(ByPoint::class, 'by_point_id', 'id');
     }
 
     public function playerLocal()
