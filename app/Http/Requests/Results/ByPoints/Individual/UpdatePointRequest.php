@@ -15,7 +15,7 @@ class UpdatePointRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,57 +27,25 @@ class UpdatePointRequest extends FormRequest
     {
         return [
             'points' => 'required|integer|min:1',
-            'isInFavor' => 'required|boolean',
             'minute' => [
                 'required',
                 'integer',
                 'min:0',
                 'max:999',
-                /**
-                 * Las siguientes funciones validan que dos jugadores no hagan un punto en
-                 * el mismo minuto.
-                 */
-                function ($attribute, $value, $fail) {
-                    $pointInMinuteLocal = DB::table('by_point_player_local')->where([
-                        ['minute', $value],
-                        ['by_point_id', $this->route('point')->result->id],
-                    ]);
-
-                    $pointInMinuteVisitor = DB::table('by_point_player_visitor')->where([
-                        ['minute', $value],
-                        ['by_point_id', $this->route('point')->result->id],
-                    ]);
-
-                    if (! $pointInMinuteLocal->count() == 1 || ! $pointInMinuteLocal->first()->by_point_id == request()->route('point')->result->id) {
-                        $fail('Another player has already scored at minute ' . $value . '.');
-                    }
-
-                    if (! $pointInMinuteVisitor->count() == 1 || ! $pointInMinuteVisitor->first()->by_point_id == request()->route('point')->result->id) {
-                        $fail('Another player has already scored at minute ' . $value . '.');
-                    }
-
-                },
-                function ($attribute, $value, $fail) {
-                    $playerMinuteLocal = DB::table('by_point_player_visitor')->where([
-                        ['minute', $value],
-                        ['event_id', $this->route('point')->event_id],
-                    ]);
-
-                    $playerMinuteVisitor = DB::table('by_point_player_visitor')->where([
-                        ['minute', $value],
-                        ['event_id', $this->route('point')->event_id],
-                    ]);
-
-                    if (! $playerMinuteLocal->count() == 1 || ! $playerMinuteLocal->first()->by_point_id == request()->route('point')->result->id) {
-                        $fail('Another player has already scored at minute ' . $value . '.');
-                    }
-
-                    if (! $playerMinuteVisitor->count() == 1 || ! $playerMinuteVisitor->first()->by_point_id == request()->route('point')->result->id) {
-                        $fail('Another player has already scored at minute ' . $value . '.');
-                    }
-
-                },
+                Rule::unique($this->route('point')->getTable())->where(function ($query) {
+                    $query->where('by_point_id', $this->route('point')->by_point_id);
+                })->ignore($this->route('point'), 'id'),
+                Rule::unique($this->route('point')->getTable())->where(function ($query) {
+                    $query->where('event_id', $this->route('point')->event_id);
+                })->ignore($this->route('point'), 'id'),
             ],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'minute.unique' => 'The same player, or another player, has already scored at minute ' . $this->minute . '.'
         ];
     }
 }
