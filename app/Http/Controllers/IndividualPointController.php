@@ -93,6 +93,12 @@ class IndividualPointController extends Controller
         return back()->with('statusRestore', 'Point restored successfully.');
     }
 
+    public function restoreVisitor(ByPointPlayerVisitor $point)
+    {
+        $point->restore();
+        return back()->with('statusRestore', 'Point restored successfully.');
+    }
+
     private function createLocal($request, $result)
     {
         return ByPointPlayerLocal::create([
