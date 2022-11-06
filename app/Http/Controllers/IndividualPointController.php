@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Results\ByPoints\Individual\CreatePointRequest;
 use App\Http\Requests\Results\ByPoints\Individual\UpdatePointRequest;
+use App\Models\Events\Event;
 use App\Models\Results\ByPoint;
 use App\Models\Results\ByPointPlayerLocal;
 use App\Models\Results\ByPointPlayerVisitor;
-use Event;
-
 class IndividualPointController extends Controller
 {
     public function create(CreatePointRequest $request, ByPoint $result)
