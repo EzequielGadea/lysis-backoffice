@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Events\Event;
+use App\Models\Players\PlayerLocal;
 use App\Models\Results\ByPoint;
 
 class ByPointPlayerLocal extends Model
@@ -30,5 +31,10 @@ class ByPointPlayerLocal extends Model
     public function result()
     {
         return $this->belongsTo(ByPoint::class);
+    }
+
+    public function playerLocal()
+    {
+        return $this->belongsTo(PlayerLocal::class, 'event_id', 'event_id');
     }
 }
