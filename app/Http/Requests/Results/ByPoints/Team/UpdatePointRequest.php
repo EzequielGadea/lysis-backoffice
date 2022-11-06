@@ -35,7 +35,7 @@ class UpdatePointRequest extends FormRequest
                 })->ignore($this->route('point'), 'id'),
                 Rule::unique('by_point_event_player_team')->where(function ($query) {
                     $query->where('by_point_id', $this->route('point')->by_point_id);
-                }),
+                })->ignore($this->route('point'), 'id'),
             ],
             'points' => 'required|integer|min:1',
         ];
