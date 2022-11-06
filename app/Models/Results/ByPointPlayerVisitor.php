@@ -19,7 +19,12 @@ class ByPointPlayerVisitor extends Model
     protected $fillable = [
         'points_in_favor',
         'points_against',
-        'minute'
+        'minute',
+    ];
+
+    protected $attributes = [
+        'points_in_favor' => 0,
+        'points_against' => 0,
     ];
 
     public function playerVisitor()
