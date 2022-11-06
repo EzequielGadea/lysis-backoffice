@@ -13,9 +13,9 @@ class IndividualPointController extends Controller
     public function create(CreatePointRequest $request, ByPoint $result)
     {
         if ($result->event->isPlayerLocal($request->post('player')))
-            $this->createLocalPoint($request, $result);
+            $this->createLocal($request, $result);
         if ($result->event->isPlayerVisitor($request->post('player')))
-            $this->createVisitorPoint($request, $result);
+            $this->createVisitor($request, $result);
 
         return back()->with('statusCreate', 'Point created successfully.');
     }
@@ -27,21 +27,21 @@ class IndividualPointController extends Controller
         ]);
     }
 
-    public function editLocalPoint(ByPointPlayerLocal $point)
+    public function editLocal(ByPointPlayerLocal $point)
     {
         return view('results.by-points.individual.edit', [
             'point' => $point
         ]);
     }
 
-    public function editVisitorPoint(ByPointPlayerVisitor $point)
+    public function editVisitor(ByPointPlayerVisitor $point)
     {
         return view('results.by-points.individual.edit', [
             'point' => $point
         ]);
     }
 
-    public function updateLocalPoint(UpdatePointRequest $request, ByPointPlayerLocal $point)
+    public function updateLocal(UpdatePointRequest $request, ByPointPlayerLocal $point)
     {
         $point->update([
             'minute' => $request->post('minute'),
@@ -54,7 +54,7 @@ class IndividualPointController extends Controller
         ]);
     }
 
-    public function updateVisitorPoint(UpdatePointRequest $request, ByPointPlayerVisitor $point)
+    public function updateVisitor(UpdatePointRequest $request, ByPointPlayerVisitor $point)
     {
         $point->update([
             'minute' => $request->post('minute'),
@@ -67,7 +67,7 @@ class IndividualPointController extends Controller
         ]);
     }
 
-    public function deleteLocalPoint(ByPointPlayerLocal $point)
+    public function deleteLocal(ByPointPlayerLocal $point)
     {
         $point->delete();
         return back()->with([
@@ -77,7 +77,7 @@ class IndividualPointController extends Controller
         ]);
     }
 
-    public function deleteVisitorPoint(ByPointPlayerVisitor $point)
+    public function deleteVisitor(ByPointPlayerVisitor $point)
     {
         $point->delete();
         return back()->with([
@@ -87,13 +87,13 @@ class IndividualPointController extends Controller
         ]);
     }
 
-    public function restoreLocalPoint(ByPointPlayerLocal $point)
+    public function restoreLocal(ByPointPlayerLocal $point)
     {
         $point->restore();
         return back()->with('statusRestore', 'Point restored successfully.');
     }
 
-    private function createLocalPoint($request, $result)
+    private function createLocal($request, $result)
     {
         return ByPointPlayerLocal::create([
             'by_point_id' => $result->id,
@@ -103,7 +103,7 @@ class IndividualPointController extends Controller
         ]);
     }
 
-    private function createVisitorPoint($request, $result)
+    private function createVisitor($request, $result)
     {
         return ByPointPlayerVisitor::create([
             'by_point_id' => $result->id,
