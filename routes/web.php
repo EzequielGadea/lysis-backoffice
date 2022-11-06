@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\IndividualPointController;
 use App\Http\Controllers\IndividualSetController;
 use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\LoginController;
@@ -294,6 +295,22 @@ Route::middleware(['web'])->group(function () {
         });
 
         Route::prefix('points')->group(function () {
+            Route::controller(IndividualPointController::class)->prefix('individual')->group(function () {
+                Route::get('/index/{event}', 'index');
+                Route::post('/create/{result}', 'create');
+                Route::prefix('local')->group(function () {
+                    Route::get('edit/{point}', 'editLocal');
+                    Route::post('update/{point}', 'updateLocal');
+                    Route::delete('delete/{point}', 'deleteLocal');
+                    Route::get('restore/{point}', 'restoreLocal')->withTrashed();
+                });
+                Route::prefix('visitor')->group(function () {
+                    Route::get('edit/{point}', 'editVisitor');
+                    Route::post('update/{point}', 'updateVisitor');
+                    Route::delete('delete/{point}', 'deleteVisitor');
+                    Route::get('restore/{point}', 'restoreVisitor')->withTrashed();
+                });
+            });
             Route::controller(TeamPointController::class)->prefix('team')->group(function () {
                 Route::get('/index/{event}', 'index');
                 Route::get('/edit/{point}', 'edit');
