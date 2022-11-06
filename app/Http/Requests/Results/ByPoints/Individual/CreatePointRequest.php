@@ -4,7 +4,7 @@ namespace App\Http\Requests\Results\ByPoints\Individual;
 
 use App\Rules\IsPlayerLocalOrVisitor;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class CreatePointRequest extends FormRequest
 {
@@ -39,18 +39,38 @@ class CreatePointRequest extends FormRequest
                 'integer',
                 'min:0',
                 'max:999',
-                Rule::unique('by_point_player_local')->where(function ($query) {
-                    $query->where('event_id', $this->route('result')->event->id);
-                }),
-                Rule::unique('by_point_player_local')->where(function ($query) {
-                    $query->where('by_point_id', $this->route('result')->id);
-                }),
-                Rule::unique('by_point_player_visitor')->where(function ($query) {
-                    $query->where('event_id', $this->route('result')->event->id);
-                }),
-                Rule::unique('by_point_player_visitor')->where(function ($query) {
-                    $query->where('by_point_id', $this->route('result')->id);
-                }),
+                function ($attribute, $value, $fail) {
+                    $isPointInMinuteUniqueLocal = DB::table('by_point_player_local')->where([
+                        ['minute', $value],
+                        ['by_point_id', $this->route('result')->event->id],
+                    ])->exists();
+
+                    $isPointInMinuteUniqueVisitor = DB::table('by_point_player_visitor')->where([
+                        ['minute', $value],
+                        ['by_point_id', $this->route('result')->event->id],
+                    ])->exists();
+
+                    if ($isPointInMinuteUniqueLocal || $isPointInMinuteUniqueVisitor) {
+                        $fail('Another player has already scored at minute ' . $value . '.');
+                    }
+
+                },
+                function ($attribute, $value, $fail) {
+                    $isPlayerMinuteUniqueLocal = DB::table('by_point_player_visitor')->where([
+                        ['minute', $value],
+                        ['event_id', $this->route('result')->event->id],
+                    ])->exists();
+
+                    $isPlayerMinuteUniqueVisitor = DB::table('by_point_player_visitor')->where([
+                        ['minute', $value],
+                        ['event_id', $this->route('result')->event->id],
+                    ])->exists();
+
+                    if ($isPlayerMinuteUniqueLocal || $isPlayerMinuteUniqueVisitor) {
+                        $fail('Another player has already scored at minute ' . $value . '.');
+                    }
+
+                },
             ],
         ];
     }
