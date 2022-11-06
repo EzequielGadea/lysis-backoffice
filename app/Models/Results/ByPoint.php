@@ -32,4 +32,14 @@ class ByPoint extends Model
     {
         return $this->belongsTo(ResultType::class, 'result_type_id', 'id');
     }
+
+    public function playerLocalPoints()
+    {
+        return $this->hasMany(ByPointPlayerLocal::class);
+    }
+
+    public function playerVisitorPoints()
+    {
+        return $this->hasMany(ByPointPlayerVisitor::class);
+    }
 }
