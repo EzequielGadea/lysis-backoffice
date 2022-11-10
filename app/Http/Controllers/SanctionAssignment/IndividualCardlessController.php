@@ -24,6 +24,13 @@ class IndividualCardlessController extends Controller
         return back()->with('statusCreate', 'Sanction created successfully');
     }
 
+    public function index(Event $event)
+    {
+        return view('sanctions.cardless.index', [
+            'event' => $event
+        ]);
+    }
+
     public function editLocal(LocalSanction $sanction)
     {
         return view('sanctions.edit-cardless', [
