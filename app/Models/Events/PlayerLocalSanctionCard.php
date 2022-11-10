@@ -20,7 +20,7 @@ class PlayerLocalSanctionCard extends Model
         'minute'
     ];
 
-    public function playerLocal()
+    public function player()
     {
         return $this->belongsTo(PlayerLocal::class, 'event_id', 'event_id');
     }
