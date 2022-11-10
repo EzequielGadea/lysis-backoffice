@@ -2,11 +2,12 @@
 
 namespace App\Models\Results;
 
+use App\Models\Events\Event;
+use App\Models\Players\PlayerLocal;
+use App\Models\Results\ByPoint;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Events\Event;
-use App\Models\Results\ByPoint;
 
 class ByPointPlayerLocal extends Model
 {
@@ -15,9 +16,16 @@ class ByPointPlayerLocal extends Model
     protected $table = 'by_point_player_local';
 
     protected $fillable = [
+        'by_point_id',
+        'event_id',
         'points_in_favor',
         'points_against',
-        'minute'
+        'minute',
+    ];
+
+    protected $attributes = [
+        'points_in_favor' => 0,
+        'points_against' => 0,
     ];
 
     public function event()
@@ -27,6 +35,11 @@ class ByPointPlayerLocal extends Model
 
     public function result()
     {
-        return $this->belongsTo(ByPoint::class);
+        return $this->belongsTo(ByPoint::class, 'by_point_id', 'id');
+    }
+
+    public function playerLocal()
+    {
+        return $this->belongsTo(PlayerLocal::class, 'event_id', 'event_id');
     }
 }

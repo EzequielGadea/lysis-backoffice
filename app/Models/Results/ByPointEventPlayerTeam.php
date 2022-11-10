@@ -17,9 +17,16 @@ class ByPointEventPlayerTeam extends Model
     protected $table = 'by_point_event_player_team';
 
     protected $fillable = [
+        'by_point_id',
+        'event_player_team_id',
         'points_in_favor',
         'points_against',
         'minute'
+    ];
+
+    protected $attributes = [
+        'points_in_favor' => 0,
+        'points_against' => 0,
     ];
 
     public function eventPlayerTeam()
@@ -30,11 +37,6 @@ class ByPointEventPlayerTeam extends Model
     public function result()
     {
         return $this->belongsTo(ByPoint::class);
-    }
-
-    public function event()
-    {
-        return $this->hasOneThrough(Event::class, EventPlayerTeam::class);
     }
 
     public function playerTeam()

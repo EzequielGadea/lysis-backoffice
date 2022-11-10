@@ -23,7 +23,8 @@ class EventPlayerTeam extends Model
     protected $table = 'event_player_team';
 
     protected $fillable = [
-        'contract_start'
+        'player_team_id',
+        'event_id'
     ];
 
     public function event(){
@@ -32,17 +33,7 @@ class EventPlayerTeam extends Model
 
     public function playerTeam()
     {
-        return $this->belongsTo(PlayerTeam::class);
-    }
-
-    public function player()
-    {
-        return $this->hasOneThrough(Player::class, PlayerTeam::class);
-    }
-
-    public function team()
-    {
-        return $this->hasOneThrough(Team::class, PlayerTeam::class);
+        return $this->belongsTo(PlayerTeam::class, 'player_team_id', 'id');
     }
 
     public function marks()

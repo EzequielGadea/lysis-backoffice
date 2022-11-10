@@ -41,6 +41,6 @@ class PlayerTeam extends Model
 
     public function events()
     {
-        return $this->hasMany(EventPlayerTeam::class);
+        return $this->hasMany(EventPlayerTeam::class, 'player_team_id', 'id');
     }
 }

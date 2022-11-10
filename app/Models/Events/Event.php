@@ -67,6 +67,17 @@ class Event extends Model
         return $this->hasOne(BySet::class);
     }
 
+    public function result()
+    {
+        if ($this->resultByPoint !== null)
+            return $this->resultByPoint;
+        if ($this->resultByMark !== null)
+            return $this->resultByMark;
+        if ($this->resultBySet !== null)
+            return $this->resultBySet;
+        return null;
+    }
+
     public function playerVisitor()
     {
         return $this->hasOne(PlayerVisitor::class);
@@ -89,8 +100,40 @@ class Event extends Model
 
     public function isIndividual()
     {
-        if($this->playerVisitor !== null && $this->playerLocal !== null)
+        if ($this->playerVisitor !== null && $this->playerLocal !== null)
             return true;
+        return false;
+    }
+
+    public function opponents()
+    {
+        if ($this->isIndividual()) {
+            return collect([$this->playerLocal->player,$this->playerVisitor->player]);
+        }
+        return collect([$this->teamLocal->team, $this->teamVisitor->team]);
+    }
+
+    public function isPlayerLocal($playerId)
+    {
+        if ($this->playerLocal->player_id == $playerId) return true;
+        return false;
+    }
+
+    public function isPlayerVisitor($playerId)
+    {
+        if ($this->playerVisitor->player_id == $playerId) return true;
+        return false;
+    }
+
+    public function isTeamLocal($teamId)
+    {
+        if ($this->teamLocal->team_id == $teamId) return true;
+        return false;
+    }
+
+    public function isTeamVisitor($teamId)
+    {
+        if ($this->teamVisitor->team_id == $teamId) return true;
         return false;
     }
 }

@@ -18,24 +18,26 @@ class EventPlayerTeamSet extends Model
     protected $table = 'event_player_team_set';
 
     protected $fillable = [
+        'set_id',
+        'event_player_team_id',
         'points_in_favor',
         'points_against',
         'minute'
     ];
 
+    protected $attributes = [
+        'points_in_favor' => 0,
+        'points_against' => 0
+    ];
+
     public function set()
     {
-        return $this->belongsTo(Set::class);
+        return $this->belongsTo(Set::class, 'set_id', 'id');
     }
 
     public function eventPlayerTeam()
     {
-        return $this->belongsTo(EventPlayerTeam::class);
-    }
-
-    public function result()
-    {
-        return $this->hasOneThrough(BySet::class, Set::class);
+        return $this->belongsTo(EventPlayerTeam::class, 'event_player_team_id', 'id');
     }
 
     public function playerTeam()

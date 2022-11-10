@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Common\Criteria;
+use App\Models\Common\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
@@ -16,7 +18,9 @@ class MarkNameController extends Controller
             return back()->withErrors($validation);
         
         MarkName::create([
-            'name' => $request->post('name')
+            'name' => $request->post('name'),
+            'criteria_id' => $request->post('criteriaId'),
+            'unit_id' => $request->post('unitId')
         ]);
         return back()->with('statusCreate', 'Mark name created succesfully');
     }
@@ -42,7 +46,9 @@ class MarkNameController extends Controller
             return back()->withErrors($validation);
 
         MarkName::find($request->post('id'))->update([
-            'name' => $request->post('name')
+            'name' => $request->post('name'),
+            'criteria_id' => $request->post('criteriaId'),
+            'unit_id' => $request->post('unitId')
         ]);
         return back()->with([
             'statusUpdate' => 'Mark name updated succesfully, you will soon be redirected.',
@@ -65,7 +71,11 @@ class MarkNameController extends Controller
 
     public function show()
     {
-        return view('MarkNameManagement')->with('markNames', MarkName::all());
+        return view('MarkNameManagement', [
+            'markNames' => MarkName::all(),
+            'criterias' => Criteria::all(),
+            'units' => Unit::all()
+        ]);
     }
 
     public function edit($id)
@@ -74,13 +84,19 @@ class MarkNameController extends Controller
         if($validation !== true)
             return back();
 
-        return view('markNameUpdate')->with('markName', MarkName::find($id));
+        return view('markNameUpdate', [
+            'markName' => MarkName::find($id),
+            'criterias' => Criteria::all(),
+            'units' => Unit::all()
+        ]);
     }
 
     private function validateCreation($request)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'required|string|max:255'
+            'name' => 'required|string|max:255',
+            'criteriaId' => 'required|numeric|exists:criterias,id',
+            'unitId' => 'required|numeric|exists:units,id'
         ]);
         if($validation->fails())
             return $validation;
@@ -91,7 +107,9 @@ class MarkNameController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'id' => 'required|numeric|exists:mark_names',
-            'name' => 'required|string|max:255'
+            'name' => 'required|string|max:255',
+            'criteriaId' => 'required|numeric|exists:criterias,id',
+            'unitId' => 'required|numeric|exists:units,id'
         ]);
         if($validation->fails())
             return $validation;

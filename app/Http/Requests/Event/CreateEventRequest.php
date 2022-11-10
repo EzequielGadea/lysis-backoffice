@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\EventController;
+namespace App\Http\Requests\Event;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EventUpdateRequest extends FormRequest
+class CreateEventRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,6 @@ class EventUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'eventId' => 'required|numeric|exists:events,id',
             'startDate' => 'required|date_format:"Y-m-d\TH:i"',
             'venueId' => 'required|numeric|exists:venues,id',
             'isIndividual' => 'required|boolean',
@@ -32,7 +31,10 @@ class EventUpdateRequest extends FormRequest
             'playerVisitorId' => 'exclude_unless:isIndividual,1|required|numeric|exists:players,id',
             'playerLocalId' => 'exclude_unless:isIndividual,1|required|numeric|exists:players,id',
             'teamLocalId' => 'exclude_if:isIndividual,1|required|numeric|exists:teams,id',
-            'teamVisitorId' => 'exclude_if:isIndividual,1|required|numeric|exists:teams,id'
+            'teamVisitorId' => 'exclude_if:isIndividual,1|required|numeric|exists:teams,id',
+            'resultTypeId' => 'required|numeric|exists:result_types,id',
+            'setAmount' => 'nullable|numeric|gte:1',
+            'markNameId' => 'nullable|numeric|exists:mark_names,id'
         ];
     }
 }

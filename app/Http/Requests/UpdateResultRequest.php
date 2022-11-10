@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\EventController;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CheckIdRequest extends FormRequest
+class UpdateResultRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class CheckIdRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|numeric|exists:events'
+            'markValue' => 'required|numeric'
         ];
     }
 }

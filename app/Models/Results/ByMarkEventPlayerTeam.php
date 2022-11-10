@@ -17,7 +17,9 @@ class ByMarkEventPlayerTeam extends Model
     protected $table = 'by_mark_event_player_team';
 
     protected $fillable = [
-        'mark_value'
+        'event_player_team_id',
+        'by_mark_id',
+        'mark_value',
     ];
 
     public function eventPlayerTeam()
@@ -27,7 +29,7 @@ class ByMarkEventPlayerTeam extends Model
 
     public function result()
     {
-        return $this->belongsTo(ByMark::class);
+        return $this->belongsTo(ByMark::class, 'by_mark_id', 'id');
     }
 
     public function event()
@@ -37,6 +39,6 @@ class ByMarkEventPlayerTeam extends Model
 
     public function playerTeam()
     {
-        return $this->hasOneThrough(PlayerTeam::class, EventPlayerTeam::class);
+        return $this->hasOneThrough(PlayerTeam::class, EventPlayerTeam::class, 'player_id', 'player_id');
     }
 }

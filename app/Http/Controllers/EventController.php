@@ -2,23 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EventController\EventCreateRequest;
-use App\Http\Requests\EventController\EventUpdateRequest;
-use App\Http\Requests\EventController\CheckIdRequest;
+use App\Http\Requests\Event\CreateEventRequest;
+use App\Http\Requests\Event\UpdateEventRequest;
 use App\Models\Common\League;
+use App\Models\Common\ResultType;
 use App\Models\Events\Event;
 use App\Models\Players\PlayerLocal;
 use App\Models\Players\PlayerVisitor;
+use App\Models\Results\ByMark;
+use App\Models\Results\ByPoint;
+use App\Models\Results\BySet;
+use App\Models\Results\MarkName;
+use App\Models\Results\Set;
 use App\Models\Teams\TeamLocal;
 use App\Models\Teams\TeamVisitor;
 use App\Models\Whereabouts\Venue;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
-    public function create(EventCreateRequest $request)
+    public function create(CreateEventRequest $request)
     {
         try {
             DB::transaction(function () use ($request) {
@@ -27,42 +32,28 @@ class EventController extends Controller
                     'venue_id' => $request->post('venueId'),
                     'league_id' => $request->post('leagueId')
                 ]);
-
-                if($request->post('isIndividual')) {
+                if ($request->post('isIndividual')) {
                     $this->createIndividualEvent($request, $event->id);
                 } else {
                     $this->createTeamEvent($request, $event->id);
-                }    
+                }
+                $this->createResult($request, $event->id);
             });
-            return back()->with('statusCreate', 'Event registered successfully.');
         } catch (QueryException $e) {
             return back()->with('statusCreate', 'Unable to create event right now.');
         }     
+        return back()->with('statusCreate', 'Event registered successfully.');
     }
 
-    public function update(EventUpdateRequest $request)
+    public function update(UpdateEventRequest $request, Event $event)
     {
-        $event = Event::find($request->post('eventId'));
-
         try {
-            DB::transaction(function () use ($request, $event){
+            DB::transaction(function () use ($request, $event) {
                 $event->update([
                     'start_date' => $request->post('startDate'),
                     'venue_id' => $request->post('venueId'),
                     'league_id' => $request->post('leagueId')
                 ]);
-
-                if($event->isIndividual()){
-                    $this->updatePlayers($event, [
-                        'localId' => $request->post('playerLocalId'), 
-                        'visitorId' => $request->post('playerVisitorId')
-                    ]);
-                } else {
-                    $this->updateTeams($event, [
-                        'localId' => $request->post('teamLocalId'), 
-                        'visitorId' => $request->post('teamVisitorId')
-                    ]);
-                }
             });
         } catch (QueryException $e) {
             return back()->with([
@@ -76,19 +67,19 @@ class EventController extends Controller
         ]);
     }
 
-    public function delete(CheckIdRequest $request)
+    public function delete(Event $event)
     {
-        Event::destroy($request->post('id'));
+        $event->delete();
         return back()->with([
             'statusDelete' => 'Event deleted successfully.',
-            'deletedId' => $request->post('id')
+            'deletedId' => $event->id
         ]);
     }
 
-    public function restore(CheckIdRequest $request)
+    public function restore(Request $request)
     {
         Event::withTrashed()
-            ->find($request->post('id'))
+            ->findOrFail($request->post('id'))
             ->restore();
         return back()->with('statusRestore', 'Event restored successfully.');
     }
@@ -98,21 +89,67 @@ class EventController extends Controller
         return view('eventManagement', [
             'events' => Event::all(),
             'leagues' => League::all(),
-            'venues' => Venue::all()
+            'venues' => Venue::all(),
+            'resultTypes' => ResultType::all(),
+            'markNames' => MarkName::all(),
         ]);
     }
 
-    public function edit($id)
+    public function edit(Event $event)
     {
-        $validation = $this->validateId($id);
-        if($validation !== true)
-            return back();
-
         return view('eventUpdate', [
-            'event' => Event::find($id),
+            'event' => $event,
             'leagues' => League::all(),
-            'venues' => Venue::all()
+            'venues' => Venue::all(),
+            'resultTypes' => ResultType::all(),
+            'markNames' => MarkName::all(),
         ]);
+    }
+
+    private function createResult($request, $eventId)
+    {
+        $results = [
+            '1' => [$this, 'createByMarksResult'],
+            '2' => [$this, 'createByPointsResult'],
+            '3' => [$this, 'createBySetsResult'],
+        ];
+        call_user_func_array(
+            $results[$request->post('resultTypeId')], 
+            [$request, $eventId]
+        );
+    }
+
+    private function createByMarksResult($request, $eventId) 
+    {
+        ByMark::create([
+            'event_id' => $eventId,
+            'mark_name_id' => $request->post('markNameId'),
+            'result_type_id' => $request->post('resultTypeId')
+        ]);
+    }
+
+    private function createByPointsResult($request, $eventId) 
+    {
+        ByPoint::create([
+            'event_id' => $eventId,
+            'result_type_id' => $request->post('resultTypeId')
+        ]);
+    }
+
+    private function createBySetsResult($request, $eventId)
+    {
+        $result = BySet::create([
+            'event_id' => $eventId,
+            'set_amount' => $request->post('setAmount'),
+            'result_type_id' => $request->post('resultTypeId')
+        ]);
+        for ($i=1; $i < $request->post('setAmount') + 1; $i++) { 
+            Set::create([
+                'by_set_id' => $result->id,
+                'number' => $i
+            ]);
+        }
+        return $result;
     }
 
     private function createIndividualEvent($request, $eventId)
@@ -137,35 +174,5 @@ class EventController extends Controller
             'event_id' => $eventId,
             'team_id' => $request->post('teamLocalId')
         ]);
-    }
-
-    private function updatePlayers($event, $players)
-    {
-        $event->playerLocal->update([
-            'player_id' => $players['localId']
-        ]);
-        $event->playerVisitor->update([
-            'player_id' => $players['visitorId']
-        ]);
-    }
-
-    private function updateTeams($event, $teams)
-    {
-        $event->teamLocal->update([
-            'team_id' => $teams['localId']
-        ]);
-        $event->teamVisitor->update([
-            'team_id' => $teams['visitorId']
-        ]);
-    }
-
-    private function validateId($id)
-    {
-        $validation = Validator::make(['id' => $id], [
-            'id' => 'numeric|exists:events'
-        ]);
-        if($validation->fails())
-            return $validation;
-        return true;
     }
 }

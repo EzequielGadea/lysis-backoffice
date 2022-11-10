@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\EventController;
+namespace App\Http\Requests\Event;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EventCreateRequest extends FormRequest
+class UpdateEventRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,10 +28,6 @@ class EventCreateRequest extends FormRequest
             'venueId' => 'required|numeric|exists:venues,id',
             'isIndividual' => 'required|boolean',
             'leagueId' => 'required|numeric|exists:leagues,id',
-            'playerVisitorId' => 'exclude_unless:isIndividual,1|required|numeric|exists:players,id',
-            'playerLocalId' => 'exclude_unless:isIndividual,1|required|numeric|exists:players,id',
-            'teamLocalId' => 'exclude_if:isIndividual,1|required|numeric|exists:teams,id',
-            'teamVisitorId' => 'exclude_if:isIndividual,1|required|numeric|exists:teams,id'
         ];
     }
 }

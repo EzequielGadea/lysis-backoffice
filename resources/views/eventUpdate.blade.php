@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot name="title">Updating event...</x-slot>
     <x-update-card>
-        <x-slot name="action">eventUpdate</x-slot>
+        <x-slot name="action">eventUpdate/{{ $event->id }}</x-slot>
         <x-slot name="backTo">eventManagement</x-slot>
         <input type="hidden" name="eventId" value="{{ $event->id }}">
         <input type="hidden" name="isIndividual" value="{{ $event->isIndividual() ? '1' : '0' }}">
@@ -37,10 +37,5 @@
             </select>
             <p class="text-sm text-red-600">{{ $errors->first('venueId') }}</p>
         </div>
-        @if ($event->isIndividual())
-            @livewire('event-update-individual', ['event' => $event])
-        @else
-            @livewire('event-update-teams', ['event' => $event])
-        @endif
     </x-update-card>
 </x-layout>

@@ -40,6 +40,10 @@
             @csrf
             <button class="font-medium text-zinc-800" id="nav-leagues" type="submit">Leagues</button>
         </form>
+        <form action="/unit/index" method="GET">
+            @csrf
+            <button class="font-medium text-zinc-800" id="nav-leagues" type="submit">Units</button>
+        </form>
         <form action="/sanctionCardManagement" method="GET">
             @csrf
             <button class="font-medium text-zinc-800 whitespace-nowrap" id="nav-sanction-cards" type="submit">Sanction cards</button>
