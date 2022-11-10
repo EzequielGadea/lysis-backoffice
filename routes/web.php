@@ -17,6 +17,7 @@ use App\Http\Controllers\PlayerTeamController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RefereeController;
 use App\Http\Controllers\SanctionAssignment\IndividualCardController;
+use App\Http\Controllers\SanctionAssignment\IndividualCardlessController;
 use App\Http\Controllers\SanctionCardController;
 use App\Http\Controllers\SanctionCardlessController;
 use App\Http\Controllers\SportController;
@@ -333,7 +334,25 @@ Route::middleware(['web'])->group(function () {
                         Route::delete('delete/{sanction}', 'deleteLocal');
                         Route::get('restore/{sanction}', 'restoreLocal')->withTrashed();
                     });
-                    Route::prefix('Visitor')->group(function () {
+                    Route::prefix('visitor')->group(function () {
+                        Route::get('edit/{sanction}', 'editVisitor');
+                        Route::post('update/{sanction}', 'updateVisitor');
+                        Route::delete('delete/{sanction}', 'deleteVisitor');
+                        Route::get('restore/{sanction}', 'restoreVisitor')->withTrashed();
+                    });
+                });
+            });
+            Route::prefix('cardless')->group(function () {
+                Route::controller(IndividualCardlessController::class)->prefix('individual')->group(function () {
+                    Route::get('index/{event}', 'index');
+                    Route::post('create/{event}', 'create');
+                    Route::prefix('local')->group(function () {
+                        Route::get('edit/{sanction}', 'editLocal');
+                        Route::post('update/{sanction}', 'updateLocal');
+                        Route::delete('delete/{sanction}', 'deleteLocal');
+                        Route::get('restore/{sanction}', 'restoreLocal')->withTrashed();
+                    });
+                    Route::prefix('visitor')->group(function () {
                         Route::get('edit/{sanction}', 'editVisitor');
                         Route::post('update/{sanction}', 'updateVisitor');
                         Route::delete('delete/{sanction}', 'deleteVisitor');
