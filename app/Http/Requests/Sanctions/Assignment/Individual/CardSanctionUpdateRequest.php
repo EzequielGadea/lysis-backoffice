@@ -26,6 +26,13 @@ class CardSanctionUpdateRequest extends FormRequest
     {
         return [
             'sanction' => 'required|integer|exists:sanction_cards,id',
+            'set' => [
+                'nullable',
+                'integer',
+                Rule::exists('sets')->where(function ($query) {
+                    $query->where('event_id', $this->route('sanction')->event->result()->id);
+                }),
+            ],
             'minute' => [
                 'required',
                 'integer',
