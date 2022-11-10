@@ -27,6 +27,13 @@ class CardlessSanctionCreateRequest extends FormRequest
     {
         return [
             'sanction' => 'required|integer|exists:sanction_cardlesses,id',
+            'set' => [
+                'nullable',
+                'integer',
+                Rule::exists('sets')->where(function ($query) {
+                    $query->where('event_id', $this->route('event')->result()->id);
+                }),
+            ],
             'player' => [
                 'bail',
                 'required',
