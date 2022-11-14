@@ -2,24 +2,45 @@
 
 namespace App\Http\Controllers\SanctionAssignment;
 
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Sanctions\Assignment\Individual\CardSanctionCreateRequest;
 use App\Http\Requests\Sanctions\Assignment\Individual\CardSanctionUpdateRequest;
 use App\Models\Events\Event;
 use App\Models\Events\PlayerLocalSanctionCard as LocalSanction;
 use App\Models\Events\PlayerVisitorSanctionCard as VisitorSanction;
+use App\Models\Events\PlayerVisitorSanctionCardSet.php as VisitorSanctionSet;
+use App\Models\Events\PlayerLocalSanctionCardSet.php as LocalSanctionSet;
 
 class IndividualCardController extends Controller
 {
+    private $bySetResultType = '3';
+
     public function create(CardSanctionCreateRequest $request, Event $event)
     {
-        if ($event->isPlayerLocal($request->post('player'))) {
-            $this->createLocal($request, $event);
+        try {
+            DB::transaction(function () use ($request, $event) {
+                if ($event->isPlayerLocal($request->post('player'))) {
+                    $sanction = $this->createLocal($request, $event);
+
+                    if ($event->result()->result_type_id == $this->bySetResultType) {
+                        $this->createLocalSet($request, $sanction);
+                    }
+                }
+        
+                if ($event->isPlayerVisitor($request->post('player'))) {
+                    $sanction = $this->createVisitor($request, $event);
+
+                    if ($event->result()->result_type_id == $this->bySetResultType) {
+                        $this->createVisitorSet($request, $sanction);
+                    }
+                }
+            });
+        } catch (QueryException $th) {
+            return back()->with('statusCreate', 'Error while creating sanction.');
         }
 
-        if ($event->isPlayerVisitor($request->post('player'))) {
-            $this->createVisitor($request, $event);
-        }
 
         return back()->with('statusCreate', 'Sanction created successfully.');
     }
@@ -52,6 +73,12 @@ class IndividualCardController extends Controller
             'minute' => $request->post('minute'),
         ]);
 
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) {
+            $sanction->inSet->update([
+                'set' => $request->post('set');
+            ]);
+        }
+
         return back()->with([
             'statusUpdate' => 'Sanction updated successfully.',
             'isRedirected' => 'true',
@@ -65,6 +92,12 @@ class IndividualCardController extends Controller
             'minute' => $request->post('minute'),
         ]);
 
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) {
+            $sanction->inSet->update([
+                'set' => $request->post('set');
+            ]);
+        }
+
         return back()->with([
             'statusUpdate' => 'Sanction updated successfully.',
             'isRedirected' => 'true',
@@ -73,24 +106,28 @@ class IndividualCardController extends Controller
 
     public function deleteLocal(LocalSanction $sanction)
     {
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->delete();
         $sanction->delete();
         return back()->with('statusDelete', 'Sanction deleted successfully.');
     }
 
     public function deleteVisitor(VisitorSanction $sanction)
     {
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->delete();
         $sanction->delete();
         return back()->with('statusDelete', 'Sanction deleted successfully.');
     }
 
     public function restoreLocal(LocalSanction $sanction)
     {
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->restore();
         $sanction->restore();
         return back()->with('statusRestore', 'Sanction restored successfully.');
     }
 
     public function restoreVisitor(VisitorSanction $sanction)
     {
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->restore();
         $sanction->restore();
         return back()->with('statusRestore', 'Sanction restored successfully.');
     }
@@ -110,6 +147,20 @@ class IndividualCardController extends Controller
             'event_id' => $event->id,
             'sanction_card_id' => $request->post('sanction'),
             'minute' => $request->post('minute'),
+        ]);
+    }
+
+    private function createVisitorSet($request, $visitorSanction) {
+        return VisitorSanctionSet::create([
+            'player_visitor_sanction_card_id' => $visitorSanction->id,
+            'set_id' => $request->post('set'),
+        ]);
+    }
+    
+    private function createLocalSet($request, $localSanction) {
+        return LocalSanctionSet::create([
+            'player_local_sanction_card_id' => $localSanction->id,
+            'set_id' => $request->post('set'),
         ]);
     }
 }
