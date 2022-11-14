@@ -34,7 +34,7 @@ class IndividualCardlessController extends Controller
                         $this->createVisitorSet($request, $sanction);
                     }
                 }
-            }
+            });
         } catch (QueryException $e) {
             return back()->with('statusCreate', 'Error while creating sanction.');
         }
@@ -72,7 +72,7 @@ class IndividualCardlessController extends Controller
 
         if ($sanction->event->result()->result_type_id == $this->bySetResultType) {
             $sanction->inSet->update([
-                'set' => $request->post('set');
+                'set' => $request->post('set'),
             ]);
         }
 
@@ -91,7 +91,7 @@ class IndividualCardlessController extends Controller
 
         if ($sanction->event->result()->result_type_id == $this->bySetResultType) {
             $sanction->inSet->update([
-                'set' => $request->post('set');
+                'set' => $request->post('set'),
             ]);
         }
 
