@@ -5,8 +5,9 @@ namespace App\Models\Events;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Sanctions\SanctionCardless;
 use App\Models\Events\EventPlayerTeam;
+use App\Models\Events\EventPlayerTeamSanctionCardlessSet.php
+use App\Models\Sanctions\SanctionCardless;
 
 class EventPlayerTeamSanctionCardless extends Model
 {
@@ -28,5 +29,9 @@ class EventPlayerTeamSanctionCardless extends Model
     public function eventPlayerTeam()
     {
         return $this->belongsTo(EventPlayerTeam::class);
+    }
+
+    public function inSet() {
+        return $this->hasOne(EventPlayerTeamSanctionCardlessSet::class);
     }
 }
