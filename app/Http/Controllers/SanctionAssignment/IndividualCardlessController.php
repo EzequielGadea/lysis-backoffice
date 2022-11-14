@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\SanctionAssignment;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Sanctions\Assignment\Individual\CardlessSanctionCreateRequest;
 use App\Http\Requests\Sanctions\Assignment\Individual\CardlessSanctionUpdateRequest;
@@ -11,14 +13,30 @@ use App\Models\Events\PlayerVisitorSanctionCardless as VisitorSanction;
 
 class IndividualCardlessController extends Controller
 {
+    private $bySetResultType = '3';
+
     public function create(CardlessSanctionCreateRequest $request, Event $event)
     {
-        if ($event->isPlayerLocal($request->post('player'))) {
-            $this->createLocal($request, $event);
-        }
+        try {
+            DB::transaction(function () use ($request, $event) {
+                if ($event->isPlayerLocal($request->post('player'))) {
+                    $this->createLocal($request, $event);
+                    
+                    if ($event->result()->result_type_id == $this->bySetResultType) {
+                        $this->createLocalSet($request, $sanction);
+                    }
+                }
 
-        if ($event->isPlayerVisitor($request->post('player'))) {
-            $this->createVisitor($request, $event);
+                if ($event->isPlayerVisitor($request->post('player'))) {
+                    $this->createVisitor($request, $event);
+
+                    if ($event->result()->result_type_id == $this->bySetResultType) {
+                        $this->createVisitorSet($request, $sanction);
+                    }
+                }
+            }
+        } catch (QueryException $e) {
+            return back()->with('statusCreate', 'Error while creating sanction.');
         }
 
         return back()->with('statusCreate', 'Sanction created successfully');
@@ -52,6 +70,12 @@ class IndividualCardlessController extends Controller
             'minute' => $request->post('minute'),
         ]);
 
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) {
+            $sanction->inSet->update([
+                'set' => $request->post('set');
+            ]);
+        }
+
         return back()->with([
             'statusUpdate' => 'Sanction updated successfully.',
             'isRedirected' => 'true',
@@ -65,6 +89,12 @@ class IndividualCardlessController extends Controller
             'minute' => $request->post('minute'),
         ]);
 
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) {
+            $sanction->inSet->update([
+                'set' => $request->post('set');
+            ]);
+        }
+
         return back()->with([
             'statusUpdate' => 'Sanction updated successfully.',
             'isRedirected' => 'true',
@@ -73,7 +103,9 @@ class IndividualCardlessController extends Controller
 
     public function deleteLocal(LocalSanction $sanction)
     {
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->delete();
         $sanction->delete();
+
         return back()->with([
             'deleteStatus' => 'Sanction deleted successfully.',
             'deletedId' => $sanction->id,
@@ -82,7 +114,9 @@ class IndividualCardlessController extends Controller
 
     public function deleteVisitor(VisitorSanction $sanction)
     {
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->delete();
         $sanction->delete();
+        
         return back()->with([
             'deleteStatus' => 'Sanction deleted successfully.',
             'deletedId' => $sanction->id,
@@ -91,13 +125,17 @@ class IndividualCardlessController extends Controller
 
     public function restoreLocal(LocalSanction $sanction)
     {
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->restore();
         $sanction->restore();
+
         return back()->with('restoreStatus', 'Sanction restored successfully.');
     }
 
     public function restoreVisitor(VisitorSanction $sanction)
     {
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->restore();
         $sanction->restore();
+
         return back()->with('restoreStatus', 'Sanction restored successfully.');
     }
 
@@ -116,6 +154,20 @@ class IndividualCardlessController extends Controller
             'event_id' => $event->id,
             'sanction_cardless_id' => $request->post('sanction'),
             'minute' => $request->post('minute'),
+        ]);
+    }
+
+    private function createVisitorSet($request, $visitorSanction) {
+        return VisitorSanctionSet::create([
+            'player_visitor_sanction_cardless_id' => $visitorSanction->id,
+            'set_id' => $request->post('set'),
+        ]);
+    }
+    
+    private function createLocalSet($request, $localSanction) {
+        return LocalSanctionSet::create([
+            'player_local_sanction_cardless_id' => $localSanction->id,
+            'set_id' => $request->post('set'),
         ]);
     }
 }
