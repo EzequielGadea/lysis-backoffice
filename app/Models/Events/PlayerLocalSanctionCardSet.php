@@ -15,16 +15,16 @@ class PlayerLocalSanctionCardSet extends Model
     protected $table = 'player_local_sanction_card_set';
 
     protected $fillable = [
-	'player_local_sanction_card_id',
-	'set_id',
+        'player_local_sanction_card_id',
+        'set_id',
     ];
 
     public function playerLocalSanctionCard() {
-	return $this->belongsTo(PlayerLocalSanctionCard::class);
+        return $this->belongsTo(PlayerLocalSanctionCard::class);
     }
 
     public function set() {
-	return $this->belongsTo(Set::class);
+        return $this->belongsTo(Set::class);
     }
 }
 
