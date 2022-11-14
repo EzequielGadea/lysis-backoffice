@@ -23,7 +23,7 @@ class PlayerLocalSanctionCardless extends Model
 
     public function playerLocal()
     {
-        return $this->belongsTo(PlayerLocal::class);
+        return $this->belongsTo(PlayerLocal::class, 'event_id', 'event_id');
     }
 
     public function sanction()

@@ -28,7 +28,7 @@ class PlayerVisitorSanctionCardless extends Model
 
     public function playerVisitor()
     {
-        return $this->belongsTo(PlayerVisitor::class);
+        return $this->belongsTo(PlayerVisitor::class, 'event_id', 'event_id');
     }
 
     public function inSet() {
