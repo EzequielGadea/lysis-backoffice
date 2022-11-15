@@ -10,6 +10,7 @@ use App\Http\Requests\Sanctions\Assignment\Individual\CardlessSanctionUpdateRequ
 use App\Models\Events\Event;
 use App\Models\Events\PlayerLocalSanctionCardless as LocalSanction;
 use App\Models\Events\PlayerVisitorSanctionCardless as VisitorSanction;
+use App\Models\Sanctions\SanctionCardless;
 
 class IndividualCardlessController extends Controller
 {
@@ -45,7 +46,8 @@ class IndividualCardlessController extends Controller
     public function index(Event $event)
     {
         return view('sanctions.cardless.individual.index', [
-            'event' => $event
+            'event' => $event,
+            'sanctions' => SanctionCardless::all(),
         ]);
     }
 
@@ -53,6 +55,7 @@ class IndividualCardlessController extends Controller
     {
         return view('sanctions.cardless.individual.edit', [
             'sanction' => $sanction,
+            'sanctions' => SanctionCardless::all(),
         ]);
     }
 
@@ -60,6 +63,7 @@ class IndividualCardlessController extends Controller
     {
         return view('sanctions.cardless.individual.edit', [
             'sanction' => $sanction,
+            'sanctions' => SanctionCardless::all(),
         ]);
     }
 
