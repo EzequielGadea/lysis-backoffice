@@ -96,6 +96,11 @@
                                                 </form>
                                             @endif
                                         @endif
+                                        <form action="/sanctions/cardless/individual/index/{{ $event->id }}"
+                                            method="get">
+                                            <button class="font-semibold text-blue-600"
+                                                type="submit">Cardless sanctions</button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
