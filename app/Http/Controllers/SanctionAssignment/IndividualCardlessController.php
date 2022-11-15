@@ -134,7 +134,7 @@ class IndividualCardlessController extends Controller
         if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->restore();
         $sanction->restore();
 
-        return back()->with('restoreStatus', 'Sanction restored successfully.');
+        return back()->with('statusRestore', 'Sanction restored successfully.');
     }
 
     public function restoreVisitor(VisitorSanction $sanction)
@@ -142,7 +142,7 @@ class IndividualCardlessController extends Controller
         if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->restore();
         $sanction->restore();
 
-        return back()->with('restoreStatus', 'Sanction restored successfully.');
+        return back()->with('statusRestore', 'Sanction restored successfully.');
     }
 
     private function createLocal($request, $event)
