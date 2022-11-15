@@ -111,7 +111,7 @@ class IndividualCardlessController extends Controller
         $sanction->delete();
 
         return back()->with([
-            'deleteStatus' => 'Sanction deleted successfully.',
+            'statusDelete' => 'Sanction deleted successfully.',
             'deletedId' => $sanction->id,
         ]);
     }
@@ -122,7 +122,7 @@ class IndividualCardlessController extends Controller
         $sanction->delete();
         
         return back()->with([
-            'deleteStatus' => 'Sanction deleted successfully.',
+            'statusDelete' => 'Sanction deleted successfully.',
             'deletedId' => $sanction->id,
         ]);
     }
