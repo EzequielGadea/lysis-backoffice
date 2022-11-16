@@ -46,12 +46,6 @@ class CardlessSanctionCreateRequest extends FormRequest
                 'integer',
                 'min:0',
                 'max:999',
-                Rule::unique('player_local_sanction_cardless')->where(function ($query) {
-                    $query->where('event_id', $this->route('event')->id);
-                }),
-                Rule::unique('player_visitor_sanction_cardless')->where(function ($query) {
-                    $query->where('event_id', $this->route('event')->id);
-                }),
             ]
         ];
     }
