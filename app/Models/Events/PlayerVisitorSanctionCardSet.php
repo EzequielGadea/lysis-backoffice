@@ -5,8 +5,8 @@ namespace App\Models\Events;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Results\Set.php;
-use App\Models\Events\PlayerVisitorSanctionCard.php;
+use App\Models\Results\Set;
+use App\Models\Events\PlayerVisitorSanctionCard;
 
 class PlayerVisitorSanctionCardSet extends Model
 {
