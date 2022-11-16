@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\SanctionAssignment;
+namespace App\Http\Controllers\SanctionAssignment\Individual;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
