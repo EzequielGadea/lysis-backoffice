@@ -33,7 +33,7 @@ class PlayerVisitorSanctionCardless extends Model
     }
 
     public function inSet() {
-        return $this->hasOne(PlayerVisitorSanctionCardlessSet::class);
+        return $this->hasOne(PlayerVisitorSanctionCardlessSet::class, 'player_visitor_sanction_cardless_id', 'id');
     }
 
     public function event() {
