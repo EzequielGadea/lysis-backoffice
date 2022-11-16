@@ -29,8 +29,8 @@ class CardlessSanctionUpdateRequest extends FormRequest
             'set' => [
                 'nullable',
                 'integer',
-                Rule::exists('sets')->where(function ($query) {
-                    $query->where('event_id', $this->route('sanction')->event->result()->id);
+                Rule::exists('sets', 'id')->where(function ($query) {
+                    $query->where('by_set_id', $this->route('sanction')->event->result()->id);
                 }),
             ],
             'minute' => [
