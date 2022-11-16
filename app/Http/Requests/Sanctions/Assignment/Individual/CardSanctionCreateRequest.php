@@ -30,8 +30,8 @@ class CardSanctionCreateRequest extends FormRequest
             'set' => [
                 'nullable',
                 'integer',
-                Rule::exists('sets')->where(function ($query) {
-                    $query->where('event_id', $this->route('event')->result()->id);
+                Rule::exists('sets', 'id')->where(function ($query) {
+                    $query->where('by_set_id', $this->route('event')->result()->id);
                 }),
                 Rule::requiredIf($this->route('event')->result()->result_type_id == '3'),
             ],
