@@ -28,7 +28,7 @@ class PlayerLocalSanctionCard extends Model
 
     public function sanction()
     {
-        return $this->belongsTo(SanctionCard::class);
+        return $this->belongsTo(SanctionCard::class, 'sanction_card_id');
     }
 
     public function inSet() {
