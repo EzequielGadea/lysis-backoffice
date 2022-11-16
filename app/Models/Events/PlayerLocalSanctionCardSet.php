@@ -24,7 +24,7 @@ class PlayerLocalSanctionCardSet extends Model
     }
 
     public function set() {
-        return $this->belongsTo(Set::class);
+        return $this->belongsTo(Set::class, 'set_id', 'id');
     }
 }
 
