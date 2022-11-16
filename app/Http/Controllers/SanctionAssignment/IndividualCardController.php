@@ -12,6 +12,7 @@ use App\Models\Events\PlayerLocalSanctionCard as LocalSanction;
 use App\Models\Events\PlayerVisitorSanctionCard as VisitorSanction;
 use App\Models\Events\PlayerVisitorSanctionCardSet.php as VisitorSanctionSet;
 use App\Models\Events\PlayerLocalSanctionCardSet.php as LocalSanctionSet;
+Use App\Models\Sanctions\SanctionCard;
 
 class IndividualCardController extends Controller
 {
@@ -49,6 +50,7 @@ class IndividualCardController extends Controller
     {
         return view('sanctions.cards.individual.index', [
             'event' => $event,
+            'cards' => SanctionCard::all(),
         ]);
     }
 
@@ -56,6 +58,7 @@ class IndividualCardController extends Controller
     {
         return view('sanctions.cards.individual.edit', [
             'sanction' => $sanction,
+            'cards' => SanctionCard::all(),
         ]);
     }
 
@@ -63,6 +66,7 @@ class IndividualCardController extends Controller
     {
         return view('sanctions.cards.individual.edit', [
             'sanction' => $sanction,
+            'cards' => SanctionCard::all(),
         ]);
     }
 
