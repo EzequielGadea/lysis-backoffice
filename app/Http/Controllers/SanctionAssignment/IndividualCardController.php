@@ -10,8 +10,8 @@ use App\Http\Requests\Sanctions\Assignment\Individual\CardSanctionUpdateRequest;
 use App\Models\Events\Event;
 use App\Models\Events\PlayerLocalSanctionCard as LocalSanction;
 use App\Models\Events\PlayerVisitorSanctionCard as VisitorSanction;
-use App\Models\Events\PlayerVisitorSanctionCardSet.php as VisitorSanctionSet;
-use App\Models\Events\PlayerLocalSanctionCardSet.php as LocalSanctionSet;
+use App\Models\Events\PlayerVisitorSanctionCardSet as VisitorSanctionSet;
+use App\Models\Events\PlayerLocalSanctionCardSet as LocalSanctionSet;
 Use App\Models\Sanctions\SanctionCard;
 
 class IndividualCardController extends Controller
