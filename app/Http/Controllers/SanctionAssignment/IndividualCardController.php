@@ -114,14 +114,22 @@ class IndividualCardController extends Controller
     {
         if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->delete();
         $sanction->delete();
-        return back()->with('statusDelete', 'Sanction deleted successfully.');
+        return back()->with([
+            'statusDelete' => 'Sanction deleted successfully.',
+            'deletedId' => $sanction->id,
+            'side' => 'local',
+        ]);
     }
 
     public function deleteVisitor(VisitorSanction $sanction)
     {
         if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->delete();
         $sanction->delete();
-        return back()->with('statusDelete', 'Sanction deleted successfully.');
+        return back()->with([
+            'statusDelete' => 'Sanction deleted successfully.',
+            'deletedId' => $sanction->id,
+            'side' => 'visitor',
+        ]);
     }
 
     public function restoreLocal(LocalSanction $sanction)
