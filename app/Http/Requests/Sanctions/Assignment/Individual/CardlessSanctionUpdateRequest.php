@@ -37,7 +37,7 @@ class CardlessSanctionUpdateRequest extends FormRequest
                 'required',
                 'integer',
                 'min:0',
-                'min:999',
+                'max:999',
                 Rule::unique('player_local_sanction_cardless')->where(function ($query) {
                     $query->where('event_id', $this->route('sanction')->event_id);
                 })->ignore($this->route('sanction')),
