@@ -81,7 +81,7 @@ class IndividualCardController extends Controller
 
         if ($sanction->event->result()->result_type_id == $this->bySetResultType) {
             $sanction->inSet->update([
-                'set' => $request->post('set');
+                'set_id' => $request->post('set')
             ]);
         }
 
@@ -100,7 +100,7 @@ class IndividualCardController extends Controller
 
         if ($sanction->event->result()->result_type_id == $this->bySetResultType) {
             $sanction->inSet->update([
-                'set' => $request->post('set');
+                'set_id' => $request->post('set')
             ]);
         }
 
