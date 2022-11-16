@@ -134,14 +134,14 @@ class IndividualCardController extends Controller
 
     public function restoreLocal(LocalSanction $sanction)
     {
-        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->restore();
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet()->withTrashed()->restore();
         $sanction->restore();
         return back()->with('statusRestore', 'Sanction restored successfully.');
     }
 
     public function restoreVisitor(VisitorSanction $sanction)
     {
-        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet->restore();
+        if ($sanction->event->result()->result_type_id == $this->bySetResultType) $sanction->inSet()->withTrashed()->restore();
         $sanction->restore();
         return back()->with('statusRestore', 'Sanction restored successfully.');
     }
