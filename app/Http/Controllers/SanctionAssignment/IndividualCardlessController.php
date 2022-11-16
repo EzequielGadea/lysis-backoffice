@@ -9,7 +9,9 @@ use App\Http\Requests\Sanctions\Assignment\Individual\CardlessSanctionCreateRequ
 use App\Http\Requests\Sanctions\Assignment\Individual\CardlessSanctionUpdateRequest;
 use App\Models\Events\Event;
 use App\Models\Events\PlayerLocalSanctionCardless as LocalSanction;
+use App\Models\Events\PlayerLocalSanctionCardlessSet as LocalSanctionSet;
 use App\Models\Events\PlayerVisitorSanctionCardless as VisitorSanction;
+use App\Models\Events\PlayerVisitorSanctionCardlessSet as VisitorSanctionSet;
 use App\Models\Sanctions\SanctionCardless;
 
 class IndividualCardlessController extends Controller
