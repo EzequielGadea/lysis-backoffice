@@ -23,7 +23,7 @@ class IndividualCardlessController extends Controller
         try {
             DB::transaction(function () use ($request, $event) {
                 if ($event->isPlayerLocal($request->post('player'))) {
-                    $this->createLocal($request, $event);
+                    $sanction = $this->createLocal($request, $event);
                     
                     if ($event->result()->result_type_id == $this->bySetResultType) {
                         $this->createLocalSet($request, $sanction);
@@ -31,7 +31,7 @@ class IndividualCardlessController extends Controller
                 }
 
                 if ($event->isPlayerVisitor($request->post('player'))) {
-                    $this->createVisitor($request, $event);
+                    $sanction = $this->createVisitor($request, $event);
 
                     if ($event->result()->result_type_id == $this->bySetResultType) {
                         $this->createVisitorSet($request, $sanction);
