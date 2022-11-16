@@ -33,6 +33,7 @@ class CardSanctionCreateRequest extends FormRequest
                 Rule::exists('sets')->where(function ($query) {
                     $query->where('event_id', $this->route('event')->result()->id);
                 }),
+                Rule::requiredIf($this->route('event')->result()->result_type_id == '3'),
             ],
             'player' => [
                 'bail',
