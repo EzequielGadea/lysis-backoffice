@@ -47,21 +47,21 @@ class IndividualCardController extends Controller
 
     public function index(Event $event)
     {
-        return view('sanctions.card.individual.index', [
+        return view('sanctions.cards.individual.index', [
             'event' => $event,
         ]);
     }
 
     public function editLocal(LocalSanction $sanction)
     {
-        return view('sanctions.card.individual.edit', [
+        return view('sanctions.cards.individual.edit', [
             'sanction' => $sanction,
         ]);
     }
 
     public function editVisitor(VisitorSanction $sanction)
     {
-        return view('sanctions.card.individual.edit', [
+        return view('sanctions.cards.individual.edit', [
             'sanction' => $sanction,
         ]);
     }
