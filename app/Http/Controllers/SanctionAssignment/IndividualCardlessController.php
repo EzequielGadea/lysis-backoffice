@@ -58,6 +58,7 @@ class IndividualCardlessController extends Controller
         return view('sanctions.cardless.individual.edit', [
             'sanction' => $sanction,
             'sanctions' => SanctionCardless::all(),
+            'side' => 'local',
         ]);
     }
 
@@ -66,6 +67,7 @@ class IndividualCardlessController extends Controller
         return view('sanctions.cardless.individual.edit', [
             'sanction' => $sanction,
             'sanctions' => SanctionCardless::all(),
+            'side' => 'visitor',
         ]);
     }
 
