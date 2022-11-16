@@ -101,7 +101,7 @@
                                             <button class="font-semibold text-blue-600"
                                                 type="submit">Cardless sanctions</button>
                                         </form>
-                                        <form action="/sanctions/card/individual/index/{{ $event->id }}"
+                                        <form action="/sanctions/cards/individual/index/{{ $event->id }}"
                                             method="get">
                                             <button class="font-semibold text-blue-600"
                                                 type="submit">Card sanctions</button>
