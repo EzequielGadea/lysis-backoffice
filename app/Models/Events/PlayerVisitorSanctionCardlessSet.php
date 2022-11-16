@@ -15,8 +15,8 @@ class PlayerVisitorSanctionCardlessSet extends Model
     protected $table = 'player_visitor_sanction_cardless_set';
 
     protected $fillable = [
-	'player_visitor_sanction_cardless_id',
-	'set_id',
+        'player_visitor_sanction_cardless_id',
+        'set_id',
     ];
 
     public function playerVisitorSanctionCardless() {
@@ -24,7 +24,7 @@ class PlayerVisitorSanctionCardlessSet extends Model
     }
 
     public function set() {
-	return $this->belongsTo(Set::class);
+        return $this->belongsTo(Set::class);
     }
 }
 
