@@ -30,9 +30,9 @@ class CardSanctionUpdateRequest extends FormRequest
                 'nullable',
                 'integer',
                 Rule::exists('sets', 'id')->where(function ($query) {
-                    $query->where('by_set_id', $this->route('sanction')->event->result()->id);
+                    $query->where('by_set_id', $this->route('sanction')->eventPlayerTeam->event->result()->id);
                 }),
-                Rule::requiredIf($this->route('sanction')->event->result()->result_type_id == '3'),
+                Rule::requiredIf($this->route('sanction')->eventPlayerTeam->event->result()->result_type_id == '3'),
             ],
             'minute' => 'required|integer|min:0|max:999',
         ];
