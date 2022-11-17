@@ -23,7 +23,7 @@ class EventPlayerTeamSanctionCardless extends Model
 
     public function sanction()
     {
-        return $this->belongsTo(SanctionCardless::class);
+        return $this->belongsTo(SanctionCardless::class, 'sanction_cardless_id');
     }
 
     public function eventPlayerTeam()
@@ -32,6 +32,6 @@ class EventPlayerTeamSanctionCardless extends Model
     }
 
     public function inSet() {
-        return $this->hasOne(EventPlayerTeamSanctionCardlessSet::class);
+        return $this->hasOne(EventPlayerTeamSanctionCardlessSet::class, 'event_player_team_sanction_cardless_id');
     }
 }
