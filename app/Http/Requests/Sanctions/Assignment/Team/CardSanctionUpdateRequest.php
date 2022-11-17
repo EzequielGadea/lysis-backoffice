@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Sanctions\Assignment\Team;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CardSanctionUpdateRequest extends FormRequest
 {
