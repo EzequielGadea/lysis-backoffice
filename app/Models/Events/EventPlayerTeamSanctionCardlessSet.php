@@ -15,15 +15,15 @@ class EventPlayerTeamSanctionCardlessSet extends Model
     protected $table = 'event_player_team_sanction_cardless_set';
 
     protected $fillable = [
-	'event_player_team_sanction_cardless_id',
-	'set_id',
+        'event_player_team_sanction_cardless_id',
+        'set_id',
     ];
 
     public function eventPlayerTeamSanctionCard() {
-	return $this->belongsTo(EventPlayerTeamSanctionCardless::class);
+        return $this->belongsTo(EventPlayerTeamSanctionCardless::class);
     }
 
     public function set() {
-	return $this->belongsTo(Set::class);
+        return $this->belongsTo(Set::class);
     }
 }
