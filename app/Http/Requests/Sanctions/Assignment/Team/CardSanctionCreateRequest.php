@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Sanctions\Assignment\Team;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CardSanctionCreateRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class CardSanctionCreateRequest extends FormRequest
     {
         return [
             'sanction' => 'required|integer|exists:sanction_cards,id',
-            'team' => 'bail|required|integer|exists:teams,id'
+            'team' => 'bail|required|integer|exists:teams,id',
             'minute' => 'required|integer|min:0|max:999',
             'set' => [
                 'nullable',
@@ -34,7 +35,7 @@ class CardSanctionCreateRequest extends FormRequest
                     $query->where('by_set_id', $this->route('event')->result()->id);
                 }),
                 Rule::requiredIf($this->route('event')->result()->result_type_id == '3'),
-            ]
+            ],
             'player' => [
                 'required',
                 'integer',
