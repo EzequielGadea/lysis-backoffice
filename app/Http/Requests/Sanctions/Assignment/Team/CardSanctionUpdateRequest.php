@@ -24,8 +24,7 @@ class CardSanctionUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'sanction' => 'required|integer|exsits:sanction_cards,id',
-            'team' => 'bail|required|integer|exists:teams,id',
+            'sanction' => 'required|integer|exists:sanction_cards,id',
             'set' => [
                 'nullable',
                 'integer',
@@ -35,13 +34,6 @@ class CardSanctionUpdateRequest extends FormRequest
                 Rule::requiredIf($this->route('sanction')->event->result()->result_type_id == '3'),
             ],
             'minute' => 'required|integer|min:0|max:999',
-            'player' => [
-                'required',
-                'integer',
-                Rule::exists('player_team', 'player_id')->where(function ($query) {
-                   $query->where('team_id', $this->team); 
-                }),
-            ],
         ];
     }
 }
