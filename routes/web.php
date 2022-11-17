@@ -19,6 +19,7 @@ use App\Http\Controllers\RefereeController;
 use App\Http\Controllers\SanctionAssignment\Individual\IndividualCardController;
 use App\Http\Controllers\SanctionAssignment\Individual\IndividualCardlessController;
 use App\Http\Controllers\SanctionAssignment\Team\TeamCardController;
+use App\Http\Controllers\SanctionAssignment\Team\TeamCardlessController;
 use App\Http\Controllers\SanctionCardController;
 use App\Http\Controllers\SanctionCardlessController;
 use App\Http\Controllers\SportController;
@@ -367,6 +368,14 @@ Route::middleware(['web'])->group(function () {
                         Route::delete('delete/{sanction}', 'deleteVisitor');
                         Route::get('restore/{sanction}', 'restoreVisitor')->withTrashed();
                     });
+                });
+                Route::controller(TeamCardlessController::class)->prefix('team')->group(function () {
+                    Route::get('index/{event}', 'index');
+                    Route::post('create/{event}', 'create');
+                    Route::get('edit/{sanction}', 'edit');
+                    Route::post('update/{sanction}', 'update');
+                    Route::delete('delete/{sanction}', 'delete');
+                    Route::get('restore/{sanction}', 'restore')->withTrashed();
                 });
             });
         });
