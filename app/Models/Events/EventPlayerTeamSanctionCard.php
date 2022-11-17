@@ -2,11 +2,12 @@
 
 namespace App\Models\Events;
 
-use App\Models\Events\EventPlayerTeam;
-use App\Models\Sanctions\SanctionCard;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Events\EventPlayerTeam;
+use App\Models\Events\EventPlayerTeamSanctionCardSet;
+use App\Models\Sanctions\SanctionCard;
 
 class EventPlayerTeamSanctionCard extends Model
 {
@@ -22,11 +23,15 @@ class EventPlayerTeamSanctionCard extends Model
 
     public function sanction()
     {
-        return $this->belongsTo(SanctionCard::class);
+        return $this->belongsTo(SanctionCard::class, 'sanction_card_id');
     }
 
     public function eventPlayerTeam()
     {
         return $this->belongsTo(EventPlayerTeam::class);
+    }
+
+    public function inSet () {
+        return $this->hasOne(EventPlayerTeamSanctionCardSet::class);
     }
 }

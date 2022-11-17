@@ -5,6 +5,8 @@ namespace App\Models\Events;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Events\Event;
+use App\Models\Events\PlayerLocalSanctionCardSet;
 use App\Models\Players\PlayerLocal;
 use App\Models\Sanctions\SanctionCard;
 
@@ -20,13 +22,21 @@ class PlayerLocalSanctionCard extends Model
         'minute'
     ];
 
-    public function playerLocal()
+    public function player()
     {
         return $this->belongsTo(PlayerLocal::class, 'event_id', 'event_id');
     }
 
     public function sanction()
     {
-        return $this->belongsTo(SanctionCard::class);
+        return $this->belongsTo(SanctionCard::class, 'sanction_card_id');
+    }
+
+    public function inSet() {
+        return $this->hasOne(PlayerLocalSanctionCardSet::class);
+    }
+
+    public function event() {
+        return $this->belongsTo(Event::class);
     }
 }
