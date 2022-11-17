@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Events\EventPlayerTeam;
-use App\Models\Events\EventPlayerTeamSanctionCardlessSet.php
+use App\Models\Events\EventPlayerTeamSanctionCardlessSet;
 use App\Models\Sanctions\SanctionCardless;
 
 class EventPlayerTeamSanctionCardless extends Model
