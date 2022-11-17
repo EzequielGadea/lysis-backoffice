@@ -136,4 +136,8 @@ class Event extends Model
         if ($this->teamVisitor->team_id == $teamId) return true;
         return false;
     }
+
+    public function isBySet() {
+        return $this->result()->result_type_id == '3';
+    }
 }
