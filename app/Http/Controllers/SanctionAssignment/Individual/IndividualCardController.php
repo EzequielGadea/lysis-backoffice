@@ -42,7 +42,6 @@ class IndividualCardController extends Controller
             return back()->with('statusCreate', 'Error while creating sanction.');
         }
 
-
         return back()->with('statusCreate', 'Sanction created successfully.');
     }
 
