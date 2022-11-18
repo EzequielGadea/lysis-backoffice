@@ -96,6 +96,29 @@
                                                 </form>
                                             @endif
                                         @endif
+                                        @if ($event->isIndividual())
+                                            <form action="/sanctions/cardless/individual/index/{{ $event->id }}"
+                                                method="get">
+                                                <button class="font-semibold text-blue-600"
+                                                    type="submit">Cardless sanctions</button>
+                                            </form>
+                                            <form action="/sanctions/cards/individual/index/{{ $event->id }}"
+                                                method="get">
+                                                <button class="font-semibold text-blue-600"
+                                                    type="submit">Card sanctions</button>
+                                            </form>
+                                        @else
+                                            <form action="/sanctions/cardless/team/index/{{ $event->id }}"
+                                                method="get">
+                                                <button class="font-semibold text-blue-600"
+                                                    type="submit">Cardless sanctions</button>
+                                            </form>
+                                            <form action="/sanctions/cards/team/index/{{ $event->id }}"
+                                                method="get">
+                                                <button class="font-semibold text-blue-600"
+                                                    type="submit">Card sanctions</button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

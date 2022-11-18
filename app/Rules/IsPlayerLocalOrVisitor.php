@@ -28,12 +28,12 @@ class IsPlayerLocalOrVisitor implements Rule
     {
         $isPlayerLocal = DB::table('player_local')->where([
             ['player_id', $value],
-            ['event_id', request()->route('result')->event->id],
+            ['event_id', request()->route('result')->event->id ?? request()->route('event')->id],
         ])->exists();
 
         $isPlayerVisitor = DB::table('player_visitor')->where([
             ['player_id', $value],
-            ['event_id', request()->route('result')->event->id],
+            ['event_id', request()->route('result')->event->id ?? request()->route('event')->id],
         ])->exists();
 
         if ($isPlayerLocal || $isPlayerVisitor) return true;
