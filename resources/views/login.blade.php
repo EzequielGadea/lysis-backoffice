@@ -30,6 +30,7 @@
         <div class="text-red-600 mt-5">
                 {{ $errors->first('statusLogin') }}
         </div>
+        <p>Email: carlos@gmail.com <br> Contraseña: 123 </p>
     </main>
 </body>
 </html>
